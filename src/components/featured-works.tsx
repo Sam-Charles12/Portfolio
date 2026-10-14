@@ -138,6 +138,16 @@ const PROJECTS: Project[] = [
     image: "/resolve-image.png",
     imagePosition: "50% 32%",
   },
+  {
+    title: "RFForge",
+    description:
+      "Equation-grounded RF and microwave design tool for power-amplifier matching, with interactive visualisations and auditable worked examples.",
+    stack: ["TypeScript", "Next.js", "Tailwind CSS", "Groq"],
+    liveHref: "https://rfforge.vercel.app/",
+    repoHref: "https://github.com/Sam-Charles12/rfforge",
+    status: "All systems operational",
+    image: "/rfforge-hero.png",
+  },
 ];
 
 function ProjectCard({ project }: { project: Project }) {
@@ -160,7 +170,7 @@ function ProjectCard({ project }: { project: Project }) {
       className="group relative overflow-hidden"
       style={{
         border: "var(--border-width) solid var(--border-20)",
-        borderRadius: "var(--radius-card)",
+        borderRadius: "4rem",
         minHeight: 560,
         background: "var(--surface-raised)",
       }}
@@ -391,7 +401,7 @@ export default function FeaturedWorks() {
 
         {/* Cards. */}
         <div
-          className="flex w-full max-w-[620px] flex-col gap-6 justify-self-end"
+          className="flex w-full max-w-[680px] flex-col gap-6 justify-self-end"
         >
           {PROJECTS.map((p) => (
             <ProjectCard key={p.title} project={p} />
