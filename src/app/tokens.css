@@ -1,0 +1,303 @@
+/*
+ * Design tokens — Carles' Software Engineer Portfolio
+ * Concept: quiet sharp dark site that reads like a well-kept codebase.
+ * Reference: https://www.thealuminate.dev/
+ *
+ * Rules:
+ * - Only two colors: --bg / --ink. Hierarchy from opacity only.
+ * - No gradients, no colored shadows, no third color.
+ * - Borders via color-mix() so everything stays tied to --ink.
+ */
+
+/* ------------------------------------------------------------------ */
+/* 1. Primitives                                                       */
+/* ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #0a0a0a;
+  --ink: #ededed;
+
+  /* ---------------------------------------------------------------- */
+  /* 2. Semantic text (opacity hierarchy only)                         */
+  /* ---------------------------------------------------------------- */
+
+  --text-100: var(--ink); /* headings, 100% */
+  --text-70: color-mix(in srgb, var(--ink) 70%, transparent); /* body */
+  --text-50: color-mix(in srgb, var(--ink) 50%, transparent); /* labels, dates */
+  --text-35: color-mix(in srgb, var(--ink) 35%, transparent); /* captions, muted */
+  --text-on-fill: var(--bg); /* text on filled elements */
+
+  /* ---------------------------------------------------------------- */
+  /* 3. Borders, grid lines, surfaces                                  */
+  /* ---------------------------------------------------------------- */
+
+  --border-100: var(--ink); /* card hover, active */
+  --border-25: color-mix(in srgb, var(--ink) 25%, transparent);
+  --border-20: color-mix(in srgb, var(--ink) 20%, transparent); /* default card/nav */
+  --border-15: color-mix(in srgb, var(--ink) 15%, transparent); /* subtle dividers */
+  --grid-line: color-mix(in srgb, var(--ink) 5%, transparent); /* 48px graph paper */
+  --border-width: 1px;
+
+  --surface-page: var(--bg);
+  --surface-raised: color-mix(in srgb, var(--ink) 4%, var(--bg)); /* card fill */
+  --surface-raised-hover: color-mix(in srgb, var(--ink) 7%, var(--bg));
+  --surface-overlay: color-mix(in srgb, var(--bg) 80%, transparent); /* sticky nav */
+
+  --fill: var(--ink); /* filled button, selected tag, timeline dot */
+  --on-fill: var(--bg);
+
+  /* ---------------------------------------------------------------- */
+  /* 4. Typography                                                     */
+  /* ---------------------------------------------------------------- */
+
+  --font-display: "Funnel Display", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-body: "Funnel Display", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-mono: "Funnel Display", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  --font-logo: "Funnel Display", system-ui, sans-serif;
+
+  /* Type scale — measured from the reference.
+     Hero caps at 48px (text-2xl → text-5xl); section titles are the
+     biggest type on the page (text-6xl → text-7xl). */
+  --text-hero: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+  --text-section: clamp(3.75rem, 3.4rem + 1.75vw, 4.5rem);
+  --text-cta: clamp(2.25rem, 1.75rem + 2.5vw, 3.75rem);
+  --text-marquee: clamp(5rem, 4rem + 8vw, 13rem);
+  --text-stat: clamp(2.25rem, 1.9rem + 1.75vw, 3.75rem);
+  --text-card-title: 22px;
+  --text-body: 17px;
+  --text-small: 14px;
+  --text-mono-label: 12px;
+  --text-mono-tag: 11px;
+
+  --leading-hero: 1.1;
+  --leading-section: 1.05;
+  --leading-cta: 1.1;
+  --leading-marquee: 1;
+  --leading-body: 1.625;
+  --leading-small: 1.5;
+  --leading-mono: 1.4;
+
+  --tracking-hero: -0.025em;
+  --tracking-section: -0.025em;
+  --tracking-card: -0.02em;
+  --tracking-stat: -0.025em;
+  --tracking-body: 0;
+  --tracking-mono-label: 0.2em;
+  --tracking-mono-tag: 0.08em;
+  --tracking-marquee: 0.02em;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---------------------------------------------------------------- */
+  /* 5. Layout / spacing                                               */
+  /* ---------------------------------------------------------------- */
+
+  --container: 1280px; /* max-w-7xl — hero, sections, footer */
+  --container-narrow: 672px; /* max-w-xl/2xl — hero copy, about text */
+  --gutter: 24px;
+  --gutter-sm: 16px;
+
+  --section-y: clamp(80px, 10vw, 128px);
+  --section-y-sm: clamp(56px, 7vw, 88px);
+  --stack-xs: 8px;
+  --stack-sm: 16px;
+  --stack-md: 24px;
+  --stack-lg: 48px;
+  --stack-xl: 80px;
+
+  --nav-h: 80px; /* 5rem — hero fills calc(100vh - nav) */
+  --nav-blur: blur(12px);
+  --grid-size: 48px;
+
+  --prose-measure: 62ch;
+
+  /* ---------------------------------------------------------------- */
+  /* 6. Shape                                                          */
+  /* ---------------------------------------------------------------- */
+
+  /* Shape — reference runs big radii: stat cards 2.5–3rem,
+     footer panels 1.5rem, buttons always full pills. */
+  --radius-card: 2.5rem;
+  --radius-card-sm: 1.5rem;
+  --radius-btn: 999px;
+  --radius-pill: 999px;
+  --radius-thumb: 1rem;
+
+  /* ---------------------------------------------------------------- */
+  /* 7. Buttons                                                        */
+  /* ---------------------------------------------------------------- */
+
+  /* Buttons — reference mains are px-5 py-2.5 (~40px tall). */
+  --btn-h: 40px;
+  --btn-h-sm: 32px;
+  --btn-pad-x: 20px;
+  --btn-pad-x-sm: 12px;
+  --btn-gap: 10px;
+  --btn-text: 15px;
+  --btn-mono-text: 12px;
+
+  /* ---------------------------------------------------------------- */
+  /* 8. Pills / tags / status                                          */
+  /* ---------------------------------------------------------------- */
+
+  --pill-pad-y: 6px;
+  --pill-pad-x: 12px;
+  --pill-gap: 8px;
+  --tag-pad-y: 5px;
+  --tag-pad-x: 10px;
+
+  --dot-size: 8px;
+  --dot-halo: color-mix(in srgb, var(--ink) 30%, transparent);
+  --timeline-dot: 10px;
+  --timeline-rail-x: 8px;
+
+  /* ---------------------------------------------------------------- */
+  /* 9. Cards                                                          */
+  /* ---------------------------------------------------------------- */
+
+  --card-pad: 24px;
+  --card-pad-sm: 20px;
+  --card-gap: 24px;
+  --card-grid-gap: 24px;
+  --project-media-ratio: 16 / 10;
+  --blog-media-ratio: 16 / 9;
+  --avatar-size: 96px;
+  --icon-btn-size: 36px;
+
+  --img-filter: grayscale(1) brightness(0.92);
+  --img-filter-hover: grayscale(0) brightness(1);
+
+  /* ---------------------------------------------------------------- */
+  /* 10. Code-flavored details (snippets, architecture diagrams)       */
+  /* ---------------------------------------------------------------- */
+
+  --diagram-stroke: 1.5px;
+  --diagram-stroke-color: var(--ink);
+  --diagram-stroke-soft: var(--border-25);
+  --diagram-grid: var(--grid-line);
+  --diagram-dot: 3px;
+
+  /* ---------------------------------------------------------------- */
+  /* 11. Motion                                                        */
+  /* ---------------------------------------------------------------- */
+
+  --rise-distance: 24px;
+  --dur-rise: 500ms;
+  --dur-hover: 200ms;
+  --dur-fade: 300ms;
+  --dur-marquee: 32s;
+  --dur-marquee-slow: 48s;
+  --dur-pulse: 2s;
+  --dur-blink: 1.1s;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-linear: linear;
+  --lift: 3px;
+
+  /* ---------------------------------------------------------------- */
+  /* 12. System                                                        */
+  /* ---------------------------------------------------------------- */
+
+  --z-nav: 50;
+  --z-overlay: 40;
+  --z-marquee: 1;
+  --z-dot: 2;
+
+  --focus-ring: 2px solid var(--ink);
+  --focus-offset: 3px;
+  --scrollbar-size: 10px;
+  --selection-bg: var(--ink);
+  --selection-fg: var(--bg);
+
+  --theme-color: #0a0a0a;
+}
+
+/* Light mode: same two tokens, flipped. Every derived token
+   (text opacities, borders, surfaces, selection) follows via color-mix. */
+[data-theme="light"] {
+  --bg: #f5f5f5;
+  --ink: #0a0a0a;
+  color-scheme: light;
+
+  --theme-color: #f5f5f5;
+}
+
+/* ------------------------------------------------------------------ */
+/* 13. Keyframes (durations reference tokens above)                    */
+/* ------------------------------------------------------------------ */
+
+@keyframes nav-link-rise {
+  from {
+    opacity: 0;
+    transform: translateY(110%) rotate(6deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes token-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes token-pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--dot-halo);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+    opacity: 0.75;
+  }
+}
+
+@keyframes token-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes token-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-distance));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-rise: 0ms;
+    --dur-hover: 0ms;
+    --dur-fade: 0ms;
+    --dur-marquee: 0s;
+    --dur-marquee-slow: 0s;
+    --dur-pulse: 0s;
+    --dur-blink: 0s;
+    --rise-distance: 0px;
+    --lift: 0px;
+  }
+}

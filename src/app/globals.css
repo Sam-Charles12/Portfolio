@@ -1,0 +1,172 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./tokens.css";
+
+:root {
+  --demo-bg: #ffffff;
+  --demo-text: #1a1a1a;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-raised: var(--surface-raised);
+  --color-overlay: var(--surface-overlay);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-hero: var(--font-hero);
+  --font-logo: var(--font-logo);
+  --font-mono: var(--font-mono);
+
+  --animate-marquee: token-marquee var(--dur-marquee) var(--ease-linear) infinite;
+  --animate-marquee-slow: token-marquee var(--dur-marquee-slow)
+    var(--ease-linear) infinite;
+  --animate-pulse-dot: token-pulse-dot var(--dur-pulse) ease-in-out infinite;
+  --animate-blink: token-blink var(--dur-blink) steps(2) infinite;
+  --animate-fade-rise: token-fade-rise var(--dur-rise) var(--ease-out) both;
+}
+
+html {
+  /* Lenis drives smoothing — CSS smooth would fight it. */
+  scroll-behavior: auto;
+  overflow-x: clip;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* Thin monochrome scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-25) transparent;
+}
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-25);
+  border-radius: var(--radius-pill);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Shared low-level helpers (tokens applied, no component design) */
+.container-shell {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-label);
+  letter-spacing: var(--tracking-mono-label);
+  text-transform: uppercase;
+  color: var(--text-50);
+  line-height: var(--leading-mono);
+}
+
+.bg-blueprint-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+/* Custom cursor: hide native cursor only when JS cursor is active
+   (component adds .has-custom-cursor) and pointer is fine. */
+@media (pointer: fine) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* Theme switch (overlay reveal is driven imperatively from the toggle):
+   class-scoped color crossfade kept as a no-JS-animation fallback. */
+.theme-animating,
+.theme-animating *,
+.theme-animating *::before,
+.theme-animating *::after {
+  transition:
+    background-color 400ms ease,
+    color 400ms ease,
+    border-color 400ms ease,
+    fill 400ms ease,
+    stroke 400ms ease !important;
+}
+
+/* Toggle icon flourish: quick rotate-in on each switch. */
+@keyframes theme-icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.theme-icon {
+  display: inline-flex;
+  animation: theme-icon-in 300ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-animating,
+  .theme-animating *,
+  .theme-animating *::before,
+  .theme-animating *::after {
+    transition: none !important;
+  }
+  .theme-icon {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
