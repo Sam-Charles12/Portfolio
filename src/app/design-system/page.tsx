@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import gsap from "gsap";
+import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
@@ -15,7 +15,6 @@ import {
   Search01Icon,
 } from "@hugeicons/core-free-icons";
 import { siGithub } from "simple-icons";
-import { cardHover, fadeRise } from "@/lib/tokens";
 
 function Section({
   index,
@@ -28,9 +27,21 @@ function Section({
   title: string;
   children: React.ReactNode;
 }) {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+    gsapSetup();
+    const ctx = gsap.context(() => {
+      blurFadeIn(el);
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <motion.section
-      {...fadeRise}
+    <section
+      ref={ref}
       className="border-t py-12"
       style={{ borderColor: "var(--border-15)" }}
     >
@@ -48,7 +59,7 @@ function Section({
         {title}
       </h2>
       <div className="mt-8">{children}</div>
-    </motion.section>
+    </section>
   );
 }
 
@@ -83,20 +94,25 @@ function Swatch({
 
 export default function DesignSystemDemo() {
   const gsapBar = useRef<HTMLDivElement>(null);
+  const gsapReveal = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!gsapBar.current) return;
+    if (prefersReducedMotion()) return;
+    gsapSetup();
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        gsapBar.current,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          transformOrigin: "left center",
-        },
-      );
+      if (gsapBar.current) {
+        gsap.fromTo(
+          gsapBar.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 1.2,
+            ease: "power3.out",
+            transformOrigin: "left center",
+          },
+        );
+      }
+      if (gsapReveal.current) blurFadeIn(gsapReveal.current);
     });
     return () => ctx.revert();
   }, []);
@@ -349,9 +365,8 @@ export default function DesignSystemDemo() {
         <Section index="05" label="Cards" title="Projects, writing, stats, experience">
           <div className="grid gap-6 md:grid-cols-2">
             {/* Project card */}
-            <motion.article
-              {...cardHover}
-              className="overflow-hidden"
+            <article
+              className="overflow-hidden transition-transform duration-200 hover:-translate-y-[3px]"
               style={{ background: "var(--surface-raised)", border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)" }}
             >
               <div className="bg-blueprint-grid flex items-center justify-center font-mono text-xs" style={{ aspectRatio: "16 / 10", color: "var(--text-50)", filter: "var(--img-filter)" }}>
@@ -372,11 +387,11 @@ export default function DesignSystemDemo() {
                 </div>
                 <p className="mt-3 font-mono text-xs" style={{ color: "var(--text-50)" }}>● All systems operational · View details →</p>
               </div>
-            </motion.article>
+            </article>
 
             {/* Blog card */}
-            <motion.article
-              {...cardHover}
+            <article
+              className="transition-transform duration-200 hover:-translate-y-[3px]"
               style={{ background: "var(--surface-raised)", border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)", padding: "var(--card-pad)" }}
             >
               <div className="flex gap-2 font-mono text-xs uppercase" style={{ color: "var(--text-50)" }}>
@@ -392,7 +407,7 @@ export default function DesignSystemDemo() {
                 Build-in-public notes on real trade-offs.
               </p>
               <p className="mt-3 font-mono text-xs" style={{ color: "var(--text-50)" }}>6 min read · OCT 2026</p>
-            </motion.article>
+            </article>
 
             {/* Stat */}
             <div style={{ border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)", padding: "var(--card-pad)" }}>
@@ -487,21 +502,18 @@ const useCanvas = create((set) => ({
           </p>
         </Section>
 
-        <Section index="09" label="Motion" title="Fade-rise, lift, GSAP">
+        <Section index="09" label="Motion" title="GSAP blur fade-in, lift">
           <div className="grid gap-6 md:grid-cols-2">
             <div style={{ border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)", padding: "var(--card-pad)" }}>
-              <p className="mono-label">Framer Motion — fade-rise</p>
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              <p className="mono-label">GSAP — blur fade-in</p>
+              <div
+                ref={gsapReveal}
                 className="mt-3 text-sm"
                 style={{ color: "var(--text-70)" }}
               >
-                Scrolls into view: 24px rise, 500ms, ease-out. This section
-                wrapper uses the shared preset.
-              </motion.div>
+                Scrolls into view: fades up 20px through blur, 1.4s,
+                power3.out. Every entrance on the site uses this one helper.
+              </div>
             </div>
             <div style={{ border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)", padding: "var(--card-pad)" }}>
               <p className="mono-label">GSAP — mount tween</p>
