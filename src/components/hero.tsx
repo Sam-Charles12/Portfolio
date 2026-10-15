@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Download01Icon } from "@hugeicons/core-free-icons";
 import { ShimmeringText } from "@/components/animate-ui/primitives/texts/shimmering";
@@ -9,25 +11,31 @@ import { ShimmeringText } from "@/components/animate-ui/primitives/texts/shimmer
 const CV_URL =
   "https://docs.google.com/document/d/1F5Wwtfk3tith4xuirGR-RDJoenlqu0k2/export?format=pdf";
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
 export default function Hero() {
-  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLElement>(null);
+
+  // Entrance (GSAP): one blur-fade language — label, headline lines,
+  // paragraph and buttons fade in through blur, staggered.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || prefersReducedMotion()) return;
+    gsapSetup();
+
+    const ctx = gsap.context(() => {
+      blurFadeIn(".hero-fade", {
+        trigger: null,
+        duration: 1.4,
+        stagger: 0.22,
+        delay: 0.15,
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={rootRef}
       aria-label="Intro"
       className="w-full"
       style={{ backgroundColor: "var(--bg)" }}
@@ -40,18 +48,10 @@ export default function Hero() {
         }}
       >
         {/* Left — copy */}
-        <motion.div
-          variants={container}
-          initial={reduceMotion ? false : "hidden"}
-          animate="show"
-          className="flex w-full max-w-none flex-col items-start"
-        >
-          <motion.p variants={item} className="mono-label">
-            Software Engineer
-          </motion.p>
+        <div className="flex w-full max-w-none flex-col items-start">
+          <p className="hero-fade mono-label">Software Engineer</p>
 
-          <motion.h1
-            variants={item}
+          <h1
             className="mt-4 font-extrabold"
             style={{
               fontFamily: "var(--font-body)",
@@ -62,20 +62,20 @@ export default function Hero() {
               color: "var(--text-100)",
             }}
           >
-            <span className="md:whitespace-nowrap">
+            <span className="hero-fade block md:whitespace-nowrap">
               Building scalable systems.
             </span>
-            <br />
-            <ShimmeringText
-              text="Writing clean code."
-              wave={false}
-              duration={4}
-            />
-          </motion.h1>
+            <span className="hero-fade block">
+              <ShimmeringText
+                text="Writing clean code."
+                wave={false}
+                duration={4}
+              />
+            </span>
+          </h1>
 
-          <motion.p
-            variants={item}
-            className="mt-5 max-w-xl"
+          <p
+            className="hero-fade mt-5 max-w-xl"
             style={{
               color: "var(--text-70)",
               fontSize: 19,
@@ -85,12 +85,12 @@ export default function Hero() {
             Full-stack engineer obsessed with performance, maintainability,
             and elegant solutions. From APIs to frontends, I ship
             production-ready software.
-          </motion.p>
+          </p>
 
-          <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
-            <motion.a
+          <div className="hero-fade mt-8 flex flex-wrap gap-3">
+            <a
               href="#work"
-              className="inline-flex items-center font-medium"
+              className="inline-flex items-center font-medium transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
               style={{
                 height: 52,
                 paddingInline: 28,
@@ -100,17 +100,14 @@ export default function Hero() {
                 fontSize: 16,
                 gap: 10,
               }}
-              whileHover={reduceMotion ? undefined : { y: -2 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 420, damping: 24 }}
             >
               See my work
-            </motion.a>
-            <motion.a
+            </a>
+            <a
               href={CV_URL}
               target={CV_URL.startsWith("http") ? "_blank" : undefined}
               rel={CV_URL.startsWith("http") ? "noreferrer" : undefined}
-              className="inline-flex items-center font-medium"
+              className="inline-flex items-center font-medium transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
               style={{
                 height: 52,
                 paddingInline: 28,
@@ -121,9 +118,6 @@ export default function Hero() {
                 fontSize: 16,
                 gap: 10,
               }}
-              whileHover={reduceMotion ? undefined : { y: -2 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 420, damping: 24 }}
             >
               Download CV
               <HugeiconsIcon
@@ -131,9 +125,9 @@ export default function Hero() {
                 size={18}
                 strokeWidth={2}
               />
-            </motion.a>
-          </motion.div>
-        </motion.div>
+            </a>
+          </div>
+        </div>
 
       </div>
     </section>
