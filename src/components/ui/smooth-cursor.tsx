@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useSpring } from "motion/react";
+import gsap from "gsap";
+import { gsapSetup } from "@/lib/gsap";
 import { FC, JSX, useEffect, useRef, useState } from "react";
 
 interface Position {
@@ -90,24 +91,19 @@ export function SmoothCursor({
   },
 }: SmoothCursorProps) {
   const [enabled, setEnabled] = useState(false);
+  const elRef = useRef<HTMLDivElement>(null);
+  const tweens = useRef<{
+    x?: gsap.QuickToFunc;
+    y?: gsap.QuickToFunc;
+    rotation?: gsap.QuickToFunc;
+    scale?: gsap.QuickToFunc;
+  }>({});
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
   const previousAngle = useRef(0);
   const accumulatedRotation = useRef(0);
-
-  const cursorX = useSpring(0, springConfig);
-  const cursorY = useSpring(0, springConfig);
-  const rotation = useSpring(0, {
-    ...springConfig,
-    damping: 60,
-    stiffness: 300,
-  });
-  const scale = useSpring(1, {
-    ...springConfig,
-    stiffness: 500,
-    damping: 35,
-  });
+  void springConfig;
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -116,7 +112,28 @@ export function SmoothCursor({
   }, []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || !elRef.current) return;
+    gsapSetup();
+    const el = elRef.current;
+    gsap.set(el, { xPercent: -50, yPercent: -50, x: -100, y: -100 });
+
+    tweens.current = {
+      x: gsap.quickTo(el, "x", { duration: 0.35, ease: "power3" }),
+      y: gsap.quickTo(el, "y", { duration: 0.35, ease: "power3" }),
+      rotation: gsap.quickTo(el, "rotation", {
+        duration: 0.4,
+        ease: "power3",
+      }),
+      scale: gsap.quickTo(el, "scale", { duration: 0.25, ease: "power2.out" }),
+    };
+
+    // Mount pop-in (mirrors the old spring entrance).
+    gsap.fromTo(
+      el,
+      { scale: 0 },
+      { scale: 1, duration: 0.5, ease: "back.out(1.5)", overwrite: "auto" },
+    );
+
     const updateVelocity = (currentPos: Position) => {
       const currentTime = Date.now();
       const deltaTime = currentTime - lastUpdateTime.current;
@@ -140,8 +157,8 @@ export function SmoothCursor({
         Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2),
       );
 
-      cursorX.set(currentPos.x);
-      cursorY.set(currentPos.y);
+      tweens.current.x?.(currentPos.x);
+      tweens.current.y?.(currentPos.y);
 
       if (speed > 0.1) {
         const currentAngle =
@@ -152,13 +169,13 @@ export function SmoothCursor({
         if (angleDiff > 180) angleDiff -= 360;
         if (angleDiff < -180) angleDiff += 360;
         accumulatedRotation.current += angleDiff;
-        rotation.set(accumulatedRotation.current);
+        tweens.current.rotation?.(accumulatedRotation.current);
         previousAngle.current = currentAngle;
 
-        scale.set(0.95);
+        tweens.current.scale?.(0.95);
         window.clearTimeout(resetScaleTimeout);
         resetScaleTimeout = window.setTimeout(() => {
-          scale.set(1);
+          tweens.current.scale?.(1);
           resetScaleTimeout = undefined;
         }, 150);
       }
@@ -185,33 +202,23 @@ export function SmoothCursor({
       if (rafId) cancelAnimationFrame(rafId);
       if (resetScaleTimeout) window.clearTimeout(resetScaleTimeout);
     };
-  }, [cursorX, cursorY, rotation, scale, enabled]);
+  }, [enabled]);
 
   if (!enabled) return null;
 
   return (
-    <motion.div
+    <div
+      ref={elRef}
       style={{
         position: "fixed",
-        left: cursorX,
-        top: cursorY,
-        translateX: "-50%",
-        translateY: "-50%",
-        rotate: rotation,
-        scale: scale,
+        left: 0,
+        top: 0,
         zIndex: 100,
         pointerEvents: "none",
         willChange: "transform",
       }}
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 400,
-        damping: 30,
-      }}
     >
       {cursor}
-    </motion.div>
+    </div>
   );
 }
