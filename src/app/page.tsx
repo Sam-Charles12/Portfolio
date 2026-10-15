@@ -1,6 +1,7 @@
 import SiteNav from "@/components/site-nav";
 import Hero from "@/components/hero";
 import FeaturedWorks from "@/components/featured-works";
+import AboutMarquee from "@/components/about-marquee";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       >
         <Hero />
         <FeaturedWorks />
+        <AboutMarquee />
       </main>
     </div>
   );
