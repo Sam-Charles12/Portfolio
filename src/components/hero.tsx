@@ -6,10 +6,7 @@ import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Download01Icon } from "@hugeicons/core-free-icons";
 import { ShimmeringText } from "@/components/animate-ui/primitives/texts/shimmering";
-
-// Direct PDF export — 1-click download.
-const CV_URL =
-  "https://docs.google.com/document/d/1F5Wwtfk3tith4xuirGR-RDJoenlqu0k2/export?format=pdf";
+import { CV_URL } from "@/lib/site";
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
