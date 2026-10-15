@@ -1,7 +1,8 @@
 /*
- * JS mirror of tokens.css for Framer Motion / GSAP / IntersectionObserver.
+ * JS mirror of tokens.css for GSAP / IntersectionObserver.
  * Keep numeric values in sync with src/app/tokens.css.
  * Colors stay as CSS vars (two-color rule) — JS only carries motion/layout.
+ * Motion itself lives in src/lib/gsap.ts (GSAP is the only animation lib).
  */
 
 export const colors = {
@@ -14,30 +15,14 @@ export const colors = {
   border25: "var(--border-25)",
 } as const;
 
-export const motion = {
+export const motionTokens = {
   riseDistance: 24,
   durRise: 0.5, // 500ms
   durHover: 0.2,
   durFade: 0.3,
-  easeOut: [0.22, 1, 0.36, 1] as const, // --ease-out
-  easeInOut: [0.65, 0, 0.35, 1] as const,
   lift: 3,
   marqueeSecs: 32,
   marqueeSlowSecs: 48,
-} as const;
-
-/** Framer Motion preset: fade-and-rise on scroll (24px, 500ms, ease-out). */
-export const fadeRise = {
-  initial: { opacity: 0, y: motion.riseDistance },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: motion.durRise, ease: motion.easeOut },
-} as const;
-
-/** Card hover: lift 3px, border to 100% ink. */
-export const cardHover = {
-  whileHover: { y: -motion.lift },
-  transition: { duration: motion.durHover, ease: motion.easeOut },
 } as const;
 
 export const layout = {
