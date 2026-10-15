@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { gsapSetup, prefersReducedMotion, blurFadeIn, parallaxY } from "@/lib/gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
@@ -15,6 +16,7 @@ import {
 import { siGithub } from "simple-icons";
 import StackIcon from "tech-stack-icons";
 import type { IconName } from "tech-stack-icons";
+import { TextReveal } from "@/components/ui/cascade-text";
 
 const STACK_ICON_NAMES: Record<string, IconName> = {
   React: "react",
@@ -81,9 +83,10 @@ function TechBadge({ name }: { name: string }) {
       </span>
     );
   }
-  // Badges sit on the black legibility scrim in both site themes,
-  // so always use the dark-variant (white) marks — the light/black
-  // Next.js + Express marks vanish on this backdrop.
+  // Backdrop-aware, not site-theme-aware: badges sit on the fixed black
+  // legibility scrim in both site themes, so always use variant="dark"
+  // (white marks for dark backgrounds). variant="light" = black marks
+  // for light backgrounds and would vanish here (Next.js, Express).
   return (
     <span
       aria-label={name}
@@ -151,23 +154,25 @@ const PROJECTS: Project[] = [
 ];
 
 function ProjectCard({ project }: { project: Project }) {
-  const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  // Parallax: image drifts as the card moves through the viewport.
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Scroll reveal (blur fade-and-rise, reverses out) + image parallax (GSAP).
+  useEffect(() => {
+    const card = ref.current;
+    if (!card || prefersReducedMotion()) return;
+    gsapSetup();
+    const ctx = gsap.context(() => {
+      blurFadeIn(card);
+      if (imgRef.current) parallaxY(imgRef.current, card);
+    }, card);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <motion.article
+    <article
       ref={ref}
-      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={reduceMotion ? undefined : { y: -3 }}
-      className="group relative overflow-hidden"
+      className="group relative overflow-hidden transition-transform duration-200 hover:-translate-y-[3px]"
       style={{
         border: "var(--border-width) solid var(--border-20)",
         borderRadius: "4rem",
@@ -178,24 +183,14 @@ function ProjectCard({ project }: { project: Project }) {
       {/* Screenshot — scroll parallax + subtle zoom on hover. */}
       {project.image ? (
         <div
-          className={`absolute inset-0 overflow-hidden ${
-            reduceMotion
-              ? ""
-              : "transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-          }`}
+          className="absolute inset-0 overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.04]"
           aria-hidden="true"
         >
-          <motion.img
+          <img
+            ref={imgRef}
             src={project.image}
             alt={`${project.title} screenshot`}
-            style={
-              reduceMotion
-                ? { objectPosition: project.imagePosition ?? "50% 0%" }
-                : {
-                    y: imageY,
-                    objectPosition: project.imagePosition ?? "50% 0%",
-                  }
-            }
+            style={{ objectPosition: project.imagePosition ?? "50% 0%" }}
             className="h-[112%] w-full object-cover"
           />
         </div>
@@ -332,26 +327,33 @@ function ProjectCard({ project }: { project: Project }) {
           </a>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
 export default function FeaturedWorks() {
-  const reduceMotion = useReducedMotion();
+  const introRef = useRef<HTMLDivElement>(null);
+
+  // Intro reveal (GSAP, plays once — it stays stuck for the section).
+  useEffect(() => {
+    const intro = introRef.current;
+    if (!intro || prefersReducedMotion()) return;
+    gsapSetup();
+    const ctx = gsap.context(() => {
+      blurFadeIn(intro, { reversible: false });
+    }, intro);
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section id="work" aria-label="Featured projects" className="w-full">
       <div
-        className="container-shell grid grid-cols-1 gap-10 py-16 md:py-24 lg:grid-cols-[1fr_1.1fr]"
+        className="container-shell grid grid-cols-1 gap-10 pt-0 pb-0 lg:grid-cols-[1fr_1.1fr]"
         style={{ paddingLeft: 0, paddingRight: 0 }}
       >
         {/* Sticky intro — mirrors the reference split. */}
-        <div className="lg:sticky lg:top-32 lg:self-start">
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
+        <div className="lg:sticky lg:top-10 lg:self-start">
+          <div ref={introRef}>
             <h2
               className="font-bold"
               style={{
@@ -389,19 +391,26 @@ export default function FeaturedWorks() {
                 fontSize: 16,
               }}
             >
-              All Works
+              <TextReveal
+                as="span"
+                text="All Works"
+                fontSize="16px"
+                color="var(--ink)"
+                hoverColor="var(--ink)"
+                style={{ padding: 0 }}
+              />
               <HugeiconsIcon
                 icon={ArrowUpRight01Icon}
                 size={18}
                 strokeWidth={2}
               />
             </a>
-          </motion.div>
+          </div>
         </div>
 
         {/* Cards. */}
         <div
-          className="flex w-full max-w-[680px] flex-col gap-6 justify-self-end"
+          className="flex w-full max-w-[680px] flex-col gap-8 justify-self-end"
         >
           {PROJECTS.map((p) => (
             <ProjectCard key={p.title} project={p} />
