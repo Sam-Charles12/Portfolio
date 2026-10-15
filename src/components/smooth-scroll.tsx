@@ -2,15 +2,19 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { getScrollTrigger } from "@/lib/gsap";
 
 /**
- * Lenis smooth scrolling — site-wide.
- * Skipped under prefers-reduced-motion. Anchor links (#work, #top, …)
- * route through lenis.scrollTo so jumps stay smooth.
+ * Lenis smooth scrolling — site-wide, wired into GSAP's ticker so
+ * ScrollTrigger stays in sync. Skipped under prefers-reduced-motion.
+ * Anchor links (#work, #top, …) route through lenis.scrollTo.
  */
 export default function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ScrollTrigger = getScrollTrigger();
 
     const lenis = new Lenis({
       duration: 1.15,
@@ -18,12 +22,10 @@ export default function SmoothScroll() {
       smoothWheel: true,
     });
 
-    let raf = 0;
-    const loop = (time: number) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+    lenis.on("scroll", ScrollTrigger.update);
+    const tick = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as Element | null)?.closest?.(
@@ -40,8 +42,8 @@ export default function SmoothScroll() {
     document.addEventListener("click", onClick);
 
     return () => {
-      cancelAnimationFrame(raf);
       document.removeEventListener("click", onClick);
+      gsap.ticker.remove(tick);
       lenis.destroy();
     };
   }, []);
