@@ -2,12 +2,8 @@
 
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type Transition,
-} from "motion/react";
+import gsap from "gsap";
+import { prefersReducedMotion } from "@/lib/gsap";
 
 export type FollowCursor = boolean | "x" | "y";
 
@@ -117,98 +113,140 @@ export function TooltipContent({
 }: TooltipContentProps) {
   const open = React.useContext(TooltipOpenContext);
   const cursor = React.useContext(TooltipCursorContext);
-  const reduceMotion = useReducedMotion();
 
   const slide = 6;
-  const initial = reduceMotion
-    ? { opacity: 0 }
-    : {
-        opacity: 0,
-        scale: 0.85,
-        filter: "blur(4px)",
-        x: side === "left" ? slide : side === "right" ? -slide : 0,
-        y: side === "top" ? slide : side === "bottom" ? -slide : 0,
-      };
-  const animate = reduceMotion
-    ? { opacity: 1 }
-    : { opacity: 1, scale: 1, x: 0, y: 0, filter: "blur(0px)" };
-  const enterTransition: Transition = reduceMotion
-    ? { duration: 0.12 }
-    : { type: "spring", stiffness: 550, damping: 32, mass: 0.6 };
-  const exitTransition: Transition = { duration: 0.12, ease: "easeIn" };
-
-  const exit = reduceMotion
-    ? { opacity: 0 }
-    : {
-        opacity: 0,
-        scale: 0.95,
-        filter: "blur(2px)",
-        transition: exitTransition,
-      };
+  const fromVars = {
+    opacity: 0,
+    scale: 0.85,
+    filter: "blur(4px)",
+    x: side === "left" ? slide : side === "right" ? -slide : 0,
+    y: side === "top" ? slide : side === "bottom" ? -slide : 0,
+  };
+  const toVars = { opacity: 1, scale: 1, x: 0, y: 0, filter: "blur(0px)" };
 
   // Cursor-following bubble — fixed to the pointer, no Radix positioning.
   if (followCursor) {
     const offset = 14;
     return (
       <TooltipPrimitive.Portal forceMount>
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={initial}
-              animate={animate}
-              exit={exit}
-              transition={enterTransition}
-              style={{
-                ...BUBBLE_STYLE,
-                position: "fixed",
-                left: cursor.x + offset,
-                top: cursor.y + offset,
-                zIndex: 60,
-                pointerEvents: "none",
-                ...style,
-              }}
-            >
-              {children}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <AnimatedBubble
+          open={open}
+          fromVars={fromVars}
+          toVars={toVars}
+          style={{
+            ...BUBBLE_STYLE,
+            position: "fixed",
+            left: cursor.x + offset,
+            top: cursor.y + offset,
+            zIndex: 60,
+            pointerEvents: "none",
+            ...style,
+          }}
+        >
+          {children}
+        </AnimatedBubble>
       </TooltipPrimitive.Portal>
     );
   }
 
   // Anchored bubble — Radix positions the invisible wrapper,
-  // motion animates the pill inside (same hover animation).
+  // GSAP animates the pill inside (same hover animation).
   return (
     <TooltipPrimitive.Portal forceMount>
-      <AnimatePresence>
-        {open && (
-          <TooltipPrimitive.Content
-            forceMount
-            side={side}
-            sideOffset={sideOffset}
-            align={align}
-            alignOffset={alignOffset}
-            style={{
-              background: "transparent",
-              border: "none",
-              padding: 0,
-              boxShadow: "none",
-              zIndex: 60,
-            }}
-            {...props}
-          >
-            <motion.div
-              initial={initial}
-              animate={animate}
-              exit={exit}
-              transition={enterTransition}
-              style={{ ...BUBBLE_STYLE, ...style }}
-            >
-              {children}
-            </motion.div>
-          </TooltipPrimitive.Content>
-        )}
-      </AnimatePresence>
+      <TooltipPrimitive.Content
+        forceMount
+        side={side}
+        sideOffset={sideOffset}
+        align={align}
+        alignOffset={alignOffset}
+        style={{
+          background: "transparent",
+          border: "none",
+          padding: 0,
+          boxShadow: "none",
+          zIndex: 60,
+        }}
+        {...props}
+      >
+        <AnimatedBubble
+          open={open}
+          fromVars={fromVars}
+          toVars={toVars}
+          style={{ ...BUBBLE_STYLE, ...style }}
+        >
+          {children}
+        </AnimatedBubble>
+      </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
+  );
+}
+
+/**
+ * Mount-animated bubble (GSAP). Stays rendered through the close tween,
+ * then unmounts — the animated exit.
+ */
+function AnimatedBubble({
+  open,
+  fromVars,
+  toVars,
+  style,
+  children,
+}: {
+  open: boolean;
+  fromVars: gsap.TweenVars;
+  toVars: gsap.TweenVars;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [render, setRender] = React.useState(open);
+  const varsRef = React.useRef({ fromVars, toVars });
+  varsRef.current = { fromVars, toVars };
+
+  React.useEffect(() => {
+    const el = ref.current;
+    const reduced = prefersReducedMotion();
+    if (open) {
+      setRender(true);
+      return;
+    }
+    if (!el || !render) return;
+    if (reduced) {
+      setRender(false);
+      return;
+    }
+    const tween = gsap.to(el, {
+      opacity: 0,
+      scale: 0.95,
+      filter: "blur(2px)",
+      duration: 0.12,
+      ease: "power2.in",
+      overwrite: true,
+      onComplete: () => setRender(false),
+    });
+    return () => {
+      tween.kill();
+    };
+  }, [open, render]);
+
+  React.useEffect(() => {
+    if (!render || !open || !ref.current) return;
+    if (prefersReducedMotion()) return;
+    const tween = gsap.fromTo(ref.current, varsRef.current.fromVars, {
+      ...varsRef.current.toVars,
+      duration: 0.35,
+      ease: "back.out(1.6)",
+      overwrite: true,
+    });
+    return () => {
+      tween.kill();
+    };
+  }, [render, open]);
+
+  if (!render) return null;
+  return (
+    <div ref={ref} style={style}>
+      {children}
+    </div>
   );
 }
