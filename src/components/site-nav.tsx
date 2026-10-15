@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowUpRight01Icon,
@@ -14,7 +13,6 @@ import { TextReveal } from "@/components/ui/cascade-text";
 
 export default function SiteNav() {
   const [open, setOpen] = useState(false);
-  const reduceMotion = useReducedMotion();
 
   return (
     <>
@@ -42,9 +40,9 @@ export default function SiteNav() {
           </a>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <motion.a
+            <a
               href="#contact"
-              className="inline-flex items-center font-semibold"
+              className="inline-flex items-center font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
               style={{
                 height: 48,
                 paddingInline: 28,
@@ -55,10 +53,7 @@ export default function SiteNav() {
                 borderRadius: "var(--radius-pill)",
                 fontSize: 16,
               }}
-            whileHover={reduceMotion ? undefined : { y: -2 }}
-            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 420, damping: 24 }}
-          >
+            >
             <TextReveal
               as="span"
               text="Say Hello"
@@ -67,18 +62,14 @@ export default function SiteNav() {
               hoverColor="var(--ink)"
               style={{ padding: 0 }}
             />
-            <motion.span
-              className="inline-flex"
-              whileHover={reduceMotion ? undefined : { x: 3, y: -3 }}
-              transition={{ type: "spring", stiffness: 500, damping: 20 }}
-            >
+            <span className="inline-flex transition-transform duration-200 hover:translate-x-[3px] hover:-translate-y-[3px]">
               <HugeiconsIcon
                 icon={ArrowUpRight01Icon}
                 size={18}
                 strokeWidth={2}
               />
-            </motion.span>
-          </motion.a>
+            </span>
+          </a>
           {/* Hamburger lives in the fixed overlay below — keep its 48px
               footprint here so the Say Hello pill keeps its right offset. */}
           <span aria-hidden="true" style={{ width: 48, height: 48 }} />
@@ -94,7 +85,7 @@ export default function SiteNav() {
         right: "clamp(20px, 6vw, 100px)",
       }}
     >
-      <motion.button
+      <button
         data-menu-toggle
         aria-expanded={open}
         aria-label={open ? "Close menu" : "Open menu"}
@@ -105,7 +96,7 @@ export default function SiteNav() {
             setOpen(true);
           }
         }}
-        className="inline-flex items-center justify-center"
+        className="inline-flex items-center justify-center transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.92]"
         style={
           open
             ? {
@@ -124,24 +115,18 @@ export default function SiteNav() {
                 borderRadius: "50%",
               }
         }
-        whileHover={reduceMotion ? undefined : { y: -2, rotate: open ? -4 : 4 }}
-        whileTap={reduceMotion ? undefined : { scale: 0.92 }}
-        transition={{ type: "spring", stiffness: 420, damping: 22 }}
       >
-        <motion.span
+        <span
           key={open ? "close" : "menu"}
-          initial={reduceMotion ? false : { rotate: -90, opacity: 0 }}
-          animate={reduceMotion ? undefined : { rotate: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 430, damping: 24 }}
-          className="inline-flex"
+          className="theme-icon inline-flex"
         >
           <HugeiconsIcon
             icon={open ? Cancel01Icon : Menu01Icon}
             size={18}
             strokeWidth={open ? 2 : 1.5}
           />
-        </motion.span>
-      </motion.button>
+        </span>
+      </button>
     </div>
 
     {open && <MenuDrawer onClose={() => setOpen(false)} />}
