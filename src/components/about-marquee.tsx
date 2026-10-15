@@ -45,7 +45,7 @@ export default function AboutMarquee() {
     <section
       aria-label="About me divider"
       className="w-full overflow-hidden"
-      style={{ paddingTop: 16, paddingBottom: 24 }}
+      style={{ paddingTop: 72, paddingBottom: 24 }}
     >
       <div className="animate-marquee-slow flex w-max items-center">
         <MarqueeHalf />
