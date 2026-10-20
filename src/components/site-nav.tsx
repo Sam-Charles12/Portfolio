@@ -25,10 +25,9 @@ export default function SiteNav() {
         data-nav
       >
         <div
-          className="flex items-center justify-between"
+          className="container-shell flex items-center justify-between"
           style={{
             minHeight: "var(--nav-h)",
-            paddingInline: "clamp(20px, 6vw, 100px)",
             paddingBottom: 20,
           }}
         >
@@ -71,20 +70,33 @@ export default function SiteNav() {
             </span>
           </a>
           {/* Hamburger lives in the fixed overlay below — keep its 48px
-              footprint here so the Say Hello pill keeps its right offset. */}
-          <span aria-hidden="true" style={{ width: 48, height: 48 }} />
+              footprint (plus its 12px left margin) here so the Say Hello
+              pill keeps its right offset. */}
+          <span
+            aria-hidden="true"
+            style={{ width: 48, height: 48, marginLeft: 4 }}
+          />
         </div>
       </div>
     </header>
 
+    {/* Fixed overlay, but docked to the nav row via the same centered
+        container-shell — so it lines up on every viewport (vw-based
+        offsets drift by half the scrollbar on Windows) and stays put
+        on scroll. Inner mirrors the row geometry so the 48px circle
+        centers exactly with the Say Hello pill. */}
     <div
-      className="fixed z-50"
+      className="pointer-events-none fixed inset-x-0 z-50"
       data-menu-toggle-fixed
-      style={{
-        top: 40,
-        right: "clamp(20px, 6vw, 100px)",
-      }}
+      style={{ top: 40 }}
     >
+      <div
+        className="container-shell flex items-center justify-end"
+        style={{
+          minHeight: "var(--nav-h)",
+          paddingBottom: 20,
+        }}
+      >
       <button
         data-menu-toggle
         aria-expanded={open}
@@ -96,7 +108,7 @@ export default function SiteNav() {
             setOpen(true);
           }
         }}
-        className="inline-flex items-center justify-center transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.92]"
+        className="pointer-events-auto inline-flex items-center justify-center transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.92]"
         style={
           open
             ? {
@@ -127,6 +139,7 @@ export default function SiteNav() {
           />
         </span>
       </button>
+      </div>
     </div>
 
     {open && <MenuDrawer onClose={() => setOpen(false)} />}

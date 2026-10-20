@@ -4,3 +4,7 @@
 /** Direct PDF export of the CV — 1-click download. */
 export const CV_URL =
   "https://docs.google.com/document/d/1F5Wwtfk3tith4xuirGR-RDJoenlqu0k2/export?format=pdf";
+
+/** Closing CTA destination. Swap to `mailto:you@domain.com` once the
+ *  address is public — keeps the button a real link until then. */
+export const CONTACT_HREF = "https://github.com/Sam-Charles12";

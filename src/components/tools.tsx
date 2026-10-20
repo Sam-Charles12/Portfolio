@@ -61,7 +61,7 @@ export default function Tools() {
   return (
     <section ref={rootRef} id="tools" aria-label="Tools I build with" className="w-full">
       <div className="container-shell grid grid-cols-1 gap-10 py-16 md:py-24 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
-        <div className="lg:sticky lg:top-32 lg:self-start">
+        <div>
           <h2
             className="font-bold lowercase"
             style={{
