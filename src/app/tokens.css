@@ -49,16 +49,10 @@
   --on-fill: var(--bg);
 
   /* ---------------------------------------------------------------- */
-  /* 4. Typography                                                     */
+  /* 4. Typography (families owned by next/font in layout.tsx —         */
+  /*    do NOT hardcode family names here, they clobber the loaded     */
+  /*    @font-face faces and fall back to system sans)                  */
   /* ---------------------------------------------------------------- */
-
-  --font-display: "Funnel Display", system-ui, -apple-system, "Segoe UI",
-    sans-serif;
-  --font-body: "Funnel Display", system-ui, -apple-system, "Segoe UI",
-    sans-serif;
-  --font-mono: "Funnel Display", ui-monospace, "SF Mono", Menlo,
-    monospace;
-  --font-logo: "Funnel Display", system-ui, sans-serif;
 
   /* Type scale — measured from the reference.
      Hero caps at 48px (text-2xl → text-5xl); section titles are the
@@ -67,7 +61,7 @@
   --text-section: clamp(3.75rem, 3.4rem + 1.75vw, 4.5rem);
   --text-cta: clamp(2.25rem, 1.75rem + 2.5vw, 3.75rem);
   --text-marquee: clamp(5rem, 4rem + 8vw, 13rem);
-  --text-stat: clamp(2.25rem, 1.9rem + 1.75vw, 3.75rem);
+  --text-stat: clamp(3rem, 2.4rem + 2.5vw, 4.5rem);
   --text-card-title: 22px;
   --text-body: 17px;
   --text-small: 14px;
@@ -102,7 +96,7 @@
 
   --container: 1280px; /* max-w-7xl — hero, sections, footer */
   --container-narrow: 672px; /* max-w-xl/2xl — hero copy, about text */
-  --gutter: 24px;
+  --gutter: 2px;
   --gutter-sm: 16px;
 
   --section-y: clamp(80px, 10vw, 128px);
