@@ -30,12 +30,16 @@ export function prefersReducedMotion() {
  * default; pass `trigger: null` to play immediately (page-load
  * entrances). `reversible` controls whether it plays back out on leave
  * (one-shot sections pass false).
+ *
+ * `x` adds a horizontal travel vector (negative = enters from the left),
+ * which is what makes a multi-target stagger read as a left→right sweep.
  */
 export function blurFadeIn(
   targets: gsap.TweenTarget,
   opts?: {
     trigger?: Element | null;
     blur?: number;
+    x?: number;
     y?: number;
     duration?: number;
     delay?: number;
@@ -47,6 +51,7 @@ export function blurFadeIn(
   const {
     trigger,
     blur = 10,
+    x = 0,
     y = 20,
     duration = 1.4,
     delay = 0,
@@ -61,9 +66,10 @@ export function blurFadeIn(
 
   return gsap.fromTo(
     targets,
-    { opacity: 0, y, filter: `blur(${blur}px)` },
+    { opacity: 0, x, y, filter: `blur(${blur}px)` },
     {
       opacity: 1,
+      x: 0,
       y: 0,
       filter: "blur(0px)",
       duration,

@@ -37,7 +37,10 @@ export default function SmoothScroll() {
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target as HTMLElement, { offset: -24 });
+      // "#top" is the page root — no offset, otherwise we'd stop short.
+      lenis.scrollTo(target as HTMLElement, {
+        offset: id === "#top" ? 0 : -24,
+      });
     };
     document.addEventListener("click", onClick);
 
