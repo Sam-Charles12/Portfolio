@@ -21,12 +21,18 @@ import { TextReveal } from "@/components/ui/cascade-text";
 const STACK_ICON_NAMES: Record<string, IconName> = {
   React: "react",
   "React Native": "reactnative",
+  JavaScript: "js",
   TypeScript: "typescript",
+  "Node.js": "nodejs",
+  Nodejs: "nodejs",
   Express: "expressjs",
+  "Express.js": "expressjs",
+  Git: "git",
   Supabase: "supabase",
   Vite: "vitejs",
   Tailwind: "tailwindcss",
   "Tailwind CSS": "tailwindcss",
+  "Tailwind..": "tailwindcss",
   "Next.js": "nextjs2",
   Nextjs: "nextjs2",
   GSAP: "gsap2",
@@ -347,9 +353,7 @@ export default function FeaturedWorks() {
 
   return (
     <section id="work" aria-label="Featured projects" className="w-full">
-      <div
-        className="container-shell grid grid-cols-1 gap-10 pt-0 pb-0 lg:grid-cols-[1fr_1.1fr]"
-      >
+      <div className="container-shell grid grid-cols-1 gap-10 pt-0 pb-0 lg:grid-cols-[1fr_1.1fr]">
         {/* Sticky intro — mirrors the reference split. */}
         <div className="lg:sticky lg:top-10 lg:self-start">
           <div ref={introRef}>

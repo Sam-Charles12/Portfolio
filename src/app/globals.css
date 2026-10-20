@@ -31,6 +31,11 @@ html {
   /* Lenis drives smoothing — CSS smooth would fight it. */
   scroll-behavior: auto;
   overflow-x: clip;
+  /* Aliases — next/font owns --font-display on <html>; body/logo/mono
+     follow it so every utility resolves to the loaded Funnel Display. */
+  --font-body: var(--font-display);
+  --font-logo: var(--font-display);
+  --font-mono: var(--font-display);
 }
 
 body {
