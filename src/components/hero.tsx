@@ -41,7 +41,6 @@ export default function Hero() {
         className="container-shell grid grid-cols-1 items-center gap-12 py-14 md:py-20"
         style={{
           minHeight: "calc(100dvh - var(--nav-h))",
-          paddingLeft: 0,
         }}
       >
         {/* Left — copy */}

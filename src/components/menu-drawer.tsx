@@ -226,20 +226,18 @@ export default function MenuDrawer({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed z-80 pointer-events-none"
-      style={{
-        top: 112,
-        right: "clamp(20px, 6vw, 100px)",
-        width: "min(520px, calc(100vw - 24px))",
-      }}
+      className="pointer-events-none fixed inset-x-0 z-80"
+      style={{ top: 112 }}
     >
-      <div
-        ref={rootRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menu"
-        className="relative"
-      >
+      <div className="container-shell flex justify-end">
+        <div
+          ref={rootRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className="relative"
+          style={{ width: "min(520px, 100%)" }}
+        >
         <div
           className="drawer-panel pointer-events-auto relative flex min-h-160 flex-col overflow-hidden"
           style={{
@@ -315,6 +313,7 @@ export default function MenuDrawer({ onClose }: { onClose: () => void }) {
               — Albert Einstein
             </p>
           </div>
+        </div>
         </div>
       </div>
     </div>
