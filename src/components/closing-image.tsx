@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
+
 /**
  * Full-bleed artwork between the tools list and the writing section.
  * Drop the image at /public/contact-bg.png (or point this at any other
@@ -10,6 +16,20 @@
 const BACKGROUND_IMAGE = "/contact-bg.png";
 
 export default function ClosingImage() {
+  const frameRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame || prefersReducedMotion()) return;
+    gsapSetup();
+
+    const ctx = gsap.context(() => {
+      blurFadeIn(frame, { duration: 1.3, y: 24 });
+    }, frame);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
       id="closing-image"
@@ -22,6 +42,7 @@ export default function ClosingImage() {
     >
       <div className="container-shell">
         <div
+          ref={frameRef}
           className="relative overflow-hidden"
           style={{
             borderRadius: "clamp(24px, 3vw, 40px)",
