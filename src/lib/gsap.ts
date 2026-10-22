@@ -78,7 +78,10 @@ export function blurFadeIn(
       ease: "power3.out",
       // Drop the transform/filter layers after one-shot plays; reversible
       // tweens need their start values kept for the reverse leg.
-      clearProps: reversible ? undefined : "filter,opacity,transform",
+      // Note: `clearProps: undefined` is NOT a no-op — GSAP still registers
+      // the special prop and then crashes on render (`undefined.split`),
+      // so the key has to be omitted entirely.
+      ...(reversible ? {} : { clearProps: "filter,opacity,transform" }),
       scrollTrigger: triggerEl
         ? {
             trigger: triggerEl,
