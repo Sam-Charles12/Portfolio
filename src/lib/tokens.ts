@@ -26,7 +26,10 @@ export const motionTokens = {
 } as const;
 
 export const layout = {
-  container: 1280,
+  // Mirrors --container in tokens.css: fluid so the outer side margin is
+  // always 40% of the old fixed-1280px margin. Kept as a string because
+  // it is a CSS length expression, not a number.
+  container: "min(1792px, calc(40vw + 768px))",
   containerNarrow: 672,
   navH: 80,
   gridSize: 48,
@@ -38,6 +41,7 @@ export const type = {
   hero: "clamp(1.5rem, 1rem + 2.5vw, 3rem)",
   section: "clamp(3.75rem, 3.4rem + 1.75vw, 4.5rem)",
   cta: "clamp(2.25rem, 1.75rem + 2.5vw, 3.75rem)",
+  panelCta: "clamp(2.5rem, 1.9rem + 3vw, 4.5rem)",
   marquee: "clamp(5rem, 4rem + 8vw, 13rem)",
   stat: "clamp(2.25rem, 1.9rem + 1.75vw, 3.75rem)",
 } as const;
