@@ -5,6 +5,8 @@ import AboutMarquee from "@/components/about-marquee";
 import About from "@/components/about";
 import Tools from "@/components/tools";
 import Stats from "@/components/stats";
+import ClosingImage from "@/components/closing-image";
+import Writing from "@/components/writing";
 import Contact from "@/components/contact";
 import BackToTop from "@/components/back-to-top";
 
@@ -22,6 +24,8 @@ export default function Home() {
         <About />
         <Stats />
         <Tools />
+        <ClosingImage />
+        <Writing />
         <Contact />
       </main>
       <BackToTop />
