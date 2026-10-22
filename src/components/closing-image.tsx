@@ -1,17 +1,18 @@
 /**
- * Closing panel artwork — drop the final image at /public/contact-bg.png
- * (or point this at any other file in /public).
+ * Full-bleed artwork between the tools list and the writing section.
+ * Drop the image at /public/contact-bg.png (or point this at any other
+ * file in /public).
  *
- * This is a purely visual close to the page. It intentionally carries no
- * copy or CTA; the `contact` anchor stays here so the nav's "Say Hello"
- * link has a destination until a dedicated contact section lands.
+ * The `#contact` anchor now lives on the closing CTA panel
+ * (src/components/contact.tsx), so the nav's "Say Hello" lands on the
+ * actual call to action.
  */
 const BACKGROUND_IMAGE = "/contact-bg.png";
 
-export default function Contact() {
+export default function ClosingImage() {
   return (
     <section
-      id="contact"
+      id="closing-image"
       aria-label="Closing image"
       className="w-full"
       style={{
