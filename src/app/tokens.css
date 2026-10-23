@@ -111,6 +111,9 @@
   --stack-lg: 48px;
   --stack-xl: 80px;
 
+  /* Symmetric breathing room around the footer wordmark. */
+  --footer-wordmark-gap: clamp(48px, 6vw, 96px);
+
   --nav-h: 80px; /* 5rem — hero fills calc(100vh - nav) */
   --nav-blur: blur(12px);
   --grid-size: 48px;

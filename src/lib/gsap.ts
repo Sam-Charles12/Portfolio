@@ -60,7 +60,12 @@ export function blurFadeIn(
     reversible = true,
   } = opts ?? {};
 
-  const first = Array.isArray(targets) ? targets[0] : targets;
+  const first =
+    typeof targets === "string"
+      ? document.querySelector(targets)
+      : Array.isArray(targets)
+        ? targets[0]
+        : targets;
   const triggerEl =
     trigger === undefined && first instanceof Element ? first : trigger;
 
