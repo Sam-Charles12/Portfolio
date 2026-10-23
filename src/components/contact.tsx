@@ -40,8 +40,9 @@ export default function Contact() {
       <div
         className="container-shell"
         style={{
+          // The footer wordmark owns the space below the panel so the
+          // gap above and below the wordmark can stay identical.
           paddingTop: "clamp(8px, 2vw, 32px)",
-          paddingBottom: "clamp(48px, 6vw, 96px)",
         }}
       >
         <div
@@ -116,7 +117,6 @@ export default function Contact() {
               <ArrowLink
                 href={CONTACT_HREF}
                 label="Get in Touch"
-                target="_blank"
                 className="font-semibold"
                 style={{
                   height: 52,

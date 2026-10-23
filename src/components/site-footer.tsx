@@ -170,8 +170,24 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
     gsapSetup();
 
     const ctx = gsap.context(() => {
+      // The wordmark gets its own later trigger — the footer starts a
+      // full viewport early, so a footer-level trigger would finish
+      // before the wordmark is actually on screen.
+      const wordmark = root.querySelector<HTMLElement>(".footer-wordmark");
+      if (wordmark) {
+        blurFadeIn(wordmark, {
+          trigger: wordmark,
+          start: "top 80%",
+          duration: 1.4,
+          y: 40,
+          blur: 14,
+          reversible: false,
+        });
+      }
+
+      // Cards reveal as the footer grid enters, not when the footer's
+      // top edge first peeks into view.
       blurFadeIn(Array.from(root.querySelectorAll<HTMLElement>(".footer-fade")), {
-        trigger: root,
         duration: 1.1,
         stagger: 0.1,
         y: 28,
@@ -237,20 +253,20 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
       <div
         className="container-shell"
         style={{
-          paddingTop: "clamp(8px, 1.5vw, 24px)",
           // Clear the fixed back-to-top button at the very end of the page.
           paddingBottom: "clamp(72px, 6vw, 88px)",
         }}
       >
         <div
           aria-hidden="true"
-          className="footer-fade select-none text-center font-medium lowercase"
+          className="footer-wordmark select-none text-center font-medium lowercase"
           style={{
             fontSize: "clamp(4.5rem, 3.5rem + 8vw, 9rem)",
             lineHeight: 1,
             letterSpacing: "-0.05em",
             color: "var(--text-100)",
-            paddingBottom: "clamp(24px, 3.5vw, 48px)",
+            paddingTop: "var(--footer-wordmark-gap)",
+            paddingBottom: "var(--footer-wordmark-gap)",
           }}
         >
           carles
@@ -279,7 +295,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
             <a
               href={EMAIL_HREF}
               aria-label={`Email Carles at ${EMAIL}`}
-              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 hover:border-[color:var(--border-25)]`}
+              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 hover:bg-[var(--surface-raised-hover)]`}
               style={padStyle("clamp(24px, 2.6vw, 40px)")}
             >
               <HugeiconsIcon
@@ -301,7 +317,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
             <a
               href={`tel:${PHONE_TEL}`}
               aria-label={`Call Carles at ${PHONE_DISPLAY}`}
-              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 hover:border-[color:var(--border-25)]`}
+              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 hover:bg-[var(--surface-raised-hover)]`}
               style={padStyle("clamp(24px, 2.6vw, 40px)")}
             >
               <HugeiconsIcon
