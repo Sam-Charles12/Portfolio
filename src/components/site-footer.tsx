@@ -27,6 +27,10 @@ const NAV_LINKS = [
 
 const QUOTES = [
   {
+    text: "Life is like riding a bicycle. To keep your balance, you must keep moving.",
+    author: "Albert Einstein",
+  },
+  {
     text: "Stay hungry, stay foolish.",
     author: "Steve Jobs",
   },
@@ -175,14 +179,27 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
       // before the wordmark is actually on screen.
       const wordmark = root.querySelector<HTMLElement>(".footer-wordmark");
       if (wordmark) {
-        blurFadeIn(wordmark, {
-          trigger: wordmark,
-          start: "top 80%",
-          duration: 1.4,
-          y: 40,
-          blur: 14,
-          reversible: false,
-        });
+        const letters = wordmark.querySelectorAll<HTMLElement>(
+          ".footer-wordmark-letter",
+        );
+        gsap.fromTo(
+          letters,
+          { opacity: 0, rotateX: -70, y: 12 },
+          {
+            opacity: 1,
+            rotateX: 0,
+            y: 0,
+            duration: 1.1,
+            stagger: 0.06,
+            ease: "power2.out",
+            clearProps: "opacity,transform",
+            scrollTrigger: {
+              trigger: wordmark,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          },
+        );
       }
 
       // Cards reveal as the footer grid enters, not when the footer's
@@ -267,9 +284,24 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
             color: "var(--text-100)",
             paddingTop: "var(--footer-wordmark-gap)",
             paddingBottom: "var(--footer-wordmark-gap)",
+            perspective: 800,
           }}
         >
-          carles
+          {"carles".split("").map((letter, index) => (
+            <span
+              key={`${letter}-${index}`}
+              className="footer-wordmark-letter inline-block"
+              aria-hidden="true"
+              style={{
+                transformOrigin: "center bottom",
+                transformStyle: "preserve-3d",
+                backfaceVisibility: "hidden",
+                willChange: "transform, opacity",
+              }}
+            >
+              {letter}
+            </span>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
