@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Call02Icon, Mail01Icon } from "@hugeicons/core-free-icons";
 import { siGithub, siWhatsapp, siX } from "simple-icons";
 import { blurFadeIn, gsapSetup, prefersReducedMotion } from "@/lib/gsap";
+import { TextRollLink } from "@/components/ui/arrow-link";
 import {
   EMAIL,
   EMAIL_HREF,
@@ -116,42 +117,6 @@ const CARD_CLASS =
   "rounded-[var(--radius-card-sm)] bg-[var(--surface-raised)]";
 
 const padStyle = (padding: string): CSSProperties => ({ padding });
-
-type FooterNavLinkProps = {
-  label: string;
-  href: string;
-  active?: boolean;
-};
-
-/** Two stacked copies that roll up on hover/focus, like the reference. */
-function FooterNavLink({ label, href, active = false }: FooterNavLinkProps) {
-  return (
-    <a
-      href={href}
-      aria-current={active ? "page" : undefined}
-      className={`group relative inline-block overflow-hidden font-medium transition-colors duration-200 ${
-        active
-          ? "text-ink"
-          : "text-[color:var(--text-50)] hover:text-ink"
-      }`}
-      style={{
-        fontSize: "clamp(1.75rem, 1.45rem + 1.1vw, 2.25rem)",
-        lineHeight: 1.2,
-        letterSpacing: "var(--tracking-card)",
-      }}
-    >
-      <span className="block transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-y-full group-focus-visible:-translate-y-full">
-        {label}
-      </span>
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 block translate-y-full transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0 group-focus-visible:translate-y-0"
-      >
-        {label}
-      </span>
-    </a>
-  );
-}
 
 type SiteFooterProps = {
   hasPortrait: boolean;
@@ -313,10 +278,15 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
             <ul className="flex flex-col gap-1.5">
               {NAV_LINKS.map((link, index) => (
                 <li key={link.href}>
-                  <FooterNavLink
+                  <TextRollLink
                     label={link.label}
                     href={link.href}
                     active={index === 0}
+                    style={{
+                      fontSize: "clamp(1.75rem, 1.45rem + 1.1vw, 2.25rem)",
+                      lineHeight: 1.2,
+                      letterSpacing: "var(--tracking-card)",
+                    }}
                   />
                 </li>
               ))}
@@ -339,7 +309,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
               <span
                 className="font-medium"
                 style={{
-                  fontSize: "clamp(1.25rem, 1.1rem + 0.4vw, 1.5rem)",
+                  fontSize: "clamp(1.35rem, 1.15rem + 0.45vw, 1.65rem)",
                 }}
               >
                 email me
@@ -361,7 +331,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
               <span
                 className="font-medium"
                 style={{
-                  fontSize: "clamp(1.25rem, 1.1rem + 0.4vw, 1.5rem)",
+                  fontSize: "clamp(1.35rem, 1.15rem + 0.45vw, 1.65rem)",
                 }}
               >
                 {PHONE_DISPLAY}
@@ -375,7 +345,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
               <h2
                 className="font-medium"
                 style={{
-                  fontSize: "clamp(1.25rem, 1.1rem + 0.4vw, 1.5rem)",
+                  fontSize: "clamp(1.35rem, 1.15rem + 0.45vw, 1.65rem)",
                   letterSpacing: "var(--tracking-card)",
                 }}
               >
@@ -388,11 +358,11 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
                       href={social.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/social -mx-2 flex items-center justify-between rounded-lg px-2 py-2.5 transition-colors duration-200 hover:bg-[var(--surface-raised-hover)]"
+                      className="group/social -mx-2 flex items-center justify-between rounded-lg px-2 py-2.5 transition-[background-color,transform] duration-300 ease-[var(--ease-out)] hover:bg-[var(--surface-raised-hover)] hover:translate-x-1 focus-visible:bg-[var(--surface-raised-hover)] focus-visible:translate-x-1"
                     >
                       <span
-                        className="font-medium transition-transform duration-200 group-hover/social:translate-x-1"
-                        style={{ fontSize: 18 }}
+                        className="font-medium transition-transform duration-300 ease-[var(--ease-out)] group-hover/social:translate-x-1"
+                        style={{ fontSize: 20 }}
                       >
                         {social.label}
                       </span>
@@ -402,7 +372,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
                         height={20}
                         fill="currentColor"
                         aria-hidden="true"
-                        className="transition-transform duration-200 group-hover/social:scale-110"
+                        className="transition-transform duration-300 ease-[var(--ease-out)] group-hover/social:-translate-x-1 group-hover/social:rotate-6 group-hover/social:scale-110"
                       >
                         <path d={social.icon.path} />
                       </svg>

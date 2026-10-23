@@ -25,6 +25,62 @@ export type ArrowLinkProps = {
   arrowSize?: number;
 };
 
+export type TextRollLinkProps = {
+  href: string;
+  label: string;
+  active?: boolean;
+  className?: string;
+  style?: CSSProperties;
+};
+
+export function TextRollLink({
+  href,
+  label,
+  active = false,
+  className = "",
+  style,
+}: TextRollLinkProps) {
+  const chars = splitGraphemes(label);
+
+  return (
+    <a
+      href={href}
+      aria-current={active ? "page" : undefined}
+      aria-label={label}
+      className={`group relative inline-block overflow-hidden font-medium ${
+        active ? "text-ink" : "text-[color:var(--text-50)] hover:text-ink"
+      } ${className}`.trim()}
+      style={style}
+    >
+      <span className="block" aria-hidden="true">
+        {chars.map((char, index) => (
+          <span
+            key={`top-${index}`}
+            className="inline-block transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"
+            style={{ transitionDelay: `${index * 25}ms` }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
+      </span>
+      <span
+        className="absolute inset-0 block"
+        aria-hidden="true"
+      >
+        {chars.map((char, index) => (
+          <span
+            key={`bottom-${index}`}
+            className="inline-block translate-y-full transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0 group-focus-visible:translate-y-0"
+            style={{ transitionDelay: `${index * 25}ms` }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
+      </span>
+    </a>
+  );
+}
+
 /**
  * Pill link with the reference site's hover motion: the label rolls up
  * per character from a second stacked copy, and the arrow swaps with a
