@@ -32,9 +32,9 @@ export default function AllWorks() {
       >
         <div
           ref={introRef}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-10"
+          className="grid grid-cols-1 gap-[0.1rem] lg:grid-cols-12 lg:gap-x-10 lg:gap-y-[0.1rem]"
         >
-          <div className="flex flex-col lg:col-span-5 lg:row-start-1 lg:justify-start lg:pb-4">
+          <div className="flex flex-col self-start lg:col-span-5 lg:row-start-1 lg:justify-start lg:pb-4">
             <div>
               <h1
                 id="works-title"
@@ -77,21 +77,27 @@ export default function AllWorks() {
             </div>
           </div>
 
-          <ProjectCard
-            project={PROJECTS[0]}
-            minHeight={540}
-            className="lg:col-span-6 lg:col-start-7 lg:row-start-1"
-          />
-          <ProjectCard
-            project={PROJECTS[1]}
-            minHeight={610}
-            className="lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:-mt-10"
-          />
-          <ProjectCard
-            project={PROJECTS[2]}
-            minHeight={540}
-            className="lg:col-span-6 lg:col-start-7 lg:row-start-2 lg:mt-12"
-          />
+          <div className="aspect-square lg:col-span-6 lg:col-start-7 lg:row-start-1">
+            <ProjectCard
+              project={PROJECTS[0]}
+              minHeight={0}
+              className="h-full w-full"
+            />
+          </div>
+          <div className="aspect-square lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:-mt-[15rem]">
+            <ProjectCard
+              project={PROJECTS[1]}
+              minHeight={0}
+              className="h-full w-full"
+            />
+          </div>
+          <div className="aspect-square lg:col-span-6 lg:col-start-7 lg:row-start-2 lg:mt-12">
+            <ProjectCard
+              project={PROJECTS[2]}
+              minHeight={0}
+              className="h-full w-full"
+            />
+          </div>
         </div>
       </section>
     </main>
