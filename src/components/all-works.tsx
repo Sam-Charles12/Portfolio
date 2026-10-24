@@ -32,9 +32,10 @@ export default function AllWorks() {
       >
         <div
           ref={introRef}
-          className="grid grid-cols-1 gap-[0.1rem] lg:grid-cols-12 lg:gap-x-10 lg:gap-y-[0.1rem]"
+          className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-x-8"
         >
-          <div className="flex flex-col self-start lg:col-span-5 lg:row-start-1 lg:justify-start lg:pb-4">
+          {/* Left column: heading + description + card 2 */}
+          <div className="flex flex-col lg:w-1/2">
             <div>
               <h1
                 id="works-title"
@@ -61,7 +62,7 @@ export default function AllWorks() {
               </h1>
             </div>
 
-            <div className="mt-4 lg:mt-6">
+            <div className="mt-3 lg:mt-4">
               <p
                 className="max-w-md"
                 style={{
@@ -75,28 +76,33 @@ export default function AllWorks() {
                 real.
               </p>
             </div>
+
+            {/* Card 2 — flows directly below text */}
+            <div className="aspect-square w-full max-w-sm mx-auto lg:max-w-none mt-8">
+              <ProjectCard
+                project={PROJECTS[1]}
+                minHeight={0}
+                className="h-full w-full"
+              />
+            </div>
           </div>
 
-          <div className="aspect-square lg:col-span-6 lg:col-start-7 lg:row-start-1">
-            <ProjectCard
-              project={PROJECTS[0]}
-              minHeight={0}
-              className="h-full w-full"
-            />
-          </div>
-          <div className="aspect-square lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:-mt-[15rem]">
-            <ProjectCard
-              project={PROJECTS[1]}
-              minHeight={0}
-              className="h-full w-full"
-            />
-          </div>
-          <div className="aspect-square lg:col-span-6 lg:col-start-7 lg:row-start-2 lg:mt-12">
-            <ProjectCard
-              project={PROJECTS[2]}
-              minHeight={0}
-              className="h-full w-full"
-            />
+          {/* Right column: card 1 + card 3, offset down for stagger */}
+          <div className="flex flex-col gap-8 lg:w-1/2 lg:mt-[28%]">
+            <div className="aspect-square w-full max-w-sm mx-auto lg:max-w-none">
+              <ProjectCard
+                project={PROJECTS[0]}
+                minHeight={0}
+                className="h-full w-full"
+              />
+            </div>
+            <div className="aspect-square w-full max-w-sm mx-auto lg:max-w-none">
+              <ProjectCard
+                project={PROJECTS[2]}
+                minHeight={0}
+                className="h-full w-full"
+              />
+            </div>
           </div>
         </div>
       </section>

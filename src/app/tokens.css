@@ -100,7 +100,7 @@
      capped at 1792px so ultrawide monitors don't stretch the layout. */
   --container: min(1792px, calc(40vw + 768px));
   --container-narrow: 672px; /* max-w-xl/2xl — hero copy, about text */
-  --gutter: 2px;
+  --gutter: 50px;
   --gutter-sm: 16px;
 
   --section-y: clamp(80px, 10vw, 128px);
