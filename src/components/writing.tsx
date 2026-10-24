@@ -10,33 +10,9 @@ import {
   parallaxY,
 } from "@/lib/gsap";
 import { ArrowLink } from "@/components/ui/arrow-link";
-
-type Post = {
-  title: string;
-  tags: string[];
-  href: string;
-  /** Optional cover in /public — falls back to the blueprint placeholder. */
-  cover?: string;
-};
-
-// Placeholder copy — swap titles/tags/hrefs for real posts.
-const POSTS: Post[] = [
-  {
-    title: "placeholder post title that wraps across a few lines",
-    tags: ["engineering", "build-in-public", "notes"],
-    href: "#",
-  },
-  {
-    title: "another placeholder title — this is where the real headline goes",
-    tags: ["architecture", "decisions", "product"],
-    href: "#",
-  },
-  {
-    title: "third placeholder title goes right here",
-    tags: ["backend", "typescript", "performance"],
-    href: "#",
-  },
-];
+// Posts live in lib/posts so the cards and the /blog/[slug] reader never
+// drift apart. Placeholder copy until the real articles are written.
+import { POSTS, type Post } from "@/lib/posts";
 
 function BlogCard({ post }: { post: Post }) {
   const cardRef = useRef<HTMLElement>(null);
@@ -58,7 +34,7 @@ function BlogCard({ post }: { post: Post }) {
     <article ref={cardRef} className="blog-card">
       {/* Hover lift lives on the link: GSAP owns the article's transform. */}
       <a
-        href={post.href}
+        href={`/blog/${post.slug}`}
         className="group block transition-transform duration-200 hover:-translate-y-[3px]"
         aria-label={`${post.title} — ${post.tags.join(", ")}`}
       >
