@@ -1,0 +1,100 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import {
+  blurFadeIn,
+  gsapSetup,
+  prefersReducedMotion,
+} from "@/lib/gsap";
+import { PROJECTS, ProjectCard } from "@/components/featured-works";
+
+export default function AllWorks() {
+  const introRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const intro = introRef.current;
+    if (!intro || prefersReducedMotion()) return;
+
+    gsapSetup();
+    const context = gsap.context(() => {
+      blurFadeIn(intro, { reversible: false });
+    }, intro);
+
+    return () => context.revert();
+  }, []);
+
+  return (
+    <main className="flex-1">
+      <section
+        aria-labelledby="works-title"
+        className="container-shell pb-24 pt-8 md:pb-36 md:pt-14"
+      >
+        <div
+          ref={introRef}
+          className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-16"
+        >
+          <div className="flex flex-col lg:col-span-5 lg:row-start-1 lg:justify-between lg:pb-12">
+            <div>
+              <h1
+                id="works-title"
+                className="font-bold"
+                style={{
+                  fontSize: "clamp(3rem, 5vw, 5.5rem)",
+                  lineHeight: 0.92,
+                  letterSpacing: "var(--tracking-section)",
+                }}
+              >
+                things
+                <br />
+                I&apos;ve built
+              </h1>
+            </div>
+
+            <div className="mt-12 lg:mt-24">
+              <p
+                className="max-w-md"
+                style={{
+                  color: "var(--text-70)",
+                  fontSize: "var(--text-body)",
+                  lineHeight: "var(--leading-body)",
+                }}
+              >
+                A collection of projects I&apos;ve shipped — tools, apps, and
+                experiments that started as ideas and turned into something
+                real.
+              </p>
+              <p
+                className="mt-6 max-w-md"
+                style={{
+                  color: "var(--text-50)",
+                  fontSize: "var(--text-small)",
+                  lineHeight: "var(--leading-body)",
+                }}
+              >
+                Each one is a record of a problem, a few trade-offs, and the
+                decisions that made the first useful version possible.
+              </p>
+            </div>
+          </div>
+
+          <ProjectCard
+            project={PROJECTS[0]}
+            minHeight={540}
+            className="lg:col-span-6 lg:col-start-7 lg:row-start-1"
+          />
+          <ProjectCard
+            project={PROJECTS[1]}
+            minHeight={610}
+            className="lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:-mt-10"
+          />
+          <ProjectCard
+            project={PROJECTS[2]}
+            minHeight={540}
+            className="lg:col-span-6 lg:col-start-7 lg:row-start-2 lg:mt-12"
+          />
+        </div>
+      </section>
+    </main>
+  );
+}

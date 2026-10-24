@@ -105,7 +105,7 @@ function TechBadge({ name }: { name: string }) {
   );
 }
 
-type Project = {
+export type Project = {
   title: string;
   description: string;
   stack: string[];
@@ -116,7 +116,7 @@ type Project = {
   imagePosition?: string;
 };
 
-const PROJECTS: Project[] = [
+export const PROJECTS: Project[] = [
   {
     title: "Interact.",
     description:
@@ -159,7 +159,15 @@ const PROJECTS: Project[] = [
   },
 ];
 
-function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({
+  project,
+  className = "",
+  minHeight = 560,
+}: {
+  project: Project;
+  className?: string;
+  minHeight?: number;
+}) {
   const ref = useRef<HTMLElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -178,11 +186,11 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       ref={ref}
-      className="group relative overflow-hidden transition-transform duration-200 hover:-translate-y-[3px]"
+      className={`group relative overflow-hidden transition-transform duration-200 hover:-translate-y-[3px] ${className}`}
       style={{
         border: "var(--border-width) solid var(--border-20)",
         borderRadius: "4rem",
-        minHeight: 560,
+        minHeight,
         background: "var(--surface-raised)",
       }}
     >
@@ -220,7 +228,7 @@ function ProjectCard({ project }: { project: Project }) {
       />
 
       <div
-        className="relative flex h-full min-h-[560px] flex-col justify-end"
+        className="relative flex h-full flex-col justify-end"
         style={{ padding: "var(--card-pad)", color: "#ededed" }}
       >
         <div className="flex items-start justify-between gap-4">
@@ -383,7 +391,7 @@ export default function FeaturedWorks() {
               that found their way into something real.
             </p>
             <a
-              href="#work"
+              href="/works"
               className="mt-7 inline-flex items-center font-semibold"
               style={{
                 height: 48,
