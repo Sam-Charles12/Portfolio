@@ -23,10 +23,10 @@ const hero = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Carles — Software Engineer",
+  title: "Carles | Software Engineer",
   description: "I build web apps and care about how they feel to use. Frontend-leaning, full-stack capable.",
   openGraph: {
-    title: "Carles — Software Engineer",
+    title: "Carles | Software Engineer",
     description: "I build web apps and care about how they feel to use.",
     type: "website",
   },

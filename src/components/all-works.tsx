@@ -32,9 +32,9 @@ export default function AllWorks() {
       >
         <div
           ref={introRef}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-16"
+          className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-10"
         >
-          <div className="flex flex-col lg:col-span-5 lg:row-start-1 lg:justify-between lg:pb-12">
+          <div className="flex flex-col lg:col-span-5 lg:row-start-1 lg:justify-start lg:pb-4">
             <div>
               <h1
                 id="works-title"
@@ -45,13 +45,23 @@ export default function AllWorks() {
                   letterSpacing: "var(--tracking-section)",
                 }}
               >
+                <span
+                  className="bg-blueprint-grid mr-3 inline-flex h-[0.72em] w-[1.7em] translate-y-[-0.04em] overflow-hidden align-middle"
+                  aria-label="Image placeholder"
+                  title="Image placeholder"
+                  style={{
+                    border: "var(--border-width) solid var(--border-20)",
+                    borderRadius: "var(--radius-pill)",
+                    backgroundColor: "var(--surface-raised)",
+                  }}
+                />
                 things
                 <br />
                 I&apos;ve built
               </h1>
             </div>
 
-            <div className="mt-12 lg:mt-24">
+            <div className="mt-4 lg:mt-6">
               <p
                 className="max-w-md"
                 style={{
@@ -63,17 +73,6 @@ export default function AllWorks() {
                 A collection of projects I&apos;ve shipped — tools, apps, and
                 experiments that started as ideas and turned into something
                 real.
-              </p>
-              <p
-                className="mt-6 max-w-md"
-                style={{
-                  color: "var(--text-50)",
-                  fontSize: "var(--text-small)",
-                  lineHeight: "var(--leading-body)",
-                }}
-              >
-                Each one is a record of a problem, a few trade-offs, and the
-                decisions that made the first useful version possible.
               </p>
             </div>
           </div>
