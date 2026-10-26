@@ -34,7 +34,7 @@ export default function AllWorks() {
           ref={introRef}
           className="columns-1 gap-8 md:columns-2"
         >
-          <div className="mb-24 break-inside-avoid">
+          <div className="mb-12 break-inside-avoid">
             <h1
               id="works-title"
               className="font-bold"
@@ -60,7 +60,7 @@ export default function AllWorks() {
             </h1>
 
             <p
-              className="mt-3 max-w-md lg:mt-4"
+              className="mt-3 max-w-[34rem] lg:mt-4"
               style={{
                 color: "var(--text-70)",
                 fontSize: "var(--text-body)",
@@ -73,7 +73,7 @@ export default function AllWorks() {
             </p>
           </div>
 
-          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:max-w-none">
+          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[1]}
               minHeight={0}
@@ -81,7 +81,7 @@ export default function AllWorks() {
             />
           </div>
 
-          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:max-w-none">
+          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[0]}
               minHeight={0}
@@ -89,7 +89,7 @@ export default function AllWorks() {
             />
           </div>
 
-          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:max-w-none">
+          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[2]}
               minHeight={0}

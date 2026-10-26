@@ -163,12 +163,10 @@ export function ProjectCard({
   project,
   className = "",
   minHeight = 560,
-  square = false,
 }: {
   project: Project;
   className?: string;
   minHeight?: number;
-  square?: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -192,8 +190,7 @@ export function ProjectCard({
       style={{
         border: "var(--border-width) solid var(--border-20)",
         borderRadius: "4rem",
-        minHeight: square ? undefined : minHeight,
-        aspectRatio: square ? "1 / 1" : undefined,
+        minHeight,
         background: "var(--surface-raised)",
       }}
     >
