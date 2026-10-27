@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { gsapSetup, prefersReducedMotion, blurFadeIn, parallaxY } from "@/lib/gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -106,6 +107,7 @@ function TechBadge({ name }: { name: string }) {
 }
 
 export type Project = {
+  slug: string;
   title: string;
   description: string;
   stack: string[];
@@ -118,16 +120,18 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "interact",
     title: "Interact.",
     description:
       "First solo full-stack product — real-time interaction with an AI-assisted backend. Shipped end to end, from schema to deploy.",
     stack: ["React", "TypeScript", "Vite", "Express", "Supabase", "Groq", "Tailwind CSS"],
     liveHref: "#",
     repoHref: "#",
-    status: "All systems operational",
+    status: "In development",
     image: "/interact-hero.png",
   },
   {
+    slug: "resolve",
     title: "Resolve",
     description:
       "Dispute inbox for Paystack teams — paste a “you took my money” message or receipt, verify live against Paystack + ledger, approve the reply in under 60s.",
@@ -148,6 +152,7 @@ export const PROJECTS: Project[] = [
     imagePosition: "50% 32%",
   },
   {
+    slug: "rfforge",
     title: "RFForge",
     description:
       "Equation-grounded RF and microwave design tool for power-amplifier matching, with interactive visualisations and auditable worked examples.",
@@ -318,33 +323,47 @@ export function ProjectCard({
         <div className="mt-5 flex items-center justify-between gap-3">
           <span
             className="inline-flex items-center gap-2 font-mono italic"
-            style={{
-              fontSize: "calc(var(--text-mono-tag) + 2px)",
-              letterSpacing: "var(--tracking-mono-tag)",
-              color: "#bbf7d0",
-              background: "#0f3d22",
-              padding: "8px 16px",
-              borderRadius: "var(--radius-pill)",
-            }}
+            style={
+              project.status === "All systems operational"
+                ? {
+                    fontSize: "calc(var(--text-mono-tag) + 2px)",
+                    letterSpacing: "var(--tracking-mono-tag)",
+                    color: "#bbf7d0",
+                    background: "#0f3d22",
+                    padding: "8px 16px",
+                    borderRadius: "var(--radius-pill)",
+                  }
+                : {
+                    fontSize: "calc(var(--text-mono-tag) + 2px)",
+                    letterSpacing: "var(--tracking-mono-tag)",
+                    color: "#ededed",
+                    background: "rgba(237, 237, 237, 0.14)",
+                    padding: "8px 16px",
+                    borderRadius: "var(--radius-pill)",
+                  }
+            }
           >
             <span
               className="animate-pulse-dot inline-block rounded-full"
               style={{
                 width: "var(--dot-size)",
                 height: "var(--dot-size)",
-                background: "#4ade80",
+                background:
+                  project.status === "All systems operational"
+                    ? "#4ade80"
+                    : "#ededed",
               }}
             />
             {project.status}
           </span>
-          <a
-            href={project.liveHref}
+          <Link
+            href={`/works/${project.slug}`}
             className="inline-flex items-center gap-1 font-medium"
             style={{ fontSize: "var(--text-small)" }}
           >
             View details
             <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={2} />
-          </a>
+          </Link>
         </div>
       </div>
     </article>
@@ -396,7 +415,7 @@ export default function FeaturedWorks() {
               some stuff i&apos;ve been working on, bits of code and ideas
               that found their way into something real.
             </p>
-            <a
+            <Link
               href="/works"
               className="mt-7 inline-flex items-center font-semibold"
               style={{
@@ -423,7 +442,7 @@ export default function FeaturedWorks() {
                 size={18}
                 strokeWidth={2}
               />
-            </a>
+            </Link>
           </div>
         </div>
 
