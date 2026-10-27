@@ -17,7 +17,6 @@ import {
 } from "@/lib/gsap";
 import {
   formatPostDate,
-  shorten,
   type Post,
   type PostBlock,
   type PostEmbed,
@@ -29,8 +28,8 @@ type BlogArticleProps = {
   next: Post | null;
 };
 
-/** Reading column: wider than `--container-narrow`, sized for body text. */
-const MEASURE = 720;
+/** Reading column, reference-sized: 896px less 24px side padding = 848px of text. */
+const MEASURE = 896;
 
 /**
  * Body copy supports **bold** inline, rendered as heavier ink rather than
@@ -56,24 +55,19 @@ function RichText({ text }: { text: string }) {
   );
 }
 
+/**
+ * Inline project card. Borderless like the reference: the shot bleeds to
+ * the column edge and the copy sits beside it, so the image carries the
+ * shape instead of a drawn box.
+ */
 function EmbedCard({ embed }: { embed: PostEmbed }) {
   return (
-    <aside
-      className="group/embed grid gap-5 md:grid-cols-[minmax(0,210px)_minmax(0,1fr)] md:items-center md:gap-7"
-      style={{
-        padding: "clamp(16px, 2.2vw, 24px)",
-        border: "var(--border-width) solid var(--border-20)",
-        borderRadius: "var(--radius-card-sm)",
-        background: "var(--surface-raised)",
-      }}
-    >
+    <aside className="group/embed grid gap-5 md:grid-cols-[0.9fr_1.1fr] md:items-center">
       <div
-        className="bg-blueprint-grid relative flex items-center justify-center overflow-hidden"
+        className="relative min-h-64 overflow-hidden md:h-full"
         style={{
-          aspectRatio: "4 / 3",
-          borderRadius: "var(--radius-thumb)",
-          border: "var(--border-width) solid var(--border-20)",
-          background: "var(--surface-page)",
+          borderRadius: "clamp(20px, 1.8vw, 28px)",
+          background: "var(--surface-raised)",
         }}
       >
         {embed.image ? (
@@ -81,30 +75,32 @@ function EmbedCard({ embed }: { embed: PostEmbed }) {
             src={embed.image}
             alt=""
             fill
-            sizes="(min-width: 768px) 210px, 100vw"
-            className="object-cover [filter:var(--img-filter)] transition-[filter] duration-500 group-hover/embed:[filter:var(--img-filter-hover)]"
+            sizes="(min-width: 768px) 40vw, 100vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover/embed:scale-[1.02]"
           />
         ) : (
-          <span className="mono-label" aria-hidden="true">
-            project shot
-          </span>
+          <div className="bg-blueprint-grid absolute inset-0 flex items-center justify-center">
+            <span className="mono-label" aria-hidden="true">
+              project shot
+            </span>
+          </div>
         )}
       </div>
 
-      <div>
+      <div className="md:pl-2">
         <h3
           className="font-semibold uppercase"
           style={{
             color: "var(--text-100)",
-            fontSize: "var(--text-card-title)",
-            lineHeight: 1.15,
-            letterSpacing: "var(--tracking-card)",
+            fontSize: 24,
+            lineHeight: 1.35,
+            letterSpacing: "-0.025em",
           }}
         >
           {embed.title}
         </h3>
         <p
-          className="mt-2"
+          className="mt-2 line-clamp-3"
           style={{
             color: "var(--text-70)",
             fontSize: "var(--text-small)",
@@ -114,22 +110,33 @@ function EmbedCard({ embed }: { embed: PostEmbed }) {
           {embed.description}
         </p>
 
-        <div className="mt-5 flex items-center justify-between gap-4">
-          <p
-            className="mono-label"
-            style={{ fontSize: "var(--text-mono-tag)" }}
-          >
-            {embed.stack.join(" · ")}
-          </p>
+        <div className="mt-6 flex items-end justify-between gap-4">
+          <ul className="flex flex-wrap gap-2">
+            {embed.stack.map((item) => (
+              <li
+                key={item}
+                className="inline-flex items-center font-medium"
+                style={{
+                  background: "var(--surface-raised-hover)",
+                  color: "var(--text-70)",
+                  borderRadius: "var(--radius-pill)",
+                  padding: "5px 12px",
+                  fontSize: 12,
+                }}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
           <a
             href={embed.href}
             aria-label={`Open ${embed.title}`}
             className="inline-flex shrink-0 items-center justify-center transition-colors duration-200 group-hover/embed:bg-ink group-hover/embed:text-bg"
             style={{
-              width: "var(--icon-btn-size)",
-              height: "var(--icon-btn-size)",
+              width: 40,
+              height: 40,
               color: "var(--text-100)",
-              border: "var(--border-width) solid var(--border-25)",
+              border: "2px solid var(--ink)",
               borderRadius: "var(--radius-pill)",
             }}
           >
@@ -152,12 +159,14 @@ function Block({ block, first }: { block: PostBlock; first: boolean }) {
         className="font-semibold lowercase"
         style={{
           marginTop: first ? 0 : "clamp(40px, 5vw, 56px)",
-          paddingBottom: 14,
-          borderBottom: "var(--border-width) solid var(--border-15)",
           color: "var(--text-100)",
-          fontSize: "clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem)",
-          lineHeight: 1.15,
+          fontSize: "clamp(1.875rem, 1.4rem + 1.6vw, 2.25rem)",
+          lineHeight: 1.25,
           letterSpacing: "var(--tracking-section)",
+          textDecoration: "underline",
+          textDecorationColor: "color-mix(in srgb, var(--ink) 45%, transparent)",
+          textDecorationThickness: "1px",
+          textUnderlineOffset: "5px",
         }}
       >
         {block.text}
@@ -167,7 +176,7 @@ function Block({ block, first }: { block: PostBlock; first: boolean }) {
 
   if (block.type === "embed") {
     return (
-      <div style={{ marginTop: first ? 0 : "clamp(32px, 4vw, 44px)" }}>
+      <div style={{ marginTop: first ? 0 : 40, marginBottom: 40 }}>
         <EmbedCard embed={block.embed} />
       </div>
     );
@@ -176,16 +185,35 @@ function Block({ block, first }: { block: PostBlock; first: boolean }) {
   return (
     <p
       style={{
-        marginTop: first ? 0 : "clamp(18px, 2vw, 24px)",
-        color: "var(--text-70)",
+        marginTop: first ? 0 : 20,
+        color: "var(--text-82)",
         fontSize: "calc(var(--text-body) + 1px)",
-        lineHeight: 1.75,
+        lineHeight: 2,
         letterSpacing: "var(--tracking-body)",
         textWrap: "pretty",
       }}
     >
       <RichText text={block.text} />
     </p>
+  );
+}
+
+function TagChip({ tag, onImage }: { tag: string; onImage?: boolean }) {
+  return (
+    <span
+      className="inline-flex items-center font-medium"
+      style={{
+        background: "var(--fill)",
+        color: "var(--on-fill)",
+        borderRadius: "var(--radius-pill)",
+        padding: onImage ? "8px 16px" : "6px 14px",
+        fontSize: 12,
+        // Both variants land on the reference's 28px pill height.
+        lineHeight: onImage ? 1 : "16px",
+      }}
+    >
+      {tag}
+    </span>
   );
 }
 
@@ -201,17 +229,17 @@ function NeighbourLink({
   if (!post) {
     return (
       <span
-        className={`mono-label inline-flex items-center gap-2 ${
+        className={`inline-flex items-center gap-2 ${
           isNext ? "justify-self-end" : "justify-self-start"
         }`}
-        style={{ color: "var(--text-35)" }}
+        style={{ color: "var(--text-35)", fontSize: 16 }}
       >
         {!isNext && (
-          <HugeiconsIcon icon={ArrowLeft01Icon} size={14} strokeWidth={2} />
+          <HugeiconsIcon icon={ArrowLeft01Icon} size={16} strokeWidth={2} />
         )}
         {isNext ? "no newer post" : "no older post"}
         {isNext && (
-          <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} />
+          <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={2} />
         )}
       </span>
     );
@@ -220,26 +248,26 @@ function NeighbourLink({
   return (
     <a
       href={`/blog/${post.slug}`}
-      className={`group inline-flex items-center gap-2 transition-colors duration-200 ${
+      className={`group inline-flex min-w-0 items-center gap-2 transition-colors duration-200 ${
         isNext ? "justify-self-end" : "justify-self-start"
       }`}
-      style={{ color: "var(--text-70)", fontSize: "var(--text-small)" }}
+      style={{ color: "var(--text-70)", fontSize: 16 }}
     >
       {!isNext && (
         <HugeiconsIcon
           icon={ArrowLeft01Icon}
-          size={15}
+          size={16}
           strokeWidth={2}
           className="shrink-0 transition-transform duration-200 group-hover:-translate-x-1"
         />
       )}
-      <span className="max-w-[34ch] truncate transition-colors duration-200 group-hover:text-ink">
-        {shorten(post.title, 30)}
+      <span className="max-w-[26ch] truncate transition-colors duration-200 group-hover:text-ink">
+        {post.title}
       </span>
       {isNext && (
         <HugeiconsIcon
           icon={ArrowRight01Icon}
-          size={15}
+          size={16}
           strokeWidth={2}
           className="shrink-0 transition-transform duration-200 group-hover:translate-x-1"
         />
@@ -310,19 +338,28 @@ export default function BlogArticle({
         </div>
 
         <header className="container-shell pb-14 pt-10 md:pb-20 md:pt-16">
-          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-x-12">
-            <div className="lg:col-span-6">
-              <p className="post-hero-fade mono-label">
-                {formatPostDate(post.date)} · {post.readingMinutes} min read
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-x-10">
+            <div>
+              <p
+                className="post-hero-fade mono-label flex flex-wrap items-center gap-2"
+                style={{ letterSpacing: "0.16em", fontWeight: 500 }}
+              >
+                <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+                <span
+                  aria-hidden="true"
+                  className="size-1 rounded-full"
+                  style={{ background: "var(--text-35)" }}
+                />
+                <span>{post.readingMinutes} min read</span>
               </p>
 
               <h1
-                className="post-hero-fade mt-5 font-medium lowercase"
+                className="post-hero-fade mt-5 font-semibold lowercase"
                 style={{
                   color: "var(--text-100)",
-                  fontSize: "clamp(2.25rem, 1.35rem + 3.4vw, 4.25rem)",
-                  lineHeight: 1.03,
-                  letterSpacing: "-0.03em",
+                  fontSize: "clamp(2.25rem, 1.35rem + 3.6vw, 4.5rem)",
+                  lineHeight: 1.02,
+                  letterSpacing: "-0.055em",
                   textWrap: "balance",
                 }}
               >
@@ -330,48 +367,32 @@ export default function BlogArticle({
               </h1>
 
               <p
-                className="post-hero-fade mt-6 max-w-[46ch]"
+                className="post-hero-fade mt-5"
                 style={{
                   color: "var(--text-70)",
-                  fontSize: "calc(var(--text-body) + 2px)",
-                  lineHeight: 1.6,
+                  fontSize: "calc(var(--text-body) + 3px)",
+                  lineHeight: 1.625,
+                  maxWidth: 672,
                 }}
               >
                 {post.dek}
               </p>
 
-              <ul className="post-hero-fade mt-8 flex flex-wrap gap-2">
+              <ul className="post-hero-fade mt-7 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <li key={tag}>
-                    <span
-                      className="inline-flex items-center font-medium"
-                      style={{
-                        background: "var(--fill)",
-                        color: "var(--on-fill)",
-                        borderRadius: "var(--radius-pill)",
-                        padding: "7px 15px",
-                        fontSize: 13,
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {tag}
-                    </span>
+                    <TagChip tag={tag} />
                   </li>
                 ))}
               </ul>
             </div>
 
-            <figure
-              ref={coverRef}
-              className="post-hero-fade lg:col-span-6"
-              style={{ margin: 0 }}
-            >
+            <figure ref={coverRef} className="post-hero-fade" style={{ margin: 0 }}>
               <div
                 className="relative overflow-hidden"
                 style={{
-                  aspectRatio: "4 / 3",
-                  borderRadius: "var(--radius-card)",
-                  border: "var(--border-width) solid var(--border-20)",
+                  minHeight: "clamp(352px, 30vw, 488px)",
+                  borderRadius: "clamp(28px, 2.75vw, 44px)",
                   background: "var(--surface-raised)",
                 }}
               >
@@ -386,7 +407,7 @@ export default function BlogArticle({
                       fill
                       priority
                       sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover [filter:var(--img-filter)]"
+                      className="object-cover"
                     />
                   </div>
                 ) : (
@@ -397,6 +418,12 @@ export default function BlogArticle({
                     <span className="mono-label">cover image</span>
                   </div>
                 )}
+
+                <div className="absolute inset-x-5 bottom-5 z-10 flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <TagChip key={tag} tag={tag} onImage />
+                  ))}
+                </div>
               </div>
             </figure>
           </div>
@@ -404,27 +431,29 @@ export default function BlogArticle({
 
         <div className="container-shell pb-20 md:pb-28">
           <div
-            className="post-body mx-auto px-4 md:px-0"
+            className="post-body mx-auto px-4 md:px-6"
             style={{ maxWidth: MEASURE }}
           >
             {post.blocks.map((block, index) => (
               <Block key={index} block={block} first={index === 0} />
             ))}
 
-            <nav
-              aria-label="More posts"
-              className="mt-14 grid grid-cols-1 items-center gap-6 pt-8 sm:grid-cols-3"
-              style={{ borderTop: "var(--border-width) solid var(--border-15)" }}
-            >
-              <NeighbourLink post={previous} direction="previous" />
-              <a
-                href="/#writing"
-                className="mono-label underline decoration-from-font underline-offset-4 transition-colors duration-200 hover:text-ink sm:justify-self-center"
-                style={{ color: "var(--text-50)" }}
-              >
-                back to all notes
-              </a>
-              <NeighbourLink post={next} direction="next" />
+            <nav aria-label="More posts" className="mt-14 pt-10">
+              <div
+                className="mb-6"
+                style={{ height: 1, background: "var(--border-15)" }}
+              />
+              <div className="grid grid-cols-1 items-center gap-6 sm:grid-cols-3">
+                <NeighbourLink post={previous} direction="previous" />
+                <a
+                  href="/#writing"
+                  className="justify-self-start rounded-full transition-colors duration-200 hover:text-ink sm:justify-self-center"
+                  style={{ color: "var(--text-50)", fontSize: 16 }}
+                >
+                  back to all notes
+                </a>
+                <NeighbourLink post={next} direction="next" />
+              </div>
             </nav>
           </div>
         </div>
