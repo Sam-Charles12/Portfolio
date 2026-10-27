@@ -2,14 +2,14 @@
  * Blog content — the single source for the writing section and the
  * /blog/[slug] reader.
  *
- * Everything below is PLACEHOLDER copy: swap the title, dek, date, tags
- * and `blocks` for the real post. The `slug` is what the URL points at,
- * so renaming one means updating anything that links to it — the cards
- * in `writing.tsx` and the prev/next rows are all derived from this
- * array, so they follow along automatically.
+ * The first post is real; the last two are still PLACEHOLDER copy: swap the
+ * title, dek, date, tags and `blocks` for the real post. The `slug` is what
+ * the URL points at, so renaming one means updating anything that links to
+ * it — the cards in `writing.tsx` and the prev/next rows are all derived from
+ * this array, so they follow along automatically.
  *
  * Body blocks render in order:
- *   - `heading`   — section title, drawn with a rule under it
+ *   - `heading`   — section title, underlined like the reference's anchors
  *   - `paragraph` — plain text; **double asterisks** make a phrase bold
  *   - `embed`     — the project card that sits inline in the column
  */
@@ -46,53 +46,88 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
-    slug: "placeholder-post-one",
-    title: "placeholder post title that wraps across a few lines",
-    dek: "one sentence that says what the post is about — the line under the headline that tells someone why they should keep reading.",
-    date: "2026-08-24",
+    slug: "the-answer-that-wasnt-from-the-ai",
+    title: "the answer that wasn’t from the ai",
+    dek: "my server never threw an error. it just quietly handed me fake study material.",
+    date: "2026-10-27",
     readingMinutes: 4,
-    tags: ["engineering", "build-in-public", "notes"],
+    tags: ["interact", "build-in-public", "product"],
+    cover: "/not-from-the-ai.jpeg",
+    coverAlt: "One glowing document card standing out in a row of grey cards",
     blocks: [
       {
         type: "paragraph",
-        text: "This is where the post opens. Two or three sentences that set up the problem, written the way you'd explain it to someone sitting at the desk next to you. Replace all of this with the real thing.",
-      },
-      {
-        type: "paragraph",
-        text: "The opening does not need to summarise the whole article. It only has to earn the next paragraph — enough context that the reader knows what is at stake, and **one bolded sentence that carries the main point**.",
-      },
-      { type: "heading", text: "the problem, in one paragraph" },
-      {
-        type: "paragraph",
-        text: "Placeholder body copy goes here. It sits at roughly sixty to seventy characters per line, which is why this column is narrower than the rest of the page. Long lines make the eye work harder to find the start of the next one.",
-      },
-      {
-        type: "paragraph",
-        text: "Another paragraph. Keep them short. Two to four sentences is usually right for a technical post — the density of a wall of text is what makes people leave before the interesting part.",
+        text: "Interact was in a good place. Sign up worked, the onboarding questions worked, and the study view had the sidebar, sections and progress checkmarks all in place. I typed in a topic, picked my answers, and got a full set of sections back. It felt done enough to test on a real topic.",
       },
       {
         type: "embed",
         embed: {
-          title: "project name",
+          title: "Interact",
           description:
-            "one line about what the project does, kept short enough to sit beside the thumbnail.",
-          stack: ["React", "TypeScript", "Tailwind CSS"],
-          href: "#",
+            "An AI study tool that asks how deep, why and how long, then builds sectioned material around your answers.",
+          stack: [
+            "React",
+            "TypeScript",
+            "Tailwind CSS",
+            "Node.js",
+            "Supabase",
+          ],
+          href: "/works/interact",
+          image: "/interact-steps.png",
         },
       },
-      { type: "heading", text: "what i changed" },
       {
         type: "paragraph",
-        text: "This section can walk through the fix or the decision behind it. Screenshots, diagrams, and code samples all live in this same column, so anything wider than the measure will break the rhythm of the page.",
+        text: "I tried it on transistors. Section 1.1 came back as “Introduction to Transistors,” and the first line said “this section provides a exhaustive with derivations, proofs, edge cases of the key ideas.”",
+      },
+      { type: "heading", text: "Material that read wrong" },
+      {
+        type: "paragraph",
+        text: "That sentence isn’t English. Then I opened section 1.2 and it had the same headers: Core Concepts, Detailed Explanation, Practical Implications, Summary. Same bullets too, just with a different title on top.",
       },
       {
         type: "paragraph",
-        text: "If a paragraph wants to read as a list, it can just be sentences. **Bold is for the one line that matters**, not for every other phrase — used everywhere it stops meaning anything.",
+        text: "No AI writes like that. Something was filling in a template.",
       },
-      { type: "heading", text: "what i took away" },
+      { type: "heading", text: "No error anywhere" },
       {
         type: "paragraph",
-        text: "Close with the takeaway: the thing you would tell yourself a month earlier. Then stop. There is no need for a summary section that repeats what the reader has just read.",
+        text: "I checked the terminal and the network tab. Nothing was red. The request came back 200 every time.",
+      },
+      {
+        type: "paragraph",
+        text: "That’s when I understood. My server had a fallback. If the AI call failed for any reason, it caught the error and returned pre-written template material instead. The frontend never found out. It got a normal response with fake content in it.",
+      },
+      {
+        type: "paragraph",
+        text: "The only reason I caught it was the broken grammar in the template text. **A fallback that never complains is a bug hider.**",
+      },
+      { type: "heading", text: "The model was gone" },
+      {
+        type: "paragraph",
+        text: "Once I looked at the server logs, the real error was there. It was a 404 saying the Gemini model I’d hardcoded wasn’t available to new users anymore. It had been failing on every request since I started testing.",
+      },
+      {
+        type: "paragraph",
+        text: "I swapped the model name, and real material finally came back.",
+      },
+      { type: "heading", text: "Then it was real, and it wasn’t good" },
+      {
+        type: "paragraph",
+        text: "It was real now but too short and too generic. I’d chosen a deep level and a specific reason for studying, and the output barely reflected either. I tried a stronger model next, but the free tier gave that model a quota of zero, so that was a dead end.",
+      },
+      {
+        type: "paragraph",
+        text: "[fill in what you did next: prompt changes, splitting outline and sections into two calls, or which provider you ended up on]",
+      },
+      { type: "heading", text: "What I changed" },
+      {
+        type: "paragraph",
+        text: "The fallback now logs the actual error loudly, and a failed generation shows the user an error instead of fake content. I’d rather see something break than have it look fine.",
+      },
+      {
+        type: "paragraph",
+        text: "I’ve kept testing on real topics since then, because the template text only gave itself away by accident. Next up is spaced repetition, so people actually remember what they study.",
       },
     ],
   },
@@ -217,9 +252,4 @@ export function formatPostDate(iso: string): string {
     year: "numeric",
     timeZone: "UTC",
   }).format(new Date(iso));
-}
-
-/** Shortens prev/next titles so the row stays on one line. */
-export function shorten(text: string, max = 30): string {
-  return text.length > max ? `${text.slice(0, max).trimEnd()}…` : text;
 }
