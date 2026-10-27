@@ -32,7 +32,7 @@ export default function AllWorks() {
       >
         <div
           ref={introRef}
-          className="columns-1 gap-8 md:columns-2"
+          className="columns-1 gap-12 md:columns-2"
         >
           <div className="mb-12 break-inside-avoid">
             <h1
@@ -73,7 +73,7 @@ export default function AllWorks() {
             </p>
           </div>
 
-          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
+          <div className="mx-auto mb-12 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[1]}
               minHeight={0}
@@ -81,7 +81,7 @@ export default function AllWorks() {
             />
           </div>
 
-          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
+          <div className="mx-auto mb-12 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[0]}
               minHeight={0}
@@ -89,7 +89,7 @@ export default function AllWorks() {
             />
           </div>
 
-          <div className="mx-auto mb-8 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
+          <div className="mx-auto mb-12 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[2]}
               minHeight={0}

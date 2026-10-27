@@ -178,7 +178,14 @@ export function ProjectCard({
     gsapSetup();
     const ctx = gsap.context(() => {
       blurFadeIn(card);
-      if (imgRef.current) parallaxY(imgRef.current, card);
+      // Image is 136% of the card height, so ±13.24% here equals the
+      // reference's ±18% card-height drift.
+      if (imgRef.current)
+        parallaxY(imgRef.current, card, -13.24, 13.24, {
+          start: "top 85%",
+          end: "bottom 10%",
+          scrub: 1,
+        });
     }, card);
     return () => ctx.revert();
   }, []);
@@ -188,7 +195,6 @@ export function ProjectCard({
       ref={ref}
       className={`group relative overflow-hidden transition-transform duration-200 hover:-translate-y-[3px] ${className}`}
       style={{
-        border: "var(--border-width) solid var(--border-20)",
         borderRadius: "4rem",
         minHeight,
         background: "var(--surface-raised)",
@@ -205,7 +211,7 @@ export function ProjectCard({
             src={project.image}
             alt={`${project.title} screenshot`}
             style={{ objectPosition: project.imagePosition ?? "50% 0%" }}
-            className="h-[112%] w-full object-cover"
+            className="absolute inset-x-0 top-[-18%] h-[136%] w-full object-cover"
           />
         </div>
       ) : (

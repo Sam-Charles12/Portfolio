@@ -106,7 +106,9 @@ export function parallaxY(
   trigger: Element,
   fromPercent = -5,
   toPercent = 5,
+  opts?: { start?: string; end?: string; scrub?: number | boolean },
 ) {
+  const { start = "top bottom", end = "bottom top", scrub = true } = opts ?? {};
   return gsap.fromTo(
     el,
     { yPercent: fromPercent },
@@ -115,9 +117,9 @@ export function parallaxY(
       ease: "none",
       scrollTrigger: {
         trigger,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
+        start,
+        end,
+        scrub,
       },
     },
   );
