@@ -186,7 +186,7 @@ export default function Writing() {
 
           <div className="writing-fade md:col-span-2 xl:col-span-1 xl:justify-self-end">
             <ArrowLink
-              href="#"
+              href="/blog"
               label="View all blog posts"
               className="font-semibold"
               style={{
