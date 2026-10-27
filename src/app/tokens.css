@@ -24,6 +24,7 @@
   /* ---------------------------------------------------------------- */
 
   --text-100: var(--ink); /* headings, 100% */
+  --text-82: color-mix(in srgb, var(--ink) 82%, transparent); /* long-form body */
   --text-70: color-mix(in srgb, var(--ink) 70%, transparent); /* body */
   --text-50: color-mix(in srgb, var(--ink) 50%, transparent); /* labels, dates */
   --text-35: color-mix(in srgb, var(--ink) 35%, transparent); /* captions, muted */
