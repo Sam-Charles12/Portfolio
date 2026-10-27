@@ -43,16 +43,16 @@ const STACK_ICON_NAMES: Record<string, IconName> = {
   Groq: "groq",
 };
 
-function PaystackBadge({ name }: { name: string }) {
+function PaystackBadge({ name, size = 30 }: { name: string; size?: number }) {
   return (
     <span aria-label={name} className="inline-flex">
-      <svg viewBox="0 0 24 24" width={30} height={30} aria-hidden="true">
+      <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
         <rect width="24" height="24" rx="6" fill="#011B33" />
         <text
           x="12"
           y="17.5"
           textAnchor="middle"
-          fontSize="14"
+          fontSize={size * 0.47}
           fontWeight={800}
           fill="#00C3F7"
           fontFamily="Arial, sans-serif"
@@ -64,8 +64,8 @@ function PaystackBadge({ name }: { name: string }) {
   );
 }
 
-function TechBadge({ name }: { name: string }) {
-  if (name === "Paystack") return <PaystackBadge name={name} />;
+export function TechBadge({ name, size = 30 }: { name: string; size?: number }) {
+  if (name === "Paystack") return <PaystackBadge name={name} size={size} />;
   const iconName = STACK_ICON_NAMES[name];
   if (!iconName) {
     const initials = name
@@ -74,15 +74,15 @@ function TechBadge({ name }: { name: string }) {
       .join("")
       .slice(0, 2)
       .toUpperCase();
+    const box = size * 0.8;
     return (
       <span
         aria-label={name}
         className="inline-flex items-center justify-center"
         style={{
-          width: 24,
-          height: 24,
-          color: "#ededed",
-          fontSize: 12,
+          width: box,
+          height: box,
+          fontSize: size * 0.4,
           fontFamily: "var(--font-mono)",
         }}
       >
@@ -99,7 +99,7 @@ function TechBadge({ name }: { name: string }) {
       aria-label={name}
       title={name}
       className="inline-flex"
-      style={{ width: 30, height: 30 }}
+      style={{ width: size, height: size }}
     >
       <StackIcon name={iconName} variant="dark" />
     </span>
@@ -116,6 +116,11 @@ export type Project = {
   status: string;
   image?: string;
   imagePosition?: string;
+  /**
+   * Minimal-crop image: small overscan with a gentle parallax drift and
+   * no hover zoom. Use for device mockups.
+   */
+  gentleMotion?: boolean;
 };
 
 export const PROJECTS: Project[] = [
@@ -128,7 +133,9 @@ export const PROJECTS: Project[] = [
     liveHref: "#",
     repoHref: "#",
     status: "In development",
-    image: "/interact-hero.png",
+    image: "/interact-dashboard.png",
+    imagePosition: "50% 50%",
+    staticImage: true,
   },
   {
     slug: "resolve",
@@ -175,6 +182,7 @@ export function ProjectCard({
 }) {
   const ref = useRef<HTMLElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const staticImage = project.staticImage === true;
 
   // Scroll reveal (blur fade-and-rise, reverses out) + image parallax (GSAP).
   useEffect(() => {
@@ -183,9 +191,9 @@ export function ProjectCard({
     gsapSetup();
     const ctx = gsap.context(() => {
       blurFadeIn(card);
-      // Image is 136% of the card height, so ±13.24% here equals the
-      // reference's ±18% card-height drift.
-      if (imgRef.current)
+      // Overscanned images drift ±13.24% (≈ the reference's ±18%
+      // card-height drift). Static images render at 100% with no drift.
+      if (imgRef.current && !staticImage)
         parallaxY(imgRef.current, card, -13.24, 13.24, {
           start: "top 85%",
           end: "bottom 10%",
@@ -193,7 +201,7 @@ export function ProjectCard({
         });
     }, card);
     return () => ctx.revert();
-  }, []);
+  }, [staticImage]);
 
   return (
     <article
@@ -205,10 +213,10 @@ export function ProjectCard({
         background: "var(--surface-raised)",
       }}
     >
-      {/* Screenshot — scroll parallax + subtle zoom on hover. */}
+      {/* Screenshot — scroll parallax + subtle zoom on hover (unless static). */}
       {project.image ? (
         <div
-          className="absolute inset-0 overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          className={`absolute inset-0 overflow-hidden ${staticImage ? "" : "transition-transform duration-700 ease-out group-hover:scale-[1.04]"}`}
           aria-hidden="true"
         >
           <img
@@ -216,7 +224,11 @@ export function ProjectCard({
             src={project.image}
             alt={`${project.title} screenshot`}
             style={{ objectPosition: project.imagePosition ?? "50% 0%" }}
-            className="absolute inset-x-0 top-[-18%] h-[136%] w-full object-cover"
+            className={
+              staticImage
+                ? "absolute inset-0 h-full w-full object-cover"
+                : "absolute inset-x-0 top-[-18%] h-[136%] w-full object-cover"
+            }
           />
         </div>
       ) : (

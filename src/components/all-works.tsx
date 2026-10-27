@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import {
   blurFadeIn,
@@ -45,15 +46,21 @@ export default function AllWorks() {
               }}
             >
               <span
-                className="bg-blueprint-grid mr-3 inline-flex h-[0.72em] w-[1.7em] translate-y-[-0.04em] overflow-hidden align-middle"
-                aria-label="Image placeholder"
-                title="Image placeholder"
+                className="relative mr-3 inline-flex h-[0.72em] w-[1.7em] translate-y-[-0.04em] overflow-hidden align-middle"
                 style={{
                   border: "var(--border-width) solid var(--border-20)",
                   borderRadius: "var(--radius-pill)",
                   backgroundColor: "var(--surface-raised)",
                 }}
-              />
+              >
+                <Image
+                  src="/works-hero.jpeg"
+                  alt="Shin from Kingdom reaching forward: because one day I'll be the greatest general on Earth"
+                  fill
+                  sizes="(min-width: 768px) 20vw, 40vw"
+                  className="object-cover"
+                />
+              </span>
               things
               <br />
               I&apos;ve built

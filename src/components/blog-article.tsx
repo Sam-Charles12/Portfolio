@@ -321,7 +321,7 @@ export default function BlogArticle({
       <article>
         <div className="container-shell pt-6 md:pt-10">
           <a
-            href="/#writing"
+            href="/blog"
             className="group inline-flex items-center gap-2"
             style={{ color: "var(--text-70)", fontSize: "var(--text-small)" }}
           >
@@ -446,7 +446,7 @@ export default function BlogArticle({
               <div className="grid grid-cols-1 items-center gap-6 sm:grid-cols-3">
                 <NeighbourLink post={previous} direction="previous" />
                 <a
-                  href="/#writing"
+                  href="/blog"
                   className="justify-self-start rounded-full transition-colors duration-200 hover:text-ink sm:justify-self-center"
                   style={{ color: "var(--text-50)", fontSize: 16 }}
                 >
