@@ -22,10 +22,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
 
-  if (!post) return { title: "Post not found — Carles" };
+  if (!post) return { title: "Post not found | Carles" };
 
   return {
-    title: `${post.title} — Carles`,
+    title: `${post.title} | Carles`,
     description: post.dek,
     openGraph: {
       title: post.title,

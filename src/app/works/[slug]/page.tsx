@@ -25,10 +25,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
 
-  if (!project) return { title: "Project not found — Carles" };
+  if (!project) return { title: "Project not found | Carles" };
 
   return {
-    title: `${project.title} — Carles`,
+    title: `${project.title} | Carles`,
     description: project.dek,
     openGraph: {
       title: project.title,
