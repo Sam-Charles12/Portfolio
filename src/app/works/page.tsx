@@ -7,7 +7,7 @@ import SiteFooter from "@/components/site-footer";
 import BackToTop from "@/components/back-to-top";
 
 export const metadata: Metadata = {
-  title: "Works — Carles",
+  title: "Works | Carles",
   description:
     "A collection of projects, tools, and experiments built by Carles.",
 };

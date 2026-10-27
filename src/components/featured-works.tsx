@@ -135,7 +135,7 @@ export const PROJECTS: Project[] = [
     status: "In development",
     image: "/interact-dashboard.png",
     imagePosition: "50% 50%",
-    staticImage: true,
+    gentleMotion: true,
   },
   {
     slug: "resolve",

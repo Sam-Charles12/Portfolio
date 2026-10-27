@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
@@ -15,7 +15,7 @@ import {
   gsapSetup,
   prefersReducedMotion,
 } from "@/lib/gsap";
-import { siGithub } from "simple-icons";
+import { TechBadge } from "@/components/featured-works";
 import type { ProjectDetail, ProjectSection } from "@/lib/projects";
 
 /** Reading column — same measure as the blog reader. */
@@ -106,12 +106,10 @@ function StatusPill({ status }: { status: string }) {
 function ProjectLink({
   href,
   label,
-  variant,
   icon,
 }: {
   href: string;
   label: string;
-  variant: "filled" | "outlined";
   icon: ReactNode;
 }) {
   // "#" means the project hasn't shipped publicly yet — show a muted
@@ -122,13 +120,13 @@ function ProjectLink({
         aria-disabled="true"
         className="inline-flex cursor-not-allowed items-center font-medium"
         style={{
-          height: 48,
-          paddingInline: 24,
+          height: 52,
+          paddingInline: 26,
           gap: 8,
           color: "var(--text-35)",
           border: "2px solid var(--border-20)",
           borderRadius: "var(--radius-pill)",
-          fontSize: 15,
+          fontSize: 16,
         }}
       >
         {label} — soon
@@ -141,32 +139,71 @@ function ProjectLink({
       target="_blank"
       rel="noreferrer"
       className="inline-flex items-center font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
-      style={
-        variant === "filled"
-          ? {
-              height: 48,
-              paddingInline: 24,
-              gap: 8,
-              background: "var(--fill)",
-              color: "var(--on-fill)",
-              borderRadius: "var(--radius-pill)",
-              fontSize: 15,
-            }
-          : {
-              height: 48,
-              paddingInline: 24,
-              gap: 8,
-              background: "transparent",
-              color: "var(--ink)",
-              border: "2px solid var(--ink)",
-              borderRadius: "var(--radius-pill)",
-              fontSize: 15,
-            }
-      }
+      style={{
+        height: 52,
+        paddingInline: 26,
+        gap: 8,
+        background: "transparent",
+        color: "var(--ink)",
+        border: "2px solid var(--ink)",
+        borderRadius: "var(--radius-pill)",
+        fontSize: 16,
+      }}
     >
       {label}
       {icon}
     </a>
+  );
+}
+
+/** Outlined icon pills like the reference — collapses past five stack. */
+const VISIBLE_STACK = 5;
+
+function StackPills({ stack }: { stack: string[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const collapsible = stack.length > VISIBLE_STACK;
+  const visible =
+    expanded || !collapsible ? stack : stack.slice(0, VISIBLE_STACK);
+
+  return (
+    <ul className="project-hero-fade mt-7 flex flex-wrap items-center gap-3">
+      {visible.map((item) => (
+        <li
+          key={item}
+          className="inline-flex items-center font-medium"
+          style={{
+            gap: 10,
+            border: "1px solid var(--border-20)",
+            color: "var(--text-70)",
+            borderRadius: "var(--radius-pill)",
+            padding: "10px 18px",
+            fontSize: 15,
+          }}
+        >
+          <TechBadge name={item} size={20} />
+          {item}
+        </li>
+      ))}
+      {collapsible && (
+        <li>
+          <button
+            type="button"
+            onClick={() => setExpanded((value) => !value)}
+            aria-expanded={expanded}
+            className="inline-flex cursor-pointer items-center font-medium transition-colors duration-200 hover:text-ink"
+            style={{
+              border: "1px solid var(--border-20)",
+              color: "var(--text-70)",
+              borderRadius: "var(--radius-pill)",
+              padding: "10px 18px",
+              fontSize: 15,
+            }}
+          >
+            {expanded ? "Show less" : `+${stack.length - VISIBLE_STACK} more`}
+          </button>
+        </li>
+      )}
+    </ul>
   );
 }
 
@@ -363,39 +400,45 @@ export default function ProjectArticle({
     <main ref={rootRef} className="flex-1">
       <article>
         <div className="container-shell pt-6 md:pt-10">
-          <Link
-            href="/works"
-            className="group inline-flex items-center gap-2"
-            style={{ color: "var(--text-70)", fontSize: "var(--text-small)" }}
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2"
+            style={{ fontSize: "var(--text-small)" }}
           >
-            <HugeiconsIcon
-              icon={ArrowLeft01Icon}
-              size={15}
-              strokeWidth={2}
-              className="transition-transform duration-200 group-hover:-translate-x-1"
-            />
-            <span className="transition-colors duration-200 group-hover:text-ink">
-              back to works
+            <Link
+              href="/works"
+              className="group inline-flex items-center gap-2"
+              style={{ color: "var(--text-50)" }}
+            >
+              <HugeiconsIcon
+                icon={ArrowLeft01Icon}
+                size={15}
+                strokeWidth={2}
+                className="transition-transform duration-200 group-hover:-translate-x-1"
+              />
+              <span className="transition-colors duration-200 group-hover:text-ink">
+                Works
+              </span>
+            </Link>
+            <span aria-hidden="true" style={{ color: "var(--text-35)" }}>
+              /
             </span>
-          </Link>
+            <span aria-current="page" style={{ color: "var(--text-100)" }}>
+              {project.title}
+            </span>
+          </nav>
         </div>
 
-        <header className="container-shell pt-10 md:pt-14">
-          <div className="project-hero-fade flex flex-wrap items-center gap-4">
-            <p
-              className="mono-label"
-              style={{ letterSpacing: "0.16em", fontWeight: 500 }}
-            >
-              {project.title}
-            </p>
+        <header className="container-shell pt-10 md:pt-16">
+          <div className="project-hero-fade">
             <StatusPill status={project.status} />
           </div>
 
           <h1
-            className="project-hero-fade mt-5 font-bold"
+            className="project-hero-fade mt-5 font-semibold"
             style={{
               color: "var(--text-100)",
-              fontSize: "clamp(2.75rem, 1.8rem + 4.5vw, 5.5rem)",
+              fontSize: "clamp(2.75rem, 1.5rem + 4.5vw, 4rem)",
               lineHeight: 1,
               letterSpacing: "var(--tracking-section)",
               textWrap: "balance",
@@ -408,42 +451,25 @@ export default function ProjectArticle({
             className="project-hero-fade mt-6"
             style={{
               color: "var(--text-70)",
-              fontSize: "calc(var(--text-body) + 3px)",
+              fontSize: "calc(var(--text-body) + 1px)",
               lineHeight: 1.625,
-              maxWidth: 760,
+              maxWidth: 1100,
               textWrap: "pretty",
             }}
           >
             {project.dek}
           </p>
 
-          <ul className="project-hero-fade mt-7 flex flex-wrap gap-2">
-            {project.stack.map((item) => (
-              <li
-                key={item}
-                className="inline-flex items-center font-medium"
-                style={{
-                  background: "var(--surface-raised-hover)",
-                  color: "var(--text-70)",
-                  borderRadius: "var(--radius-pill)",
-                  padding: "6px 14px",
-                  fontSize: 13,
-                }}
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
+          <StackPills stack={project.stack} />
 
-          <div className="project-hero-fade mt-8 flex flex-wrap gap-3">
+          <div className="project-hero-fade mt-9 flex flex-wrap gap-4">
             <ProjectLink
               href={project.liveHref}
               label="Live demo"
-              variant="filled"
               icon={
                 <HugeiconsIcon
                   icon={ArrowUpRight01Icon}
-                  size={17}
+                  size={18}
                   strokeWidth={2}
                 />
               }
@@ -451,27 +477,22 @@ export default function ProjectArticle({
             <ProjectLink
               href={project.repoHref}
               label="Source code"
-              variant="outlined"
               icon={
-                <svg
-                  viewBox="0 0 24 24"
-                  width={17}
-                  height={17}
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d={siGithub.path} />
-                </svg>
+                <HugeiconsIcon
+                  icon={ArrowUpRight01Icon}
+                  size={18}
+                  strokeWidth={2}
+                />
               }
             />
           </div>
         </header>
 
-        <div className="container-shell pt-10 md:pt-14">
+        <div className="container-shell pt-10 md:pt-16">
           <div
-            className="project-hero-fade relative aspect-[16/10] overflow-hidden lg:aspect-[18/9]"
+            className="project-hero-fade relative aspect-[16/10] overflow-hidden lg:aspect-[21/9]"
             style={{
-              borderRadius: "clamp(28px, 2.5vw, 40px)",
+              borderRadius: "clamp(24px, 2vw, 32px)",
               background: "var(--surface-raised)",
             }}
           >
