@@ -58,7 +58,7 @@ function BlogCard({ post }: { post: Post }) {
                   alt=""
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover transition-[filter] duration-500 [filter:var(--img-filter)] group-hover:[filter:var(--img-filter-hover)]"
+                  className="object-cover"
                 />
               </div>
               {/* Legibility scrim for the tag pills over the photo. */}
