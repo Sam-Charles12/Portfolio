@@ -227,8 +227,9 @@ export default function DesignSystemDemo() {
             <Swatch name="--bg" value="#0a0a0a" fg="var(--ink)" bg="var(--bg)" />
             <Swatch name="--ink" value="#ededed" fg="var(--bg)" bg="var(--ink)" border="var(--ink)" />
           </div>
-          <div className="mt-3 grid gap-3 sm:grid-cols-4">
+          <div className="mt-3 grid gap-3 sm:grid-cols-5">
             <Swatch name="text 100%" value="headings" fg="var(--text-100)" bg="transparent" />
+            <Swatch name="text 82%" value="long-form body" fg="var(--text-82)" bg="transparent" />
             <Swatch name="text 70%" value="body" fg="var(--text-70)" bg="transparent" />
             <Swatch name="text 50%" value="labels / dates" fg="var(--text-50)" bg="transparent" />
             <Swatch name="text 35%" value="captions" fg="var(--text-35)" bg="transparent" />

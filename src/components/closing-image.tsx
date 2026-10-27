@@ -2,7 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
+import {
+  gsapSetup,
+  prefersReducedMotion,
+  blurFadeIn,
+  parallaxY,
+} from "@/lib/gsap";
 
 /**
  * Full-bleed artwork between the tools list and the writing section.
@@ -17,14 +22,23 @@ const BACKGROUND_IMAGE = "/contact-bg.png";
 
 export default function ClosingImage() {
   const frameRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const frame = frameRef.current;
-    if (!frame || prefersReducedMotion()) return;
+    const image = imageRef.current;
+    if (!frame || !image || prefersReducedMotion()) return;
     gsapSetup();
 
     const ctx = gsap.context(() => {
       blurFadeIn(frame, { duration: 1.3, y: 24 });
+      // Image is 136% of the frame height, so ±13.24% here drifts it by
+      // ±18% of the frame — the same amount the project cards use.
+      parallaxY(image, frame, -13.24, 13.24, {
+        start: "top 85%",
+        end: "bottom 10%",
+        scrub: 1,
+      });
     }, frame);
 
     return () => ctx.revert();
@@ -52,12 +66,13 @@ export default function ClosingImage() {
           }}
         >
           <img
+            ref={imageRef}
             src={BACKGROUND_IMAGE}
             alt=""
             aria-hidden="true"
             decoding="async"
             loading="lazy"
-            className="h-full w-full object-cover"
+            className="absolute inset-x-0 top-[-18%] h-[136%] w-full object-cover"
           />
         </div>
       </div>
