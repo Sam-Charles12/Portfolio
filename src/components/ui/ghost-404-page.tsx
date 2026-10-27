@@ -385,3 +385,91 @@ export function GhostNotFound() {
   );
 }
 
+const MARQUEE_ITEMS = [
+  "it worked on my machine!",
+  "route hidden in .gitignore",
+  "compiler cannot find this path",
+  "searching... timeout",
+  "wrong url, right portfolio",
+  "404",
+];
+
+function NotFoundMarqueeHalf({ hidden }: { hidden?: boolean }) {
+  return (
+    <div
+      className="flex shrink-0 items-center gap-12 pr-12 md:gap-16 md:pr-16"
+      aria-hidden={hidden || undefined}
+    >
+      {MARQUEE_ITEMS.map((item, index) => {
+        const outline = index % 2 === 1;
+        return (
+          <span
+            key={item}
+            className="flex shrink-0 items-center gap-12 md:gap-16"
+          >
+            <span
+              className="font-display font-semibold whitespace-nowrap lowercase"
+              style={
+                outline
+                  ? {
+                      fontSize: "clamp(1.75rem, 1.25rem + 2vw, 2.75rem)",
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.02em",
+                      color: "transparent",
+                      WebkitTextStroke: "1.5px var(--text-50)",
+                    }
+                  : {
+                      fontSize: "clamp(1.75rem, 1.25rem + 2vw, 2.75rem)",
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.02em",
+                      color: "var(--text-70)",
+                    }
+              }
+            >
+              {item}
+            </span>
+            <span
+              aria-hidden="true"
+              className="font-mono shrink-0"
+              style={{
+                fontSize: "clamp(1.25rem, 1rem + 0.75vw, 1.625rem)",
+                color: "var(--text-35)",
+              }}
+            >
+              {"//"}
+            </span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Dev-joke ticker along the bottom. Solid words alternate with outlined
+ * ones for rhythm, the edges fade so it bleeds off-screen, and hovering
+ * pauses the crawl so each joke can be read.
+ */
+export function NotFoundMarquee() {
+  return (
+    <section
+      aria-label="Page not found divider"
+      className="group w-full overflow-hidden"
+      style={{
+        paddingTop: 32,
+        paddingBottom: 44,
+        borderTop: "1px solid var(--border-15)",
+        maskImage:
+          "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+      }}
+    >
+      <div className="animate-marquee-slow flex w-max items-center group-hover:[animation-play-state:paused]">
+        <NotFoundMarqueeHalf />
+        <NotFoundMarqueeHalf hidden />
+      </div>
+    </section>
+  );
+}
+
