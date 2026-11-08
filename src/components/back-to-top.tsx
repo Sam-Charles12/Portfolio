@@ -28,7 +28,7 @@ export default function BackToTop() {
           aria-label="Back to top"
           aria-hidden={!visible}
           tabIndex={visible ? 0 : -1}
-          className="inline-flex items-center justify-center transition-all duration-300 hover:scale-105"
+          className="inline-flex items-center justify-center outline-hidden transition-all duration-300 hover:scale-105 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-95 active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0"
           style={{
             width: 48,
             height: 48,
