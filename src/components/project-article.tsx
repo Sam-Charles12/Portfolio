@@ -138,7 +138,7 @@ function ProjectLink({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+      className="inline-flex items-center font-semibold outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.97] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate"
       style={{
         height: 52,
         paddingInline: 26,
@@ -190,7 +190,7 @@ function StackPills({ stack }: { stack: string[] }) {
             type="button"
             onClick={() => setExpanded((value) => !value)}
             aria-expanded={expanded}
-            className="inline-flex cursor-pointer items-center font-medium transition-colors duration-200 hover:text-ink"
+            className="inline-flex cursor-pointer items-center font-medium outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0"
             style={{
               border: "1px solid var(--border-20)",
               color: "var(--text-70)",
@@ -333,7 +333,7 @@ function NeighbourLink({
   return (
     <Link
       href={`/works/${project.slug}`}
-      className={`group inline-flex min-w-0 items-center gap-2 transition-colors duration-200 ${
+      className={`group inline-flex min-w-0 items-center gap-2 rounded-md px-2 py-1 outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate ${
         isNext ? "justify-self-end" : "justify-self-start"
       }`}
       style={{ color: "var(--text-70)", fontSize: 16 }}
@@ -346,7 +346,7 @@ function NeighbourLink({
           className="shrink-0 transition-transform duration-200 group-hover:-translate-x-1"
         />
       )}
-      <span className="max-w-[26ch] truncate transition-colors duration-200 group-hover:text-ink">
+      <span className="max-w-[26ch] truncate rounded-md px-1 transition-colors duration-200 group-hover:bg-[var(--surface-raised-hover)] group-hover:text-[var(--text-100)] group-active:bg-[var(--surface-raised-hover)]">
         {project.title}
       </span>
       {isNext && (
@@ -407,7 +407,7 @@ export default function ProjectArticle({
           >
             <Link
               href="/works"
-              className="group inline-flex items-center gap-2"
+              className="group inline-flex items-center gap-2 rounded-md px-2 py-1 outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 [&_svg]:shrink-0"
               style={{ color: "var(--text-50)" }}
             >
               <HugeiconsIcon
@@ -416,7 +416,7 @@ export default function ProjectArticle({
                 strokeWidth={2}
                 className="transition-transform duration-200 group-hover:-translate-x-1"
               />
-              <span className="transition-colors duration-200 group-hover:text-ink">
+              <span className="rounded-md px-1 transition-colors duration-200 group-hover:bg-[var(--surface-raised-hover)] group-hover:text-[var(--text-100)]">
                 Works
               </span>
             </Link>
@@ -525,7 +525,7 @@ export default function ProjectArticle({
                 <NeighbourLink project={previous} direction="previous" />
                 <Link
                   href="/works"
-                  className="justify-self-start rounded-full transition-colors duration-200 hover:text-ink sm:justify-self-center"
+                  className="justify-self-start rounded-full px-4 py-2 outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 sm:justify-self-center"
                   style={{ color: "var(--text-50)", fontSize: 16 }}
                 >
                   back to all projects

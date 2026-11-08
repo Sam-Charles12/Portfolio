@@ -32,16 +32,16 @@ export default function SiteNav() {
           }}
         >
           <a
-            href="#top"
-            className="font-logo text-2xl font-semibold tracking-tight md:text-3xl"
+            href="/"
+            className="rounded-md font-logo text-2xl font-semibold tracking-tight outline-hidden transition-colors duration-200 hover:text-[var(--text-100)] focus-visible:ring-2 md:text-3xl [&>span:last-child]:truncate"
           >
             carles
           </a>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <a
-              href="#contact"
-              className="inline-flex items-center font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+              href="/#contact"
+              className="inline-flex items-center font-semibold outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.97] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate"
               style={{
                 height: 48,
                 paddingInline: 28,
@@ -108,7 +108,7 @@ export default function SiteNav() {
             setOpen(true);
           }
         }}
-        className="pointer-events-auto inline-flex items-center justify-center transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.92]"
+        className="pointer-events-auto inline-flex items-center justify-center outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:text-[var(--text-100)] active:scale-[0.92] active:opacity-90 focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0"
         style={
           open
             ? {
