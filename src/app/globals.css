@@ -13,11 +13,11 @@
   --color-raised: var(--surface-raised);
   --color-overlay: var(--surface-overlay);
 
-  --font-display: var(--font-display);
-  --font-body: var(--font-body);
-  --font-hero: var(--font-hero);
-  --font-logo: var(--font-logo);
-  --font-mono: var(--font-mono);
+  --font-display: var(--font-funnel);
+  --font-body: var(--font-funnel);
+  --font-hero: var(--font-space);
+  --font-logo: var(--font-funnel);
+  --font-mono: var(--font-funnel);
 
   --animate-marquee: token-marquee var(--dur-marquee) var(--ease-linear) infinite;
   --animate-marquee-slow: token-marquee var(--dur-marquee-slow)
@@ -31,11 +31,15 @@ html {
   /* Lenis drives smoothing — CSS smooth would fight it. */
   scroll-behavior: auto;
   overflow-x: clip;
-  /* Aliases — next/font owns --font-display on <html>; body/logo/mono
-     follow it so every utility resolves to the loaded Funnel Display. */
-  --font-body: var(--font-display);
-  --font-logo: var(--font-display);
-  --font-mono: var(--font-display);
+  /* Aliases — next/font owns --font-funnel/--font-space on <html>;
+     body/logo/mono follow Funnel Display so every utility resolves
+     to the loaded face. Plain CSS var() uses (body, h1-h3) need
+     these defined here, not just in @theme. */
+  --font-display: var(--font-funnel);
+  --font-body: var(--font-funnel);
+  --font-logo: var(--font-funnel);
+  --font-mono: var(--font-funnel);
+  --font-hero: var(--font-space);
 }
 
 body {
