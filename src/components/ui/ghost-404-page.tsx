@@ -366,7 +366,7 @@ export function GhostNotFound() {
               <button
                 type="button"
                 onClick={goBack}
-                className="inline-flex h-12 cursor-pointer items-center px-8 font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+                className="inline-flex h-12 cursor-pointer items-center px-8 font-semibold outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.97] active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0"
                 style={{
                   background: "transparent",
                   color: "var(--ink)",

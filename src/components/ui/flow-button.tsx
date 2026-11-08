@@ -49,7 +49,7 @@ export function FlowButton({ text, href, onClick, className = "" }: FlowButtonPr
     </>
   );
 
-  const cls = `group relative flex h-12 cursor-pointer items-center gap-1 overflow-hidden rounded-full border-[1.5px] border-ink/40 bg-transparent px-8 font-semibold text-ink transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-transparent hover:text-bg active:scale-[0.95] ${className}`;
+  const cls = `group relative flex h-12 cursor-pointer items-center gap-1 overflow-hidden rounded-full border-[1.5px] border-ink/40 bg-transparent px-8 font-semibold text-ink outline-hidden transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-transparent hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.95] active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate ${className}`;
 
   if (href) {
     return (

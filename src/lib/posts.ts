@@ -46,6 +46,160 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "llm-doesnt-get-to-guess",
+    title: "the llm doesn’t get to guess",
+    dek: "a customer says they paid. i built a support tool that checks with Paystack before anyone replies.",
+    date: "2026-11-08",
+    readingMinutes: 4,
+    tags: ["resolve", "build-in-public", "product"],
+    cover: "/resolve-cover.png",
+    coverAlt: "Resolve support triage flow checking Paystack before drafting a reply",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "If you sell anything online, you’ve gotten this message: “I paid but I didn’t get anything.” Usually there’s a blurry receipt screenshot attached.",
+      },
+      {
+        type: "paragraph",
+        text: "Someone has to open the dashboard, find the transaction, work out whether it went through, and write back. It’s slow, and it’s the same lookup every time.",
+      },
+      {
+        type: "paragraph",
+        text: "The easy fix is to paste the message into an LLM and let it reply. That’s where it goes wrong.",
+      },
+      {
+        type: "embed",
+        embed: {
+          title: "Resolve",
+          description:
+            "A support triage tool for payment disputes. It checks the payment with Paystack first, then drafts the reply.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
+          href: "/works/resolve",
+          image: "/resolve-image.png",
+        },
+      },
+      { type: "heading", text: "a guess that sounds sure" },
+      {
+        type: "paragraph",
+        text: "Whether a payment went through isn’t a matter of opinion. Paystack knows. The model reading the customer’s message doesn’t, so it guesses, and it guesses in a confident tone. “Your payment was successful” when it failed is bad. Refunding something that’s already been refunded is worse.",
+      },
+      {
+        type: "paragraph",
+        text: "So Resolve has one rule. **The model doesn’t get to decide what happened.**",
+      },
+      { type: "heading", text: "how it works" },
+      {
+        type: "paragraph",
+        text: "A ticket comes in as text, a pasted receipt, or both. A vision model reads it and pulls out the payment details. If that fails, a regex fallback catches the obvious cases.",
+      },
+      {
+        type: "paragraph",
+        text: "Then the real work happens, and no model does it. Resolve checks the transaction against Paystack’s verify API, against the business’s own orders ledger, and against the list of refunds already issued. The refund check is what stops a double refund.",
+      },
+      {
+        type: "paragraph",
+        text: "Only after that does a model write anything. It gets the verdict and nothing else. It never sees the customer’s message or the receipt image, so it can’t repeat a claim as if it were true. The model is good at wording a reply. It just doesn’t get to choose the facts.",
+      },
+      { type: "heading", text: "the security bits" },
+      {
+        type: "paragraph",
+        text: "Each business connects its own Paystack key on a setup page. The key goes in an httpOnly cookie, not local storage. Every lookup lands on an audit page, so you can see what was checked and why a reply says what it says.",
+      },
+      { type: "heading", text: "what was still open" },
+      {
+        type: "paragraph",
+        text: "When I last worked on it I hadn’t got to page-level auth redirects, row-level security policies, or tighter tracking of where each draft’s facts come from. I wouldn’t have put it in front of a real business before those.",
+      },
+      { type: "heading", text: "where it’s going" },
+      {
+        type: "paragraph",
+        text: "Resolve was a project, not a company, and I’m not pitching it as one. What I’m keeping is the rule behind it. If the answer lives in a system somewhere, go ask the system. Don’t ask the model to remember it.",
+      },
+    ],
+  },
+  {
+    slug: "one-timeout-for-every-device",
+    title: "one timeout for every device",
+    dek: "the network decides when to drop your phone’s radio connection using a fixed timer. we made that timer adapt to the crowd.",
+    date: "2026-11-08",
+    readingMinutes: 5,
+    tags: ["telecom", "research", "ieee"],
+    cover: "/artm-cover.png",
+    coverAlt: "Crowded cell tower with phones competing for radio resources",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "ARTM — Adaptive Radio Resource Control Timeout Management. A paper from six of us in LASU’s ECE department, accepted at IEEE NIGERCON 2026. Built with Python, SimPy and a Random Forest model.",
+      },
+      {
+        type: "paragraph",
+        text: "If you’ve ever tried to make a call at a packed event in Lagos, you know what happens. Calls drop, texts hang, and data crawls. “Too many people” is the usual answer, but part of the problem is how the network treats phones that go quiet.",
+      },
+      { type: "heading", text: "the timer nobody talks about" },
+      {
+        type: "paragraph",
+        text: "When your phone stops sending data, the tower doesn’t let go of it right away. It keeps radio resources reserved for a set time, then releases them. That wait is the RRC inactivity timeout, and in most networks it’s one fixed number.",
+      },
+      {
+        type: "paragraph",
+        text: "In a crowd, that number hurts. Every idle phone holds a slice of the cell while everyone else waits their turn. Earlier work fixed this by cutting a constant 1 to 2 seconds off the timer during crowded events. That helps, but the cut is the same whether the crowd is just starting to build or already at its peak.",
+      },
+      { type: "heading", text: "what ARTM does" },
+      {
+        type: "paragraph",
+        text: "It has two parts.",
+      },
+      {
+        type: "paragraph",
+        text: "The first is a crowd density estimator. It reads three things the network already measures: how loaded the cell is with active connections, how hard devices are hitting the random access channel, and how saturated the control channel is. It also tracks how fast each one is changing. A Random Forest model turns all of that into one number between 0 and 1, where 0 is a quiet cell and 1 is a fully packed one.",
+      },
+      {
+        type: "paragraph",
+        text: "The second is a timeout controller. It takes that number and sets the timeout with one line: timeout = 20s − (20s − 10s) × density.",
+      },
+      {
+        type: "paragraph",
+        text: "A quiet cell keeps the normal 20 seconds. A fully packed cell drops to 10 seconds. Everything in between scales in a straight line. Both limits are values operators already use, so ARTM never produces a timeout nobody runs in practice, and it needs no new infrastructure.",
+      },
+      { type: "heading", text: "how we tested it" },
+      {
+        type: "paragraph",
+        text: "There’s no public data from real crowded events in Nigeria, so we built a simulation in SimPy and calibrated it against published Nigerian GSM performance numbers. We ran six crowd shapes: steady low, gradual buildup, flash surge, sustained peak, surge then decay, and oscillating. Each one ran with 30 random seeds. The baseline was a fixed 18 second timeout, based on the constant cut from earlier work.",
+      },
+      { type: "heading", text: "what came out" },
+      {
+        type: "paragraph",
+        text: "ARTM beat the baseline in all six scenarios.",
+      },
+      {
+        type: "paragraph",
+        text: "Reconnection rate dropped by 22.9% to 40.6%. The best case was steady low at 40.6%, then gradual buildup at 34.7%. The toughest ones, flash surge and sustained peak, gave 23.8% and 22.9%.",
+      },
+      {
+        type: "paragraph",
+        text: "Signaling overhead dropped by 11.2% to 24.7%, with the biggest drop again in steady low.",
+      },
+      {
+        type: "paragraph",
+        text: "Resource utilization went up 7.0% in the sustained peak scenario.",
+      },
+      {
+        type: "paragraph",
+        text: "The gains were biggest early in an event and while it was building, which is when a fixed timer wastes the most. At the peak they’re smaller but still there. Blocking rate barely moved, so the timeout alone doesn’t fix that.",
+      },
+      { type: "heading", text: "what it doesn’t do yet" },
+      {
+        type: "paragraph",
+        text: "All the training data is simulated, because real event traces weren’t available. It models one sector of one cell, not several interacting. And it can’t tell whether a given phone is actually active or idle, which would cut down the remaining reconnections.",
+      },
+      { type: "heading", text: "where it’s going" },
+      {
+        type: "paragraph",
+        text: "We presented ARTM at IEEE NIGERCON 2026 on 5-6 November. Next up: testing it on real traces from Nigerian operators, extending it to multiple sectors, adding a per-user activity classifier, and validating it at the protocol level in OMNeT++.",
+      },
+    ],
+  },
+  {
     slug: "the-answer-that-wasnt-from-the-ai",
     title: "the answer that wasn’t from the ai",
     dek: "my server never threw an error. it just quietly handed me fake study material.",
@@ -128,100 +282,6 @@ export const POSTS: Post[] = [
       {
         type: "paragraph",
         text: "I’ve kept testing on real topics since then, because the template text only gave itself away by accident. Next up is spaced repetition, so people actually remember what they study.",
-      },
-    ],
-  },
-  {
-    slug: "placeholder-post-two",
-    title: "another placeholder title — this is where the real headline goes",
-    dek: "a second dek line, about the same length as the first, so the two layouts can be compared side by side.",
-    date: "2026-07-09",
-    readingMinutes: 6,
-    tags: ["architecture", "decisions", "product"],
-    blocks: [
-      {
-        type: "paragraph",
-        text: "A post can open on a concrete moment instead of a thesis. The bug that only happened once, the file that was four thousand lines long, the deploy that went out at midnight.",
-      },
-      {
-        type: "paragraph",
-        text: "Starting concrete is easier to read than starting abstract, and it gives the rest of the article something to resolve. **Specifics are what make a post worth publishing.**",
-      },
-      { type: "heading", text: "the setup" },
-      {
-        type: "paragraph",
-        text: "Spend one paragraph on the system as it was. Just enough that a reader who has never seen the repo can follow the decision that comes later.",
-      },
-      {
-        type: "paragraph",
-        text: "Then the constraint: time, budget, an API that does not do what its docs claim, a deadline that moved twice.",
-      },
-      { type: "heading", text: "where it got messy" },
-      {
-        type: "paragraph",
-        text: "This is the part people actually come for — the wrong turn, the thing that looked clever and was not, the moment the estimate stopped being true.",
-      },
-      {
-        type: "embed",
-        embed: {
-          title: "project name",
-          description:
-            "short description of the build this post is about, the same shape as the card above.",
-          stack: ["Next.js", "Supabase", "GSAP"],
-          href: "#",
-        },
-      },
-      { type: "heading", text: "the call i made" },
-      {
-        type: "paragraph",
-        text: "State the decision plainly, then the trade-off it bought. Every decision costs something; naming the cost is what separates a write-up from a pitch.",
-      },
-      {
-        type: "paragraph",
-        text: "If it worked, say how you know. If it did not, say that too — **a post about a thing that failed is usually more useful** than one about a thing that shipped cleanly.",
-      },
-    ],
-  },
-  {
-    slug: "placeholder-post-three",
-    title: "third placeholder title goes right here",
-    dek: "shorter dek this time, to check that the header still balances when the subheading is only one line.",
-    date: "2026-05-30",
-    readingMinutes: 5,
-    tags: ["backend", "typescript", "performance"],
-    blocks: [
-      {
-        type: "paragraph",
-        text: "Numbers make a good opening. A response time, a bundle size, a bill, a count of records. Anything the reader can hold onto while the rest of the post explains why it was that number.",
-      },
-      { type: "heading", text: "why it was slow" },
-      {
-        type: "paragraph",
-        text: "Walk through the cause in the order you found it, not the order you would teach it. The order you found it is the order the reader is following.",
-      },
-      {
-        type: "paragraph",
-        text: "Mention the false lead. The one you chased for an afternoon before realising it was not the problem — that is the paragraph people quote back to you.",
-      },
-      { type: "heading", text: "what i measured" },
-      {
-        type: "paragraph",
-        text: "Show the before and after, and say how each was measured. A number without a method is a claim, and readers are right not to trust it.",
-      },
-      {
-        type: "embed",
-        embed: {
-          title: "project name",
-          description:
-            "the tool or service this post covers, with the stack listed underneath.",
-          stack: ["Node.js", "Postgres", "Redis"],
-          href: "#",
-        },
-      },
-      { type: "heading", text: "the result" },
-      {
-        type: "paragraph",
-        text: "Close on the outcome and the one thing you would do differently. Short. Specific. Done.",
       },
     ],
   },
