@@ -86,7 +86,7 @@ export default function Hero() {
           <div className="hero-fade mt-8 flex flex-wrap gap-3">
             <a
               href="#work"
-              className="inline-flex items-center font-medium transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+              className="inline-flex items-center font-medium outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:opacity-85 active:scale-[0.97] active:opacity-85 focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate"
               style={{
                 height: 52,
                 paddingInline: 28,
@@ -103,7 +103,7 @@ export default function Hero() {
               href={CV_URL}
               target={CV_URL.startsWith("http") ? "_blank" : undefined}
               rel={CV_URL.startsWith("http") ? "noreferrer" : undefined}
-              className="inline-flex items-center font-medium transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+              className="inline-flex items-center font-medium outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.97] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate"
               style={{
                 height: 52,
                 paddingInline: 28,

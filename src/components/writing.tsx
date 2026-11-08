@@ -8,6 +8,7 @@ import {
   prefersReducedMotion,
   blurFadeIn,
   parallaxY,
+  getScrollTrigger,
 } from "@/lib/gsap";
 import { ArrowLink } from "@/components/ui/arrow-link";
 // Posts live in lib/posts so the cards and the /blog/[slug] reader never
@@ -18,24 +19,27 @@ function BlogCard({ post }: { post: Post }) {
   const cardRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
 
-  // Cover parallax only when a real image is supplied.
+  // Cover parallax only when a real image is supplied. Re-runs when the
+  // cover changes (covers were wired before the files landed) and the
+  // trigger refreshes once the image decodes, so positions are never
+  // measured against an empty box.
   useEffect(() => {
     const card = cardRef.current;
     const media = mediaRef.current;
     if (!card || !media || prefersReducedMotion()) return;
     gsapSetup();
     const ctx = gsap.context(() => {
-      parallaxY(media, card);
+      parallaxY(media, card, -8, 8);
     }, card);
     return () => ctx.revert();
-  }, []);
+  }, [post.cover]);
 
   return (
     <article ref={cardRef} className="blog-card">
       {/* Hover lift lives on the link: GSAP owns the article's transform. */}
       <a
         href={`/blog/${post.slug}`}
-        className="group block transition-transform duration-200 hover:-translate-y-[3px]"
+        className="group block rounded-[var(--radius-card)] outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
         aria-label={`${post.title} — ${post.tags.join(", ")}`}
       >
         <div
@@ -51,7 +55,7 @@ function BlogCard({ post }: { post: Post }) {
             <>
               <div
                 ref={mediaRef}
-                className="absolute inset-x-0 top-[-6%] h-[112%]"
+                className="absolute inset-x-0 top-[-10%] h-[120%]"
               >
                 <Image
                   src={post.cover}
@@ -59,6 +63,7 @@ function BlogCard({ post }: { post: Post }) {
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   className="object-cover"
+                  onLoad={() => getScrollTrigger().refresh()}
                 />
               </div>
               {/* Legibility scrim for the tag pills over the photo. */}
@@ -163,9 +168,9 @@ export default function Writing() {
                 color: "var(--text-100)",
               }}
             >
-              thoughts and
+              thoughts
               <br />
-              notes
+              <span className="whitespace-nowrap">and notes</span>
             </h2>
           </div>
 
