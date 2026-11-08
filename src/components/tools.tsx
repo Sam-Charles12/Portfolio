@@ -80,7 +80,7 @@ export default function Tools() {
           {TOOLS.map((tool) => (
             <div
               key={tool.label}
-              className="tool-cell flex flex-col items-center justify-center text-center transition-transform duration-200 hover:-translate-y-[3px]"
+              className="tool-cell flex flex-col items-center justify-center text-center outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:bg-[var(--surface-raised-hover)] hover:border-[var(--border-25)] focus-visible:ring-2"
               style={{
                 border: "var(--border-width) solid var(--border-20)",
                 borderRadius: 48,

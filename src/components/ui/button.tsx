@@ -7,12 +7,18 @@ export interface ButtonProps
 }
 
 const VARIANTS: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  default: "bg-ink text-bg hover:opacity-85",
+  // Sidebar SidebarMenuButton language: hover/active share the same accent
+  // bg + accent-foreground. accent -> var(--surface-raised-hover),
+  // accent-foreground -> var(--text-100). Layered under existing styles.
+  default:
+    "bg-ink text-bg hover:opacity-85 active:opacity-85 data-active:opacity-85",
   outline:
-    "border border-[var(--border-25)] bg-transparent text-ink hover:bg-[rgba(128,128,128,0.12)]",
-  ghost: "bg-transparent text-ink hover:bg-[rgba(128,128,128,0.12)]",
-  secondary: "bg-[var(--surface-raised)] text-ink hover:opacity-90",
-  link: "bg-transparent text-ink underline-offset-4 hover:underline",
+    "border border-[var(--border-25)] bg-transparent text-ink hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)]",
+  ghost:
+    "bg-transparent text-ink hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)]",
+  secondary:
+    "bg-[var(--surface-raised)] text-ink hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)]",
+  link: "bg-transparent text-ink underline-offset-4 hover:underline hover:text-[var(--text-100)]",
 };
 
 const SIZES: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -32,7 +38,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-full font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-50 ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-full font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...props}
     />
   );
