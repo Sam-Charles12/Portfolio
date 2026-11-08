@@ -19,11 +19,11 @@ import {
 } from "@/lib/site";
 
 const NAV_LINKS = [
-  { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#work" },
-  { label: "Blog", href: "#writing" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/#about" },
+  { label: "Projects", href: "/#work" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/#contact" },
 ] as const;
 
 const QUOTES = [
@@ -297,7 +297,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
             <a
               href={EMAIL_HREF}
               aria-label={`Email Carles at ${EMAIL}`}
-              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 hover:bg-[var(--surface-raised-hover)]`}
+              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 outline-hidden hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate`}
               style={padStyle("clamp(24px, 2.6vw, 40px)")}
             >
               <HugeiconsIcon
@@ -319,7 +319,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
             <a
               href={`tel:${PHONE_TEL}`}
               aria-label={`Call Carles at ${PHONE_DISPLAY}`}
-              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 hover:bg-[var(--surface-raised-hover)]`}
+              className={`${CARD_CLASS} footer-fade group flex items-center gap-4 transition-colors duration-200 outline-hidden hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate`}
               style={padStyle("clamp(24px, 2.6vw, 40px)")}
             >
               <HugeiconsIcon
@@ -358,7 +358,7 @@ export default function SiteFooter({ hasPortrait }: SiteFooterProps) {
                       href={social.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/social -mx-2 flex items-center justify-between rounded-lg px-2 py-2.5 transition-[background-color,transform] duration-300 ease-[var(--ease-out)] hover:bg-[var(--surface-raised-hover)] hover:translate-x-1 focus-visible:bg-[var(--surface-raised-hover)] focus-visible:translate-x-1"
+                      className="group/social -mx-2 flex items-center justify-between rounded-lg px-2 py-2.5 outline-hidden transition-[background-color,transform] duration-300 ease-[var(--ease-out)] hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] hover:translate-x-1 active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:bg-[var(--surface-raised-hover)] focus-visible:text-[var(--text-100)] focus-visible:ring-2 focus-visible:translate-x-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate"
                     >
                       <span
                         className="font-medium transition-transform duration-300 ease-[var(--ease-out)] group-hover/social:translate-x-1"
