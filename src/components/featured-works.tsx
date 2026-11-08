@@ -182,7 +182,7 @@ export function ProjectCard({
 }) {
   const ref = useRef<HTMLElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const staticImage = project.staticImage === true;
+  const gentleMotion = project.gentleMotion === true;
 
   // Scroll reveal (blur fade-and-rise, reverses out) + image parallax (GSAP).
   useEffect(() => {
@@ -191,32 +191,33 @@ export function ProjectCard({
     gsapSetup();
     const ctx = gsap.context(() => {
       blurFadeIn(card);
-      // Overscanned images drift ±13.24% (≈ the reference's ±18%
-      // card-height drift). Static images render at 100% with no drift.
-      if (imgRef.current && !staticImage)
-        parallaxY(imgRef.current, card, -13.24, 13.24, {
+      // Drift range must stay inside the image overscan: ±13.24% for the
+      // 136% images, ±5% for the 112% gentle-motion ones.
+      const drift = gentleMotion ? 5 : 13.24;
+      if (imgRef.current)
+        parallaxY(imgRef.current, card, -drift, drift, {
           start: "top 85%",
           end: "bottom 10%",
           scrub: 1,
         });
     }, card);
     return () => ctx.revert();
-  }, [staticImage]);
+  }, [gentleMotion]);
 
   return (
     <article
       ref={ref}
-      className={`group relative overflow-hidden transition-transform duration-200 hover:-translate-y-[3px] ${className}`}
+      className={`group relative overflow-hidden outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 ${className}`}
       style={{
         borderRadius: "4rem",
         minHeight,
         background: "var(--surface-raised)",
       }}
     >
-      {/* Screenshot — scroll parallax + subtle zoom on hover (unless static). */}
+      {/* Screenshot — parallax drift on scroll + subtle zoom on hover (unless gentle-motion). */}
       {project.image ? (
         <div
-          className={`absolute inset-0 overflow-hidden ${staticImage ? "" : "transition-transform duration-700 ease-out group-hover:scale-[1.04]"}`}
+          className={`absolute inset-0 overflow-hidden ${gentleMotion ? "" : "transition-transform duration-700 ease-out group-hover:scale-[1.04]"}`}
           aria-hidden="true"
         >
           <img
@@ -225,8 +226,8 @@ export function ProjectCard({
             alt={`${project.title} screenshot`}
             style={{ objectPosition: project.imagePosition ?? "50% 0%" }}
             className={
-              staticImage
-                ? "absolute inset-0 h-full w-full object-cover"
+              gentleMotion
+                ? "absolute inset-x-0 top-[-6%] h-[112%] w-full object-cover"
                 : "absolute inset-x-0 top-[-18%] h-[136%] w-full object-cover"
             }
           />
@@ -269,7 +270,7 @@ export function ProjectCard({
               href={project.repoHref}
               aria-label={`${project.title} repository`}
               title={`${project.title} repository`}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#ededed] transition-colors duration-200 hover:bg-[rgba(237,237,237,0.12)]"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#ededed] outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -285,7 +286,7 @@ export function ProjectCard({
               href={project.liveHref}
               aria-label={`${project.title} live demo`}
               title={`${project.title} live demo`}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#ededed] transition-colors duration-200 hover:bg-[rgba(237,237,237,0.12)]"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#ededed] outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0"
             >
               <HugeiconsIcon
                 icon={ArrowUpRight01Icon}
@@ -321,7 +322,7 @@ export function ProjectCard({
           {project.stack.map((t) => (
             <Tooltip key={t}>
               <TooltipTrigger asChild>
-                <span className="inline-flex cursor-default transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 data-[state=open]:-translate-y-0.5 data-[state=open]:scale-110">
+                <span className="inline-flex cursor-default rounded-md px-1 outline-hidden transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:bg-[var(--surface-raised-hover)] focus-visible:ring-2 data-[state=open]:-translate-y-0.5 data-[state=open]:scale-110 data-[state=open]:bg-[var(--surface-raised-hover)]">
                   <TechBadge name={t} />
                 </span>
               </TooltipTrigger>

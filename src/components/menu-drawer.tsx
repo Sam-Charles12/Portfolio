@@ -6,11 +6,11 @@ import { CustomEase } from "gsap/CustomEase";
 import { TextReveal } from "@/components/ui/cascade-text";
 
 const LINKS = [
-  { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#work" },
-  { label: "Blog", href: "#writing" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/#about" },
+  { label: "Projects", href: "/#work" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const ENTRANCE_COLORS = [
@@ -41,7 +41,7 @@ function mainEase(): string {
 export default function MenuDrawer({ onClose }: { onClose: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const closedRef = useRef(false);
-  const [active, setActive] = useState("#top");
+  const [active, setActive] = useState("/");
 
   useEffect(() => {
     const root = rootRef.current;
@@ -275,7 +275,7 @@ export default function MenuDrawer({ onClose }: { onClose: () => void }) {
               {LINKS.map((l) => {
                 const isActive = active === l.href;
                 return (
-                  <span key={l.href} className="block overflow-hidden">
+                  <span key={l.href} className="block overflow-hidden rounded-md">
                     <TextReveal
                       text={l.label}
                       href={l.href}
@@ -283,7 +283,10 @@ export default function MenuDrawer({ onClose }: { onClose: () => void }) {
                         setActive(l.href);
                         requestClose();
                       }}
-                      className="nav-link-inner font-display font-semibold tracking-tight"
+                      // Sidebar SidebarMenuButton hover layered under the cascade
+                      // roll: hover/active share accent bg. Drawer is inverted
+                      // (ink bg, bg text) so accent uses bg mix. Roll is kept.
+                      className="nav-link-inner rounded-md font-display font-semibold tracking-tight outline-hidden transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--bg)_12%,transparent)] active:bg-[color-mix(in_srgb,var(--bg)_12%,transparent)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate"
                       fontSize="2.5rem"
                       style={{ paddingInline: 0 }}
                       color={
