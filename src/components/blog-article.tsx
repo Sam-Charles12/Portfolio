@@ -248,7 +248,7 @@ function NeighbourLink({
   return (
     <a
       href={`/blog/${post.slug}`}
-      className={`group inline-flex min-w-0 items-center gap-2 transition-colors duration-200 ${
+      className={`group inline-flex min-w-0 items-center gap-2 rounded-md px-2 py-1 outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate ${
         isNext ? "justify-self-end" : "justify-self-start"
       }`}
       style={{ color: "var(--text-70)", fontSize: 16 }}
@@ -261,7 +261,7 @@ function NeighbourLink({
           className="shrink-0 transition-transform duration-200 group-hover:-translate-x-1"
         />
       )}
-      <span className="max-w-[26ch] truncate transition-colors duration-200 group-hover:text-ink">
+      <span className="max-w-[26ch] truncate rounded-md px-1 transition-colors duration-200 group-hover:bg-[var(--surface-raised-hover)] group-hover:text-[var(--text-100)]">
         {post.title}
       </span>
       {isNext && (
@@ -322,7 +322,7 @@ export default function BlogArticle({
         <div className="container-shell pt-6 md:pt-10">
           <a
             href="/blog"
-            className="group inline-flex items-center gap-2"
+            className="group inline-flex items-center gap-2 rounded-md px-2 py-1 outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] focus-visible:ring-2 [&_svg]:shrink-0"
             style={{ color: "var(--text-70)", fontSize: "var(--text-small)" }}
           >
             <HugeiconsIcon
@@ -331,7 +331,7 @@ export default function BlogArticle({
               strokeWidth={2}
               className="transition-transform duration-200 group-hover:-translate-x-1"
             />
-            <span className="transition-colors duration-200 group-hover:text-ink">
+            <span className="rounded-md px-1 transition-colors duration-200 group-hover:bg-[var(--surface-raised-hover)] group-hover:text-[var(--text-100)]">
               back to blogs
             </span>
           </a>
@@ -447,7 +447,7 @@ export default function BlogArticle({
                 <NeighbourLink post={previous} direction="previous" />
                 <a
                   href="/blog"
-                  className="justify-self-start rounded-full transition-colors duration-200 hover:text-ink sm:justify-self-center"
+                  className="justify-self-start rounded-full px-4 py-2 outline-hidden transition-colors duration-200 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 sm:justify-self-center"
                   style={{ color: "var(--text-50)", fontSize: 16 }}
                 >
                   back to all notes

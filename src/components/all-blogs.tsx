@@ -20,30 +20,35 @@ function ListingCard({ post }: { post: Post }) {
   const cardRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
 
-  // Cover parallax only when a real image is supplied.
+  // Cover parallax only when a real image is supplied. Re-runs when the
+  // cover changes (covers were wired before the files landed) and the
+  // trigger refreshes once the image decodes, so positions are never
+  // measured against an empty box.
   useEffect(() => {
     const card = cardRef.current;
     const media = mediaRef.current;
     if (!card || !media || prefersReducedMotion()) return;
     gsapSetup();
     const ctx = gsap.context(() => {
-      parallaxY(media, card);
+      parallaxY(media, card, -8, 8);
     }, card);
     return () => ctx.revert();
-  }, []);
+  }, [post.cover]);
 
   return (
     <article ref={cardRef} className="blog-listing-card">
-      {/* Hover lift lives on the link: GSAP owns the article's transform. */}
+      {/* Hover lift lives on the link: GSAP owns the article's transform. Sidebar accent layered under lift. */}
       <a
         href={`/blog/${post.slug}`}
-        className="group block transition-transform duration-200 hover:-translate-y-[3px]"
+        className="group block rounded-[var(--radius-card)] outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
         aria-label={`${post.title} — ${post.tags.join(", ")}`}
       >
         <div
           className="relative overflow-hidden"
           style={{
-            aspectRatio: "var(--blog-media-ratio)",
+            // Landscape covers like the reference, not the square homepage
+            // card ratio.
+            aspectRatio: "4 / 3",
             borderRadius: "var(--radius-card)",
             border: "var(--border-width) solid var(--border-20)",
             background: "var(--surface-raised)",
@@ -53,7 +58,7 @@ function ListingCard({ post }: { post: Post }) {
             <>
               <div
                 ref={mediaRef}
-                className="absolute inset-x-0 top-[-6%] h-[112%]"
+                className="absolute inset-x-0 top-[-10%] h-[120%]"
               >
                 <Image
                   src={post.cover}
@@ -61,6 +66,7 @@ function ListingCard({ post }: { post: Post }) {
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   className="object-cover"
+                  onLoad={() => getScrollTrigger().refresh()}
                 />
               </div>
               {/* Legibility scrim for the tag pills over the photo. */}
@@ -147,8 +153,12 @@ function FilterPill({
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`inline-flex cursor-pointer items-center font-medium transition-colors duration-200 ${
-        selected ? "" : "hover:border-ink hover:text-ink"
+      // Sidebar SidebarMenuButton hover layered on: hover/active share accent
+      // bg + accent-foreground, focus-visible ring, disabled handling.
+      className={`inline-flex cursor-pointer items-center font-medium transition-colors duration-200 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate ${
+        selected
+          ? "data-active:bg-[var(--surface-raised-hover)] data-active:text-[var(--text-100)] data-active:font-medium"
+          : "hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] hover:border-[var(--border-25)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)]"
       }`}
       style={
         selected
@@ -157,16 +167,16 @@ function FilterPill({
               color: "var(--on-fill)",
               border: "1px solid var(--fill)",
               borderRadius: "var(--radius-pill)",
-              padding: "12px 20px",
-              fontSize: 14,
+              padding: "10px 18px",
+              fontSize: 13,
             }
           : {
-              background: "transparent",
+              background: "var(--surface-raised-hover)",
               color: "var(--text-70)",
-              border: "1px solid var(--border-20)",
+              border: "1px solid transparent",
               borderRadius: "var(--radius-pill)",
-              padding: "12px 20px",
-              fontSize: 14,
+              padding: "10px 18px",
+              fontSize: 13,
             }
       }
     >
@@ -233,7 +243,12 @@ export default function AllBlogs() {
         aria-labelledby="blog-title"
         className="container-shell pb-24 pt-8 md:pb-36 md:pt-14"
       >
-        <div ref={introRef}>
+        {/* Split hero like the reference: title left, description and tag
+            filters right-aligned in the second column. Stacked on mobile. */}
+        <div
+          ref={introRef}
+          className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start"
+        >
           <h1
             id="blog-title"
             className="font-bold lowercase"
@@ -260,42 +275,41 @@ export default function AllBlogs() {
                 className="object-cover [filter:var(--img-filter)]"
               />
             </span>
-            thoughts and
+            thoughts
             <br />
-            notes
+            <span className="whitespace-nowrap">and notes</span>
           </h1>
 
-          <p
-            className="mt-3 max-w-[34rem] lg:mt-4"
-            style={{
-              color: "var(--text-70)",
-              fontSize: "var(--text-body)",
-              lineHeight: "var(--leading-body)",
-            }}
-          >
-            here i share ideas, document experiments, and talk about things
-            i&apos;m learning or building along the way. it&apos;s more of a
-            quiet corner for insights, progress, and everything in between.
-          </p>
+          <div>
+            <p
+              className="lg:text-right"
+              style={{
+                color: "var(--text-70)",
+                fontSize: "var(--text-body)",
+                lineHeight: "var(--leading-body)",
+              }}
+            >
+              here i share ideas, document experiments, and talk about things
+              i&apos;m learning or building along the way. it&apos;s more of a
+              quiet corner for insights, progress, and everything in between.
+            </p>
 
-          <div
-            role="group"
-            aria-label="Filter posts by tag"
-            className="mt-8 flex flex-wrap gap-2"
-          >
-            <FilterPill
-              label="all"
-              selected={activeTag === null}
-              onSelect={() => selectTag(null)}
-            />
-            {tags.map((tag) => (
-              <FilterPill
-                key={tag}
-                label={tag}
-                selected={activeTag === tag}
-                onSelect={() => selectTag(activeTag === tag ? null : tag)}
-              />
-            ))}
+            {/* Tag-only row like the reference — clicking the active tag
+                again clears the filter. */}
+            <div
+              role="group"
+              aria-label="Filter posts by tag"
+              className="mt-6 flex flex-wrap gap-2 lg:justify-end"
+            >
+              {tags.map((tag) => (
+                <FilterPill
+                  key={tag}
+                  label={tag}
+                  selected={activeTag === tag}
+                  onSelect={() => selectTag(activeTag === tag ? null : tag)}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -304,10 +318,17 @@ export default function AllBlogs() {
             ref={gridRef}
             key={activeTag ?? "all"}
             aria-live="polite"
-            className={`${hasFiltered ? "animate-fade-rise " : ""}mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:mt-16 lg:grid-cols-3`}
+            className={`${hasFiltered ? "animate-fade-rise " : ""}mt-16 grid grid-cols-1 items-start gap-x-6 gap-y-12 md:grid-cols-2 lg:mt-24`}
           >
-            {visible.map((post) => (
-              <ListingCard key={post.slug} post={post} />
+            {/* Second-column cards sit lower, like the reference stagger.
+                Offset on a wrapper so GSAP keeps owning the card node. */}
+            {visible.map((post, index) => (
+              <div
+                key={post.slug}
+                className={index % 2 === 1 ? "md:mt-20" : undefined}
+              >
+                <ListingCard post={post} />
+              </div>
             ))}
           </div>
         ) : (
