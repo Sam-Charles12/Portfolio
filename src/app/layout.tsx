@@ -1,34 +1,63 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Funnel_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import SmoothScroll from "@/components/smooth-scroll";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 // Single source for Funnel Display — one @font-face set. body/logo/mono
 // alias to it in globals.css. (Loading the same family 4x with 4 variables
 // duplicates the CSS and fights the token overrides.)
 const display = Funnel_Display({
-  variable: "--font-display",
+  variable: "--font-funnel",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700", "800"],
 });
 
 const hero = Space_Grotesk({
-  variable: "--font-hero",
+  variable: "--font-space",
   subsets: ["latin"],
   display: "swap",
   weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Carles | Software Engineer",
-  description: "I build web apps and care about how they feel to use. Frontend-leaning, full-stack capable.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Carles | Software Engineer",
+    template: "%s | Carles",
+  },
+  description:
+    "Carles is a full-stack software engineer building scalable systems and clean, production-ready web apps — from APIs to frontends.",
+  keywords: [
+    "Carles",
+    "Software Engineer",
+    "Full-stack Developer",
+    "Next.js",
+    "TypeScript",
+    "React",
+  ],
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Carles | Software Engineer",
-    description: "I build web apps and care about how they feel to use.",
     type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: SITE_NAME,
+    title: "Carles | Software Engineer",
+    description:
+      "I build web apps and care about how they feel to use. Frontend-leaning, full-stack capable.",
+    images: [{ url: "/me.jpg", width: 1200, height: 630, alt: "Carles" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Carles | Software Engineer",
+    description:
+      "I build web apps and care about how they feel to use. Frontend-leaning, full-stack capable.",
+    images: ["/me.jpg"],
   },
 };
 
@@ -36,7 +65,29 @@ export const viewport = {
   themeColor: "#0a0a0a",
 };
 
+// Applies the saved (or OS-preferred) theme synchronously before paint, so
+// there's no theme flash. A plain blocking script, not next/script:
+// beforeInteractive neither blocks paint nor survives React client renders.
+const themeInit = `try{var t=localStorage.getItem("carles-theme");if(!t){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE_NAME,
+    url: SITE_URL,
+    jobTitle: "Software Engineer",
+    sameAs: [
+      "https://github.com/Sam-Charles12",
+      "https://x.com/carles_devlog",
+    ],
+  };
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: SITE_URL,
+  };
   return (
     <html
       lang="en"
@@ -44,9 +95,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${display.variable} ${hero.variable} h-full antialiased`}
     >
       <body className="bg-bg text-ink font-body min-h-screen flex flex-col">
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`try{var t=localStorage.getItem("carles-theme");if(!t){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){}`}
-        </Script>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <SmoothCursor />
         <SmoothScroll />
         {children}

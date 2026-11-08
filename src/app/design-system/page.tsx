@@ -367,7 +367,7 @@ export default function DesignSystemDemo() {
           <div className="grid gap-6 md:grid-cols-2">
             {/* Project card */}
             <article
-              className="overflow-hidden transition-transform duration-200 hover:-translate-y-[3px]"
+              className="overflow-hidden outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] hover:bg-[var(--surface-raised-hover)] focus-visible:ring-2"
               style={{ background: "var(--surface-raised)", border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)" }}
             >
               <div className="bg-blueprint-grid flex items-center justify-center font-mono text-xs" style={{ aspectRatio: "16 / 10", color: "var(--text-50)", filter: "var(--img-filter)" }}>
@@ -392,7 +392,7 @@ export default function DesignSystemDemo() {
 
             {/* Blog card */}
             <article
-              className="transition-transform duration-200 hover:-translate-y-[3px]"
+              className="outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] hover:bg-[var(--surface-raised-hover)] focus-visible:ring-2"
               style={{ background: "var(--surface-raised)", border: "var(--border-width) solid var(--border-20)", borderRadius: "var(--radius-card)", padding: "var(--card-pad)" }}
             >
               <div className="flex gap-2 font-mono text-xs uppercase" style={{ color: "var(--text-50)" }}>

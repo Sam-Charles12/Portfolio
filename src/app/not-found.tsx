@@ -7,9 +7,10 @@ import {
 } from "@/components/ui/ghost-404-page";
 
 export const metadata: Metadata = {
-  title: "404 | Page Not Found | Carles",
+  title: "404 | Page Not Found",
   description:
     "This page took an unscheduled break. Head back home or go back.",
+  robots: { index: false, follow: false },
 };
 
 export default function NotFound() {
