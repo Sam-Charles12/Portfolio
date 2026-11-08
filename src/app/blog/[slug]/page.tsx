@@ -22,17 +22,29 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
 
-  if (!post) return { title: "Post not found | Carles" };
+  if (!post) return { title: "Post not found" };
+
+  const url = `/blog/${post.slug}`;
+  const image = post.cover ?? "/contact-bg.png";
 
   return {
-    title: `${post.title} | Carles`,
+    title: post.title,
     description: post.dek,
+    alternates: { canonical: url },
     openGraph: {
       title: post.title,
       description: post.dek,
       type: "article",
+      url,
       publishedTime: post.date,
       tags: post.tags,
+      images: [{ url: image, alt: post.coverAlt ?? post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.dek,
+      images: [image],
     },
   };
 }

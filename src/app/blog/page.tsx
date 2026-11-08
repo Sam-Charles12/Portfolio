@@ -7,9 +7,23 @@ import SiteFooter from "@/components/site-footer";
 import BackToTop from "@/components/back-to-top";
 
 export const metadata: Metadata = {
-  title: "Blog | Carles",
+  title: "Blog",
   description:
     "Thoughts and notes by Carles — ideas, experiments, and lessons from building software.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Blog | Carles",
+    description:
+      "Thoughts and notes by Carles — ideas, experiments, and lessons from building software.",
+    type: "website",
+    url: "/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Carles",
+    description:
+      "Thoughts and notes by Carles — ideas, experiments, and lessons from building software.",
+  },
 };
 
 export default function BlogPage() {
