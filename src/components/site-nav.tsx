@@ -40,7 +40,7 @@ export default function SiteNav() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <a
-              href="/#contact"
+              href="/contact"
               className="inline-flex items-center font-semibold outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.97] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate"
               style={{
                 height: 48,

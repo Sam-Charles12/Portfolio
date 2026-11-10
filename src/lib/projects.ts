@@ -202,8 +202,8 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     stack: ["TypeScript", "Next.js", "Tailwind CSS", "Groq"],
     liveHref: "https://rfforge.vercel.app/",
     repoHref: "https://github.com/Sam-Charles12/rfforge",
-    image: "/rfforge-hero.png",
-    imageAlt: "RFForge matching network designer with solved values and charts",
+    image: "/rfforge-project-cover.jpeg",
+    imageAlt: "RFForge matching network solver on a laptop, top-down on a marble desk — solved values and Smith chart",
     sections: [
       {
         heading: "Why I built this",
