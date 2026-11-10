@@ -19,17 +19,17 @@ function BlogCard({ post }: { post: Post }) {
   const cardRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
 
-  // Cover parallax only when a real image is supplied. Re-runs when the
-  // cover changes (covers were wired before the files landed) and the
-  // trigger refreshes once the image decodes, so positions are never
-  // measured against an empty box.
+  // Cover parallax with a wide drift so the motion reads while
+  // scrolling. Re-runs when the cover changes (covers were wired
+  // before the files landed) and the trigger refreshes once the image
+  // decodes, so positions are never measured against an empty box.
   useEffect(() => {
     const card = cardRef.current;
     const media = mediaRef.current;
     if (!card || !media || prefersReducedMotion()) return;
     gsapSetup();
     const ctx = gsap.context(() => {
-      parallaxY(media, card, -8, 8);
+      parallaxY(media, card, -13, 13);
     }, card);
     return () => ctx.revert();
   }, [post.cover]);
@@ -54,7 +54,7 @@ function BlogCard({ post }: { post: Post }) {
             <>
               <div
                 ref={mediaRef}
-                className="absolute inset-x-0 top-[-10%] h-[120%]"
+                className="absolute inset-x-0 top-[-18%] h-[136%]"
               >
                 <Image
                   src={post.cover}
@@ -145,12 +145,18 @@ export default function Writing() {
 
     const ctx = gsap.context(() => {
       // Intro copy reveals first, cards sweep in left→right behind it.
-      blurFadeIn(".writing-fade", { duration: 1.2, stagger: 0.15 });
+      // One-shot: cards must stay visible once entered.
+      blurFadeIn(".writing-fade", {
+        duration: 1.2,
+        stagger: 0.15,
+        reversible: false,
+      });
       blurFadeIn(Array.from(root.querySelectorAll(".blog-card")), {
         duration: 1,
         stagger: 0.12,
         y: 24,
         start: "top bottom-=40px",
+        reversible: false,
       });
     }, root);
 
