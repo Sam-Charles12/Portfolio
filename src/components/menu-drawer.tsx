@@ -10,7 +10,7 @@ const LINKS = [
   { label: "About", href: "/#about" },
   { label: "Projects", href: "/#work" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const ENTRANCE_COLORS = [

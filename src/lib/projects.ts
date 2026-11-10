@@ -129,8 +129,8 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     ],
     liveHref: "https://resolve-two-psi.vercel.app/",
     repoHref: "https://github.com/Sam-Charles12/Resolve",
-    image: "/resolve-image.png",
-    imageAlt: "Resolve inbox verifying a ticket against Paystack truth",
+    image: "/resolve-project-cover.jpeg",
+    imageAlt: "Resolve landing page on a laptop — A watchdog that checks Paystack, a clerk that writes the reply",
     sections: [
       {
         heading: "Why I built this",
