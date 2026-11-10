@@ -97,7 +97,6 @@ export function TechBadge({ name, size = 30 }: { name: string; size?: number }) 
   return (
     <span
       aria-label={name}
-      title={name}
       className="inline-flex"
       style={{ width: size, height: size }}
     >
@@ -322,7 +321,7 @@ export function ProjectCard({
           {project.stack.map((t) => (
             <Tooltip key={t}>
               <TooltipTrigger asChild>
-                <span className="inline-flex cursor-default rounded-md px-1 outline-hidden transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:bg-[var(--surface-raised-hover)] focus-visible:ring-2 data-[state=open]:-translate-y-0.5 data-[state=open]:scale-110 data-[state=open]:bg-[var(--surface-raised-hover)]">
+                <span className="inline-flex cursor-default rounded-md px-1 outline-hidden transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:-translate-y-1 hover:scale-[1.08] focus-visible:ring-2 data-[state=open]:-translate-y-1 data-[state=open]:scale-[1.08]">
                   <TechBadge name={t} />
                 </span>
               </TooltipTrigger>

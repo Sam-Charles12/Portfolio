@@ -268,11 +268,11 @@ export default function AllBlogs() {
               }}
             >
               <Image
-                src="/contact-bg.png"
+                src="/nikola_tesla.jpg"
                 alt=""
                 fill
                 sizes="(min-width: 768px) 20vw, 40vw"
-                className="object-cover [filter:var(--img-filter)]"
+                className="object-cover [object-position:50%_25%]"
               />
             </span>
             thoughts
