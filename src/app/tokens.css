@@ -102,7 +102,7 @@
   --container: min(1792px, calc(40vw + 768px));
   --container-narrow: 672px; /* max-w-xl/2xl — hero copy, about text */
   --gutter: 50px;
-  --gutter-sm: 16px;
+  --gutter-sm: 20px;
 
   --section-y: clamp(80px, 10vw, 128px);
   --section-y-sm: clamp(56px, 7vw, 88px);

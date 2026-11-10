@@ -20,8 +20,13 @@ export default function About() {
     gsapSetup();
 
     const ctx = gsap.context(() => {
-      // Standard entrance for the copy + buttons.
-      blurFadeIn(".about-fade", { duration: 1.2, stagger: 0.15 });
+      // Standard entrance for the copy + buttons. One-shot: sections
+      // must never reverse to invisible while scrolling.
+      blurFadeIn(".about-fade", {
+        duration: 1.2,
+        stagger: 0.15,
+        reversible: false,
+      });
 
       // Scroll-scrubbed headline fill — words resolve from dim to
       // full ink as the section travels through the viewport.
