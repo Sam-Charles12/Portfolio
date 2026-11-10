@@ -132,7 +132,7 @@ export const PROJECTS: Project[] = [
     liveHref: "#",
     repoHref: "#",
     status: "In development",
-    image: "/interact-dashboard.png",
+    image: "/interact-dashboard.jpeg",
     imagePosition: "50% 50%",
     gentleMotion: true,
   },

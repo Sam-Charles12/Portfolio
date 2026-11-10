@@ -393,7 +393,6 @@ export default function BlogArticle({
                 style={{
                   minHeight: "clamp(352px, 30vw, 488px)",
                   borderRadius: "clamp(28px, 2.75vw, 44px)",
-                  background: "var(--surface-raised)",
                 }}
               >
                 {post.cover ? (
