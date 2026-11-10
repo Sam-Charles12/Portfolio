@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -110,9 +111,9 @@ export default function About() {
                 strokeWidth={2}
               />
             </a>
-            <a
-              href="#"
-              aria-label="More about me (link coming soon)"
+            <Link
+              href="/about"
+              aria-label="More about me"
               className="inline-flex items-center font-medium outline-hidden transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:scale-[0.97] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 [&>span:last-child]:truncate"
               style={{
                 height: 52,
@@ -138,7 +139,7 @@ export default function About() {
                 size={18}
                 strokeWidth={2}
               />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
