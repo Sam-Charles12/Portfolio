@@ -291,7 +291,7 @@ const buildCardGeometry = (layout: CardLayout) => {
   const position = face.getAttribute('position') as THREE.BufferAttribute;
   const uv = face.getAttribute('uv') as THREE.BufferAttribute;
   for (let i = 0; i < position.count; i++) {
-    uv.setXY(i, (position.getX(i) + width) / width, (position.getY(i) + height) / height);
+    uv.setXY(i, (position.getX(i) + width / 2) / width, (position.getY(i) + height / 2) / height);
   }
   uv.needsUpdate = true;
   return { body, face };
@@ -471,70 +471,103 @@ const paintCardText = (canvas: HTMLCanvasElement, color: [number, number, number
   const dark = luminance(color) <= 0.5;
   const ink = dark ? 'rgba(237,237,237,1)' : 'rgba(10,10,10,1)';
   const soft = dark ? 'rgba(237,237,237,0.55)' : 'rgba(10,10,10,0.55)';
-  const faint = dark ? 'rgba(237,237,237,0.22)' : 'rgba(10,10,10,0.22)';
-  const line = dark ? 'rgba(237,237,237,0.16)' : 'rgba(10,10,10,0.16)';
 
-  // hairline inset frame
-  ctx.strokeStyle = line;
-  ctx.lineWidth = Math.max(2, W * 0.003);
-  const pad = W * 0.055;
-  const r = W * 0.06;
-  ctx.beginPath();
-  ctx.roundRect(pad, pad, W - pad * 2, H - pad * 2, r);
-  ctx.stroke();
+  // Editorial conference-badge taste (ref: black ID, mono micro-labels,
+  // oversized staggered initials, left-aligned name block) — no inset frame.
+  const micro = (size: number, weight = 600) =>
+    `${weight} ${Math.round(W * size)}px "Fira Code", ui-monospace, monospace`;
+  const display = (size: number, weight = 800) =>
+    `${weight} ${Math.round(W * size)}px "Funnel Display", "Space Grotesk", system-ui, sans-serif`;
+
+  const fitLeft = (text: string, baseSize: number, weight: number, maxWidth: number) => {
+    let size = Math.round(W * baseSize);
+    ctx.font = `${weight} ${size}px "Funnel Display", "Space Grotesk", system-ui, sans-serif`;
+    const measured = ctx.measureText(text).width;
+    if (measured > maxWidth) {
+      size = Math.max(10, Math.floor(size * (maxWidth / measured)));
+      ctx.font = `${weight} ${size}px "Funnel Display", "Space Grotesk", system-ui, sans-serif`;
+    }
+  };
 
   ctx.textBaseline = 'alphabetic';
   if (side === 'front') {
-    // top mono label
+    // top micro row — date/code left, location right (clears slot + ring)
     ctx.fillStyle = soft;
-    ctx.font = `600 ${Math.round(W * 0.038)}px "Fira Code", ui-monospace, monospace`;
-    ctx.textAlign = 'center';
-    try { ctx.letterSpacing = `${Math.round(W * 0.012)}px`; } catch { /* older canvas */ }
-    ctx.fillText('SOFTWARE ENGINEER', W / 2, H * 0.16);
+    ctx.font = micro(0.028);
+    try { ctx.letterSpacing = `${Math.max(1, Math.round(W * 0.004))}px`; } catch { /* older canvas */ }
+    ctx.textAlign = 'left';
+    ctx.fillText('PORTFOLIO', W * 0.08, H * 0.115);
+    ctx.textAlign = 'right';
+    ctx.fillText('LAGOS · REMOTE', W * 0.92, H * 0.115);
     try { ctx.letterSpacing = '0px'; } catch { /* noop */ }
 
-    // name — the readable ID on the badge
+    // oversized staggered initials S·C·O (Sam-Charles Oladipo)
     ctx.fillStyle = ink;
-    ctx.font = `800 ${Math.round(W * 0.21)}px "Funnel Display", "Space Grotesk", system-ui, sans-serif`;
     ctx.textAlign = 'center';
-    ctx.fillText('carles', W / 2, H * 0.46);
+    ctx.textBaseline = 'middle';
+    ctx.font = display(0.3);
+    ctx.fillText('S', W * 0.72, H * 0.27);
+    ctx.fillText('C', W * 0.54, H * 0.44);
+    ctx.fillText('O', W * 0.74, H * 0.61);
+    ctx.textBaseline = 'alphabetic';
 
-    // rule
-    ctx.strokeStyle = faint;
-    ctx.lineWidth = Math.max(1, W * 0.002);
-    ctx.beginPath();
-    ctx.moveTo(W * 0.2, H * 0.54);
-    ctx.lineTo(W * 0.8, H * 0.54);
-    ctx.stroke();
-
-    // handle
+    // small triangle marker, left-mid (like ref)
     ctx.fillStyle = soft;
-    ctx.font = `500 ${Math.round(W * 0.05)}px "Fira Code", ui-monospace, monospace`;
-    ctx.fillText('@carles_devlog', W / 2, H * 0.64);
-
-    // status line
-    const dotY = H * 0.82;
-    ctx.fillStyle = dark ? '#ededed' : '#0a0a0a';
+    const tx = W * 0.1;
+    const ty = H * 0.48;
+    const ts = W * 0.02;
     ctx.beginPath();
-    ctx.arc(W * 0.3, dotY - W * 0.012, W * 0.014, 0, Math.PI * 2);
+    ctx.moveTo(tx, ty - ts);
+    ctx.lineTo(tx - ts * 0.6, ty + ts * 0.4);
+    ctx.lineTo(tx + ts * 0.6, ty + ts * 0.4);
+    ctx.closePath();
     ctx.fill();
-    ctx.fillStyle = soft;
-    ctx.font = `600 ${Math.round(W * 0.036)}px "Fira Code", ui-monospace, monospace`;
+
+    // name block — left aligned, two lines so the full name reads
+    ctx.fillStyle = ink;
     ctx.textAlign = 'left';
-    ctx.fillText('OPEN TO WORK', W * 0.3 + W * 0.035, dotY);
+    const maxName = W * 0.6;
+    fitLeft('Sam-Charles', 0.08, 700, maxName);
+    ctx.fillText('Sam-Charles', W * 0.08, H * 0.75);
+    fitLeft('Oladipo', 0.08, 700, maxName);
+    ctx.fillText('Oladipo', W * 0.08, H * 0.815);
+
+    // role — mono caption under name (ref: "IN PERSON ATTENDEE")
+    ctx.fillStyle = soft;
+    ctx.font = micro(0.032);
+    try { ctx.letterSpacing = `${Math.max(1, Math.round(W * 0.006))}px`; } catch { /* noop */ }
+    ctx.fillText('FULL-STACK DEVELOPER', W * 0.08, H * 0.855);
+    try { ctx.letterSpacing = '0px'; } catch { /* noop */ }
+
+    // bottom micro — site/stack left, chip mark right (ref venue + bar)
+    ctx.font = micro(0.03);
+    ctx.fillText('CARLES.DEV', W * 0.08, H * 0.895);
+    ctx.fillText('TS · REACT · NEXT', W * 0.08, H * 0.92);
+    ctx.fillStyle = ink;
+    const bw = W * 0.08;
+    const bh = Math.max(6, H * 0.012);
+    const bx = W * 0.92 - bw;
+    const by = H * 0.888 - bh / 2;
+    try {
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, bh / 2);
+      ctx.fill();
+    } catch {
+      ctx.fillRect(bx, by, bw, bh);
+    }
   } else {
     ctx.textAlign = 'center';
     ctx.fillStyle = soft;
-    ctx.font = `600 ${Math.round(W * 0.036)}px "Fira Code", ui-monospace, monospace`;
+    ctx.font = micro(0.036);
     try { ctx.letterSpacing = `${Math.round(W * 0.01)}px`; } catch { /* noop */ }
     ctx.fillText('BUILD · SHIP · LEARN', W / 2, H * 0.2);
     try { ctx.letterSpacing = '0px'; } catch { /* noop */ }
 
     ctx.fillStyle = ink;
-    ctx.font = `700 ${Math.round(W * 0.11)}px "Funnel Display", "Space Grotesk", system-ui, sans-serif`;
+    ctx.font = display(0.11, 700);
     ctx.fillText('carles.dev', W / 2, H * 0.46);
 
-    ctx.strokeStyle = faint;
+    ctx.strokeStyle = soft;
     ctx.lineWidth = Math.max(1, W * 0.002);
     ctx.beginPath();
     ctx.moveTo(W * 0.2, H * 0.56);
@@ -542,7 +575,7 @@ const paintCardText = (canvas: HTMLCanvasElement, color: [number, number, number
     ctx.stroke();
 
     ctx.fillStyle = soft;
-    ctx.font = `500 ${Math.round(W * 0.042)}px "Fira Code", ui-monospace, monospace`;
+    ctx.font = micro(0.042, 500);
     ctx.fillText('SYS.READY — v1.0', W / 2, H * 0.68);
     ctx.fillText('TS · REACT · NEXT', W / 2, H * 0.78);
   }
@@ -1060,7 +1093,9 @@ export default function Lanyard({
       foilUniforms.foilFill.value.set(3, -1, 4).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilTop.value.set(0.5, 4.5, 8).normalize().transformDirection(camera.matrixWorldInverse);
       const anchorX = ((ANCHORS[s.anchor ?? 'center'] ?? 0.5) - 0.5) * viewWidth;
-      const anchorY = viewHeight / 2 + 0.2;
+      // Pin the anchor well above the visible frame so the strap always
+      // bleeds past the top edge (clipped flush) instead of ending in view.
+      const anchorY = viewHeight / 2 + 1.0;
       const cardTop = viewHeight / 2 - viewHeight * mix(0.12, 0.42, clamp(s.strapLength ?? 0.5, 0, 1));
       const hangTop = cardTop + (layout.hangY - layout.height / 2);
       sim.anchor.set(anchorX, anchorY, 0);

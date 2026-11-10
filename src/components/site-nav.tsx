@@ -17,7 +17,7 @@ export default function SiteNav() {
   return (
     <>
       <header
-        className="shrink-0"
+        className="relative z-10 shrink-0"
         style={{
           paddingTop: 40,
           paddingBottom: 32,
