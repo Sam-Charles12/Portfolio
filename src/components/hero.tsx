@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Download01Icon } from "@hugeicons/core-free-icons";
 import { ShimmeringText } from "@/components/animate-ui/primitives/texts/shimmering";
 import { CV_URL } from "@/lib/site";
+
+const Lanyard = dynamic(() => import("@/components/lanyard"), {
+  ssr: false,
+});
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
@@ -38,7 +43,7 @@ export default function Hero() {
       style={{ backgroundColor: "var(--bg)" }}
     >
       <div
-        className="container-shell grid grid-cols-1 items-center gap-12 py-14 md:py-20"
+        className="container-shell grid grid-cols-1 items-center gap-12 py-14 md:py-20 lg:grid-cols-[1.05fr_0.95fr]"
         style={{
           minHeight: "calc(100dvh - var(--nav-h))",
         }}
@@ -123,6 +128,26 @@ export default function Hero() {
               />
             </a>
           </div>
+        </div>
+
+        {/* Right — interactive 3D badge. Name is printed on the card
+            texture itself, so no photo is needed. */}
+        <div
+          className="relative w-full overflow-hidden"
+          style={{ height: "clamp(420px, 52vw, 600px)" }}
+        >
+          <Lanyard
+            cardColor="#111111"
+            strapColor="#1a1a1a"
+            orientation="portrait"
+            finish="matte"
+            metal="silver"
+            size={0.6}
+            anchor="center"
+            strapLength={0.5}
+            interactive
+            intro
+          />
         </div>
 
       </div>
