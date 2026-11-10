@@ -7,7 +7,7 @@ import { TextReveal } from "@/components/ui/cascade-text";
 
 const LINKS = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/#about" },
+  { label: "About", href: "/about" },
   { label: "Projects", href: "/#work" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
