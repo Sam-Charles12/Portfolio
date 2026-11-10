@@ -154,8 +154,9 @@ export const PROJECTS: Project[] = [
     liveHref: "https://resolve-two-psi.vercel.app/",
     repoHref: "https://github.com/Sam-Charles12/Resolve",
     status: "All systems operational",
-    image: "/resolve-image.png",
+    image: "/resolve-project-cover.jpeg",
     imagePosition: "50% 32%",
+    gentleMotion: true,
   },
   {
     slug: "rfforge",
@@ -166,7 +167,9 @@ export const PROJECTS: Project[] = [
     liveHref: "https://rfforge.vercel.app/",
     repoHref: "https://github.com/Sam-Charles12/rfforge",
     status: "All systems operational",
-    image: "/rfforge-hero.png",
+    image: "/rfforge-project-cover.jpeg",
+    imagePosition: "50% 32%",
+    gentleMotion: true,
   },
 ];
 
