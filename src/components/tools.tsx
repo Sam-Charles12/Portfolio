@@ -53,6 +53,7 @@ export default function Tools() {
         duration: 0.9,
         stagger: 0.08,
         y: 20,
+        reversible: false,
       });
     }, root);
     return () => ctx.revert();

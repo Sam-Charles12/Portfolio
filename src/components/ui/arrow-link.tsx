@@ -47,14 +47,12 @@ export function TextRollLink({
       href={href}
       aria-current={active ? "page" : undefined}
       aria-label={label}
-      // Sidebar SidebarMenuSubButton hover, layered under the roll:
-      // hover/active/data-active share accent bg + accent-foreground.
-      // accent -> var(--surface-raised-hover), accent-fg -> var(--text-100).
-      // Roll animation below is kept; this only adds the bg underneath.
+      // No background pill for hover/active — the link reads through
+      // color + the character roll only (same as the menu drawer).
       className={`group relative inline-block overflow-hidden rounded-md px-2 py-1 font-medium transition-colors duration-200 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 ${
         active
-          ? "bg-[var(--surface-raised-hover)] text-ink data-active:bg-[var(--surface-raised-hover)] data-active:text-[var(--text-100)]"
-          : "text-[color:var(--text-50)] hover:bg-[var(--surface-raised-hover)] hover:text-[var(--text-100)] active:bg-[var(--surface-raised-hover)] active:text-[var(--text-100)]"
+          ? "text-ink"
+          : "text-[color:var(--text-50)] hover:text-[var(--text-100)] active:text-[var(--text-100)]"
       } ${className}`.trim()}
       style={style}
     >
