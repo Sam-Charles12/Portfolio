@@ -27,7 +27,11 @@ export default function Contact() {
     gsapSetup();
 
     const ctx = gsap.context(() => {
-      blurFadeIn(".contact-fade", { duration: 1.3, stagger: 0.12 });
+      blurFadeIn(".contact-fade", {
+        duration: 1.3,
+        stagger: 0.12,
+        reversible: false,
+      });
       if (art) parallaxY(art, root, 5, -5);
     }, root);
 
@@ -63,13 +67,17 @@ export default function Contact() {
             }}
           />
 
-          {/* Decorative browser window, clipped by the panel edge. */}
+          {/* Decorative browser window, clipped by the panel edge.
+              On phones it centers behind the copy at 150% width so the
+              whole window — frame, dots, code lines — reads as backdrop
+              texture instead of vanishing. */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute right-[-4%] top-1/2 hidden w-[56%] -translate-y-1/2 md:block"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center md:inset-x-auto md:bottom-auto md:right-[-4%] md:top-1/2 md:block md:w-[56%] md:-translate-y-1/2"
           >
             <div
               ref={artRef}
+              className="w-[150%] max-w-none shrink-0 md:w-full"
               style={{
                 color: "var(--bg)",
                 opacity: 0.12,

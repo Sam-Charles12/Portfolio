@@ -186,13 +186,13 @@ export function ProjectCard({
   const imgRef = useRef<HTMLImageElement>(null);
   const gentleMotion = project.gentleMotion === true;
 
-  // Scroll reveal (blur fade-and-rise, reverses out) + image parallax (GSAP).
+  // Scroll reveal (one-shot blur fade-and-rise) + image parallax (GSAP).
   useEffect(() => {
     const card = ref.current;
     if (!card || prefersReducedMotion()) return;
     gsapSetup();
     const ctx = gsap.context(() => {
-      blurFadeIn(card);
+      blurFadeIn(card, { reversible: false });
       // Drift range must stay inside the image overscan: ±13.24% for the
       // 136% images, ±5% for the 112% gentle-motion ones.
       const drift = gentleMotion ? 5 : 13.24;
@@ -209,7 +209,7 @@ export function ProjectCard({
   return (
     <article
       ref={ref}
-      className={`group relative overflow-hidden outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 ${className}`}
+      className={`project-card group relative overflow-hidden outline-hidden transition-all duration-200 hover:-translate-y-[3px] hover:border-[var(--border-25)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 ${className}`}
       style={{
         borderRadius: "4rem",
         minHeight,
@@ -335,9 +335,9 @@ export function ProjectCard({
           ))}
         </div>
 
-        <div className="mt-5 flex items-center justify-between gap-3">
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
           <span
-            className="inline-flex items-center gap-2 font-mono italic"
+            className="inline-flex items-center gap-2 whitespace-nowrap font-mono italic"
             style={
               project.status === "All systems operational"
                 ? {
@@ -373,7 +373,7 @@ export function ProjectCard({
           </span>
           <Link
             href={`/works/${project.slug}`}
-            className="inline-flex items-center gap-1 font-medium"
+            className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap font-medium"
             style={{ fontSize: "var(--text-small)" }}
           >
             View details
