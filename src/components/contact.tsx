@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { CONTACT_HREF } from "@/lib/site";
 import {
   gsapSetup,
   prefersReducedMotion,
@@ -115,7 +114,7 @@ export default function Contact() {
 
             <div className="contact-fade pt-2">
               <ArrowLink
-                href={CONTACT_HREF}
+                href="/contact"
                 label="Get in Touch"
                 className="font-semibold"
                 style={{

@@ -146,7 +146,7 @@ export default function Hero() {
             metal="silver"
             size={0.38}
             anchor="center"
-            strapLength={0.7}
+            strapLength={0.78}
             interactive
             intro
           />
