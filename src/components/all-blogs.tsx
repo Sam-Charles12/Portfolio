@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import {
   blurFadeIn,
   getScrollTrigger,
@@ -21,8 +19,6 @@ import { POSTS, formatPostDate, type Post } from "@/lib/posts";
 function ListingCard({ post }: { post: Post }) {
   const cardRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
-  // Unique SVG path id per card — textPath hrefs must not collide.
-  const circleId = useId().replace(/:/g, "read");
 
   // Cover parallax only when a real image is supplied. Re-runs when the
   // cover changes (covers were wired before the files landed) and the
@@ -90,26 +86,6 @@ function ListingCard({ post }: { post: Post }) {
                 }}
                 aria-hidden="true"
               />
-              {/* Centered read affordance — rises in with the zoom. */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex items-center justify-center motion-reduce:hidden"
-              >
-                <span
-                  className="inline-flex translate-y-2 scale-95 items-center gap-2 opacity-0 blur-[2px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none"
-                  style={{
-                    background: "var(--fill)",
-                    color: "var(--on-fill)",
-                    borderRadius: "var(--radius-pill)",
-                    padding: "10px 20px",
-                    fontSize: 13,
-                    fontWeight: 600,
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  read <span aria-hidden="true">→</span>
-                </span>
-              </div>
             </>
           ) : (
             <div

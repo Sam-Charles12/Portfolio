@@ -283,10 +283,10 @@ export default function MenuDrawer({ onClose }: { onClose: () => void }) {
                         setActive(l.href);
                         requestClose();
                       }}
-                      // Sidebar SidebarMenuButton hover layered under the cascade
-                      // roll: hover/active share accent bg. Drawer is inverted
-                      // (ink bg, bg text) so accent uses bg mix. Roll is kept.
-                      className="nav-link-inner rounded-md font-display font-semibold tracking-tight outline-hidden transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--bg)_12%,transparent)] active:bg-[color-mix(in_srgb,var(--bg)_12%,transparent)] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate"
+                      // No background pill on hover/active — the link reads
+                      // through color + the cascade roll only. Drawer is
+                      // inverted (ink bg, bg text) so accent uses bg mix.
+                      className="nav-link-inner rounded-md font-display font-semibold tracking-tight outline-hidden transition-colors duration-200 focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate"
                       fontSize="2.5rem"
                       style={{ paddingInline: 0 }}
                       color={
