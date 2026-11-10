@@ -52,7 +52,7 @@ export const POSTS: Post[] = [
     date: "2026-11-08",
     readingMinutes: 4,
     tags: ["resolve", "build-in-public", "product"],
-    cover: "/resolve-cover.png",
+    cover: "/resolve-cover.jpeg",
     coverAlt: "Resolve support triage flow checking Paystack before drafting a reply",
     blocks: [
       {
@@ -124,7 +124,7 @@ export const POSTS: Post[] = [
     date: "2026-11-08",
     readingMinutes: 5,
     tags: ["telecom", "research", "ieee"],
-    cover: "/artm-cover.png",
+    cover: "/artm-cover.jpeg",
     coverAlt: "Crowded cell tower with phones competing for radio resources",
     blocks: [
       {
@@ -227,7 +227,7 @@ export const POSTS: Post[] = [
             "Supabase",
           ],
           href: "/works/interact",
-          image: "/interact-steps.png",
+          image: "/interact-steps.jpeg",
         },
       },
       {

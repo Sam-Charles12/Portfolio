@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import {
   gsapSetup,
   prefersReducedMotion,
@@ -20,8 +18,6 @@ import { POSTS, type Post } from "@/lib/posts";
 function BlogCard({ post }: { post: Post }) {
   const cardRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
-  // Unique SVG path id per card — textPath hrefs must not collide.
-  const circleId = useId().replace(/:/g, "read");
 
   // Cover parallax only when a real image is supplied. Re-runs when the
   // cover changes (covers were wired before the files landed) and the
@@ -87,50 +83,6 @@ function BlogCard({ post }: { post: Post }) {
                 }}
                 aria-hidden="true"
               />
-              {/* Orbiting read badge — circular mono text spinning
-                  around an arrow, springs in with the zoom. */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex items-center justify-center motion-reduce:hidden"
-              >
-                <span
-                  className="relative flex h-28 w-28 scale-75 items-center justify-center opacity-0 blur-[3px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none"
-                  style={{
-                    background: "var(--fill)",
-                    color: "var(--on-fill)",
-                    borderRadius: "999px",
-                    boxShadow: "0 12px 32px rgba(0, 0, 0, 0.4)",
-                  }}
-                >
-                  <svg
-                    viewBox="0 0 100 100"
-                    className="absolute inset-0 h-full w-full animate-[spin_14s_linear_infinite]"
-                  >
-                    <defs>
-                      <path
-                        id={circleId}
-                        d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
-                        fill="none"
-                      />
-                    </defs>
-                    <text
-                      fontSize="10"
-                      letterSpacing="1"
-                      fill="var(--on-fill)"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      <textPath href={`#${circleId}`} textLength={225}>
-                        READ ARTICLE • READ ARTICLE •
-                      </textPath>
-                    </text>
-                  </svg>
-                  <HugeiconsIcon
-                    icon={ArrowUpRight01Icon}
-                    size={26}
-                    strokeWidth={2}
-                  />
-                </span>
-              </div>
             </>
           ) : (
             <div
