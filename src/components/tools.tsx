@@ -28,7 +28,7 @@ type Tool = {
   icon: IconName;
 };
 
-const TOOLS: Tool[] = [
+export const TOOLS: Tool[] = [
   { label: "Next.js", icon: "nextjs2" },
   { label: "React", icon: "react" },
   { label: "Express.js", icon: "expressjs" },
