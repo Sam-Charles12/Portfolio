@@ -576,8 +576,7 @@ const paintCardText = (canvas: HTMLCanvasElement, color: [number, number, number
 
     ctx.fillStyle = soft;
     ctx.font = micro(0.042, 500);
-    ctx.fillText('SYS.READY — v1.0', W / 2, H * 0.68);
-    ctx.fillText('TS · REACT · NEXT', W / 2, H * 0.78);
+    ctx.fillText('TS · REACT · NEXT', W / 2, H * 0.68);
   }
 };
 
