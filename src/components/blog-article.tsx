@@ -305,7 +305,12 @@ export default function BlogArticle({
       root
         .querySelectorAll(".post-body > *")
         .forEach((el) =>
-          blurFadeIn(el, { duration: 1, y: 24, start: "top bottom-=50px" }),
+          blurFadeIn(el, {
+            duration: 1,
+            y: 24,
+            start: "top bottom-=50px",
+            reversible: false,
+          }),
         );
 
       if (mediaRef.current && coverRef.current) {

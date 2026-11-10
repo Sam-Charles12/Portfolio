@@ -99,6 +99,21 @@ h3 {
   padding-inline: var(--gutter);
 }
 
+@media (max-width: 767px) {
+  .container-shell,
+  .container-narrow {
+    padding-inline: var(--gutter-sm);
+  }
+
+  /* Featured project cards: fixed 560px is lanky on phones — target a
+     4/5 frame instead. Aspect ratio is a preference, not a clamp, so
+     taller content still grows the card instead of clipping. */
+  .project-card {
+    min-height: auto !important;
+    aspect-ratio: 4 / 5;
+  }
+}
+
 .mono-label {
   font-family: var(--font-mono);
   font-size: var(--text-mono-label);
