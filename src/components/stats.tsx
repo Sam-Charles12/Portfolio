@@ -54,6 +54,7 @@ export default function Stats() {
         duration: 0.9,
         stagger: 0.15,
         x: -48,
+        reversible: false,
       });
 
       // Count-up — numbers tick from zero as each cell enters, hidden

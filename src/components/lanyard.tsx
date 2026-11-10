@@ -21,6 +21,8 @@ export interface LanyardProps {
   size?: number;
   anchor?: AnchorName;
   strapLength?: number;
+  /** Hide the rope + clamp (card floats centered). Used on small screens. */
+  showStrap?: boolean;
   strapImage?: string;
   strapColor?: string;
   strapWidth?: number;
@@ -894,6 +896,7 @@ export default function Lanyard({
   size = 0.6,
   anchor = 'center',
   strapLength = 0.5,
+  showStrap = true,
   strapImage,
   strapColor = '#1a1a1a',
   strapWidth = 0.65,
@@ -915,7 +918,7 @@ export default function Lanyard({
   useEffect(() => {
     settingsRef.current = {
       frontImage, backImage, imageFit, cardColor, orientation, finish, cornerRadius,
-      size, anchor, strapLength, strapImage, strapColor, strapWidth, metal,
+      size, anchor, strapLength, showStrap, strapImage, strapColor, strapWidth, metal,
       gravity, damping, elasticity, breeze, interactive, intro,
     };
     applyRef.current?.();
@@ -1095,7 +1098,10 @@ export default function Lanyard({
       // Pin the anchor well above the visible frame so the strap always
       // bleeds past the top edge (clipped flush) instead of ending in view.
       const anchorY = viewHeight / 2 + 1.0;
-      const cardTop = viewHeight / 2 - viewHeight * mix(0.12, 0.42, clamp(s.strapLength ?? 0.5, 0, 1));
+      // Strapless mode: center the card instead of leaving headroom for rope.
+      const cardTop = s.showStrap === false
+        ? layout.height / 2
+        : viewHeight / 2 - viewHeight * mix(0.12, 0.42, clamp(s.strapLength ?? 0.5, 0, 1));
       const hangTop = cardTop + (layout.hangY - layout.height / 2);
       sim.anchor.set(anchorX, anchorY, 0);
       configureSimulation(sim, layout, anchorY - hangTop);
@@ -1121,7 +1127,7 @@ export default function Lanyard({
         ring.position.set(0, layout.ringY, 0);
         applied.framingKey = '';
       }
-      const framingKey = `${layoutKey}|${s.size}|${s.anchor}|${s.strapLength}|${view.width}|${view.height}`;
+      const framingKey = `${layoutKey}|${s.size}|${s.anchor}|${s.strapLength}|${s.showStrap}|${view.width}|${view.height}`;
       if (framingKey !== applied.framingKey) {
         frameView();
         if (!placed) {
@@ -1177,6 +1183,10 @@ export default function Lanyard({
         clampMesh.geometry = buildClampGeometry(strapScale);
       }
       canvas.style.touchAction = s.interactive ? 'pan-y' : 'auto';
+      // Strapless mode hides rope + clamp + ring; the card floats clean.
+      band.visible = s.showStrap !== false;
+      clampGroup.visible = s.showStrap !== false;
+      ring.visible = s.showStrap !== false;
 
       applied = { layoutKey, framingKey, imageKey, faceKey, strapColor: s.strapColor, strapScale };
       start();
