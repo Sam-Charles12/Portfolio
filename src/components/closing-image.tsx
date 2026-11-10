@@ -31,7 +31,7 @@ export default function ClosingImage() {
     gsapSetup();
 
     const ctx = gsap.context(() => {
-      blurFadeIn(frame, { duration: 1.3, y: 24 });
+      blurFadeIn(frame, { duration: 1.3, y: 24, reversible: false });
       // Image is 136% of the frame height, so ±13.24% here drifts it by
       // ±18% of the frame — the same amount the project cards use.
       parallaxY(image, frame, -13.24, 13.24, {

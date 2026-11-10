@@ -34,7 +34,7 @@ function Section({
     if (!el || prefersReducedMotion()) return;
     gsapSetup();
     const ctx = gsap.context(() => {
-      blurFadeIn(el);
+      blurFadeIn(el, { reversible: false });
     }, el);
     return () => ctx.revert();
   }, []);
@@ -112,7 +112,8 @@ export default function DesignSystemDemo() {
           },
         );
       }
-      if (gsapReveal.current) blurFadeIn(gsapReveal.current);
+      if (gsapReveal.current)
+        blurFadeIn(gsapReveal.current, { reversible: false });
     });
     return () => ctx.revert();
   }, []);
