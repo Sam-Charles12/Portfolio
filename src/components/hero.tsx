@@ -131,10 +131,12 @@ export default function Hero() {
         </div>
 
         {/* Right — interactive 3D badge. Name is printed on the card
-            texture itself, so no photo is needed. */}
+            texture itself, so no photo is needed.
+            Pulled to the viewport top on lg (cancels grid py-20 + header
+            height) so the strap hangs from the very top of the page,
+            sliding behind the nav. Clipped flush at y=0. */}
         <div
-          className="relative w-full overflow-hidden"
-          style={{ height: "clamp(420px, 52vw, 600px)" }}
+          className="relative h-[clamp(420px,52vw,600px)] w-full overflow-hidden lg:-mt-[232px] lg:h-[calc(clamp(420px,52vw,600px)+232px)]"
         >
           <Lanyard
             cardColor="#111111"
@@ -142,9 +144,9 @@ export default function Hero() {
             orientation="portrait"
             finish="matte"
             metal="silver"
-            size={0.6}
+            size={0.38}
             anchor="center"
-            strapLength={0.5}
+            strapLength={0.7}
             interactive
             intro
           />

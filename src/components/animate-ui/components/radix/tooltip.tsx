@@ -97,9 +97,52 @@ const BUBBLE_STYLE: React.CSSProperties = {
   borderRadius: "var(--radius-pill)",
   boxShadow: "0 8px 24px rgba(0, 0, 0, 0.35)",
   maxWidth: 240,
-  overflow: "hidden",
+  overflow: "visible",
+  position: "relative",
+  whiteSpace: "nowrap",
+  willChange: "transform, opacity, filter",
   transformOrigin: "var(--radix-tooltip-content-transform-origin)",
 };
+
+const ARROW_SIZE = 8;
+
+function arrowStyle(side: string): React.CSSProperties {
+  const base: React.CSSProperties = {
+    position: "absolute",
+    width: ARROW_SIZE,
+    height: ARROW_SIZE,
+    background: "var(--ink)",
+    pointerEvents: "none",
+  };
+  if (side === "bottom")
+    return {
+      ...base,
+      left: "50%",
+      top: -ARROW_SIZE / 2,
+      transform: "translateX(-50%) rotate(45deg)",
+    };
+  if (side === "left")
+    return {
+      ...base,
+      top: "50%",
+      right: -ARROW_SIZE / 2,
+      transform: "translateY(-50%) rotate(45deg)",
+    };
+  if (side === "right")
+    return {
+      ...base,
+      top: "50%",
+      left: -ARROW_SIZE / 2,
+      transform: "translateY(-50%) rotate(45deg)",
+    };
+  // side === "top" — pointer at the bottom pointing down to the trigger
+  return {
+    ...base,
+    left: "50%",
+    bottom: -ARROW_SIZE / 2,
+    transform: "translateX(-50%) rotate(45deg)",
+  };
+}
 
 export function TooltipContent({
   side = "top",
@@ -114,11 +157,11 @@ export function TooltipContent({
   const open = React.useContext(TooltipOpenContext);
   const cursor = React.useContext(TooltipCursorContext);
 
-  const slide = 6;
+  const slide = 4;
   const fromVars = {
     opacity: 0,
-    scale: 0.85,
-    filter: "blur(4px)",
+    scale: 0.92,
+    filter: "blur(6px)",
     x: side === "left" ? slide : side === "right" ? -slide : 0,
     y: side === "top" ? slide : side === "bottom" ? -slide : 0,
   };
@@ -133,6 +176,7 @@ export function TooltipContent({
           open={open}
           fromVars={fromVars}
           toVars={toVars}
+          showArrow={false}
           style={{
             ...BUBBLE_STYLE,
             position: "fixed",
@@ -172,6 +216,7 @@ export function TooltipContent({
           open={open}
           fromVars={fromVars}
           toVars={toVars}
+          side={side}
           style={{ ...BUBBLE_STYLE, ...style }}
         >
           {children}
@@ -191,12 +236,16 @@ function AnimatedBubble({
   toVars,
   style,
   children,
+  side = "top",
+  showArrow = true,
 }: {
   open: boolean;
   fromVars: gsap.TweenVars;
   toVars: gsap.TweenVars;
   style?: React.CSSProperties;
   children: React.ReactNode;
+  side?: string;
+  showArrow?: boolean;
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [render, setRender] = React.useState(open);
@@ -217,10 +266,11 @@ function AnimatedBubble({
     }
     const tween = gsap.to(el, {
       opacity: 0,
-      scale: 0.95,
-      filter: "blur(2px)",
-      duration: 0.12,
-      ease: "power2.in",
+      scale: 0.96,
+      filter: "blur(4px)",
+      y: 2,
+      duration: 0.16,
+      ease: "power2.out",
       overwrite: true,
       onComplete: () => setRender(false),
     });
@@ -234,8 +284,8 @@ function AnimatedBubble({
     if (prefersReducedMotion()) return;
     const tween = gsap.fromTo(ref.current, varsRef.current.fromVars, {
       ...varsRef.current.toVars,
-      duration: 0.35,
-      ease: "back.out(1.6)",
+      duration: 0.32,
+      ease: "expo.out",
       overwrite: true,
     });
     return () => {
@@ -245,8 +295,9 @@ function AnimatedBubble({
 
   if (!render) return null;
   return (
-    <div ref={ref} style={style}>
+    <div ref={ref} style={{ position: "relative", ...style }}>
       {children}
+      {showArrow && <span aria-hidden="true" style={arrowStyle(side)} />}
     </div>
   );
 }
