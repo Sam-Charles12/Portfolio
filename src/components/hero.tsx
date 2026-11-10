@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { gsapSetup, prefersReducedMotion, blurFadeIn } from "@/lib/gsap";
@@ -15,6 +15,17 @@ const Lanyard = dynamic(() => import("@/components/lanyard"), {
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Small screens: hide the rope, blow the card up (it reads tiny
+  // otherwise next to the stacked copy).
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   // Entrance (GSAP): one blur-fade language — label, headline lines,
   // paragraph and buttons fade in through blur, staggered.
@@ -29,6 +40,7 @@ export default function Hero() {
         duration: 1.4,
         stagger: 0.22,
         delay: 0.15,
+        reversible: false,
       });
     }, root);
 
@@ -144,10 +156,11 @@ export default function Hero() {
             orientation="portrait"
             finish="matte"
             metal="silver"
-            size={0.38}
+            size={isMobile ? 0.8 : 0.38}
+            showStrap={!isMobile}
             anchor="center"
             strapLength={0.78}
-            interactive
+            interactive={!isMobile}
             intro
           />
         </div>

@@ -389,7 +389,12 @@ export default function ProjectArticle({
       root
         .querySelectorAll(".project-body > *")
         .forEach((el) =>
-          blurFadeIn(el, { duration: 1, y: 24, start: "top bottom-=50px" }),
+          blurFadeIn(el, {
+            duration: 1,
+            y: 24,
+            start: "top bottom-=50px",
+            reversible: false,
+          }),
         );
     }, root);
 
