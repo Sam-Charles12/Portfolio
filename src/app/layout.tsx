@@ -3,7 +3,7 @@ import { Funnel_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import SmoothScroll from "@/components/smooth-scroll";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_URL, SITE_NAME, SITE_HANDLE } from "@/lib/site";
 
 // Single source for Funnel Display — one @font-face set. body/logo/mono
 // alias to it in globals.css. (Loading the same family 4x with 4 variables
@@ -49,20 +49,32 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Carles | Software Engineer",
     description:
-      "I build web apps and care about how they feel to use. Frontend-leaning, full-stack capable.",
-    images: [{ url: "/me.jpg", width: 1200, height: 630, alt: "Carles" }],
+      "Carles is a full-stack software engineer building scalable systems and clean, production-ready web apps — from APIs to frontends.",
+    images: [
+      {
+        url: "/og-cover.png",
+        width: 1200,
+        height: 630,
+        alt: "Carles — Software Engineer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: SITE_HANDLE,
+    creator: SITE_HANDLE,
     title: "Carles | Software Engineer",
     description:
-      "I build web apps and care about how they feel to use. Frontend-leaning, full-stack capable.",
-    images: ["/me.jpg"],
+      "Carles is a full-stack software engineer building scalable systems and clean, production-ready web apps — from APIs to frontends.",
+    images: ["/og-cover.png"],
   },
 };
 
 export const viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 // Applies the saved (or OS-preferred) theme synchronously before paint, so
