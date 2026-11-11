@@ -36,7 +36,7 @@ export async function generateMetadata({
     openGraph: {
       title: project.title,
       description: project.dek,
-      type: "article",
+      type: "website",
       url,
       images: [{ url: project.image, alt: project.imageAlt }],
     },
