@@ -15,6 +15,7 @@ import {
   Search01Icon,
 } from "@hugeicons/core-free-icons";
 import { siGithub } from "simple-icons";
+import Logo from "@/components/logo";
 
 function Section({
   index,
@@ -541,7 +542,10 @@ const useCanvas = create((set) => ({
           </div>
           <footer className="mt-8 grid gap-6 border-t pt-8 md:grid-cols-3" style={{ borderColor: "var(--border-15)" }}>
             <div>
-              <p className="font-bold">carles</p>
+              <p className="flex items-center gap-2 font-bold">
+                <Logo size={20} />
+                carles
+              </p>
               <p className="mt-2 font-mono text-xs" style={{ color: "var(--text-50)" }}>Work · About · Writing · Contact</p>
             </div>
             <div className="font-mono text-xs" style={{ color: "var(--text-50)" }}>
