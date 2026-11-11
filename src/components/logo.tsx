@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { LOGO_MARK_D, LOGO_TILE_D, LOGO_VIEWBOX } from "./logo-art";
+import { LOGO_MARK_D, LOGO_MARK_VIEWBOX } from "./logo-art";
 
 type LogoProps = {
   /** Rendered square size in px. */
@@ -11,13 +11,13 @@ type LogoProps = {
 };
 
 /**
- * Project logo — ink tile with a knocked-out mark. Token-driven, so it
- * follows the manual theme toggle as well as the OS scheme.
+ * Project logo — bare mark, no tile. Token-driven, so it follows the
+ * manual theme toggle as well as the OS scheme.
  */
 export default function Logo({ size = 32, className, style, label }: LogoProps) {
   return (
     <svg
-      viewBox={LOGO_VIEWBOX}
+      viewBox={LOGO_MARK_VIEWBOX}
       width={size}
       height={size}
       className={className}
@@ -27,18 +27,10 @@ export default function Logo({ size = 32, className, style, label }: LogoProps) 
     >
       {label ? <title>{label}</title> : null}
       <path
-        d={LOGO_TILE_D}
+        d={LOGO_MARK_D}
         fill="var(--ink)"
         fillRule="evenodd"
         stroke="var(--ink)"
-        strokeWidth={0.25}
-        strokeLinejoin="round"
-      />
-      <path
-        d={LOGO_MARK_D}
-        fill="var(--bg)"
-        fillRule="evenodd"
-        stroke="var(--bg)"
         strokeWidth={0.25}
         strokeLinejoin="round"
       />
