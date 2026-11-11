@@ -17,12 +17,21 @@ export const metadata: Metadata = {
       "Have something in mind? Reach out to Carles — projects, questions, or just to say hi.",
     type: "website",
     url: "/contact",
+    images: [
+      {
+        url: "/og-cover.png",
+        width: 1200,
+        height: 630,
+        alt: "Carles — Software Engineer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Contact | Carles",
     description:
       "Have something in mind? Reach out to Carles — projects, questions, or just to say hi.",
+    images: ["/og-cover.png"],
   },
 };
 

@@ -17,12 +17,21 @@ export const metadata: Metadata = {
       "A collection of projects, tools, and experiments built by Carles.",
     type: "website",
     url: "/works",
+    images: [
+      {
+        url: "/og-cover.png",
+        width: 1200,
+        height: 630,
+        alt: "Carles — Software Engineer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Works | Carles",
     description:
       "A collection of projects, tools, and experiments built by Carles.",
+    images: ["/og-cover.png"],
   },
 };
 
