@@ -9,6 +9,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import ThemeToggle from "@/components/theme-toggle";
 import MenuDrawer from "@/components/menu-drawer";
+import Logo from "@/components/logo";
 import { TextReveal } from "@/components/ui/cascade-text";
 
 export default function SiteNav() {
@@ -33,9 +34,10 @@ export default function SiteNav() {
         >
           <a
             href="/"
-            className="rounded-md font-logo text-2xl font-semibold tracking-tight outline-hidden transition-colors duration-200 hover:text-[var(--text-100)] focus-visible:ring-2 md:text-3xl [&>span:last-child]:truncate"
+            className="flex items-center gap-3 rounded-md font-logo text-2xl font-semibold tracking-tight outline-hidden transition-colors duration-200 hover:text-[var(--text-100)] focus-visible:ring-2 md:text-3xl [&>span:last-child]:truncate"
           >
-            carles
+            <Logo size={30} />
+            <span>carles</span>
           </a>
           <div className="flex items-center gap-3">
             <ThemeToggle />
