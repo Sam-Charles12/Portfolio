@@ -80,7 +80,7 @@ export default function AllWorks() {
             </p>
           </div>
 
-          <div className="mx-auto mb-12 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
+          <div className="mb-12 w-full break-inside-avoid md:mx-auto md:aspect-square md:max-w-sm lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[1]}
               minHeight={0}
@@ -88,7 +88,7 @@ export default function AllWorks() {
             />
           </div>
 
-          <div className="mx-auto mb-12 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
+          <div className="mb-12 w-full break-inside-avoid md:mx-auto md:aspect-square md:max-w-sm lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[0]}
               minHeight={0}
@@ -96,7 +96,7 @@ export default function AllWorks() {
             />
           </div>
 
-          <div className="mx-auto mb-12 aspect-square w-full max-w-sm break-inside-avoid lg:aspect-[10/9] lg:max-w-none">
+          <div className="mb-12 w-full break-inside-avoid md:mx-auto md:aspect-square md:max-w-sm lg:aspect-[10/9] lg:max-w-none">
             <ProjectCard
               project={PROJECTS[2]}
               minHeight={0}
