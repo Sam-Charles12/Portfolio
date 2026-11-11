@@ -9,6 +9,7 @@ import BackToTop from "@/components/back-to-top";
 import BlogArticle from "@/components/blog-article";
 import Writing from "@/components/writing";
 import { POSTS, getNeighbours, getPost } from "@/lib/posts";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 type BlogPostPageProps = { params: Promise<{ slug: string }> };
 
@@ -59,12 +60,26 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const hasPortrait = existsSync(
     path.join(process.cwd(), "public", "me.jpg"),
   );
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.dek,
+    datePublished: post.date,
+    author: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    image: `${SITE_URL}${post.cover ?? "/contact-bg.png"}`,
+    mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+  };
 
   return (
     <div
       id="top"
       className="bg-bg text-ink font-body min-h-screen flex flex-col"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <SiteNav />
       <BlogArticle post={post} previous={previous} next={next} />
 
