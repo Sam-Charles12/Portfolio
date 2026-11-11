@@ -53,7 +53,7 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     ],
     liveHref: "#",
     repoHref: "#",
-    image: "/interact-steps.png",
+    image: "/interact-steps.jpeg",
     imageAlt: "Interact study view with sections and progress checkmarks",
     sections: [
       {

@@ -1,10 +1,9 @@
 // Shared site constants — single source of truth for links used in
 // more than one place (hero, about, footer).
 
-/** TODO: swap for the real production domain on deploy. Used for
- *  canonical URLs, sitemap, robots and OG images — change it in one
- *  place and all SEO output follows. */
-export const SITE_URL = "https://carles.dev";
+/** Production domain. Used for canonical URLs, sitemap, robots and
+ *  OG images — change it in one place and all SEO output follows. */
+export const SITE_URL = "https://thecarles.dev";
 export const SITE_NAME = "Carles";
 export const SITE_HANDLE = "@carles_devlog";
 
@@ -16,6 +15,10 @@ export const CV_URL =
  *  closing CTA. */
 export const EMAIL = "oladiposamcharles@gmail.com";
 export const EMAIL_HREF = `mailto:${EMAIL}`;
+
+/** Contact-form sender. Requires thecarles.dev to be verified in Resend
+ *  (DNS records) — otherwise Resend rejects the send. */
+export const CONTACT_FROM = "Carles <hello@thecarles.dev>";
 
 export const PHONE_DISPLAY = "+234 704 543 8563";
 export const PHONE_TEL = "+2347045438563";
