@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { EMAIL } from "@/lib/site";
+import { CONTACT_FROM, EMAIL } from "@/lib/site";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = { name: 100, email: 254, subject: 150, message: 5000 };
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
   }
 
   const to = process.env.CONTACT_TO || EMAIL;
-  const from = process.env.CONTACT_FROM || "Portfolio Contact <onboarding@resend.dev>";
+  const from = process.env.CONTACT_FROM || CONTACT_FROM;
   const finalSubject = subject || `New portfolio message from ${name}`;
 
   try {
